@@ -6,7 +6,6 @@ export class Book {
     this.title = title;
     this.description = description;
   }
-
   async save() {
     let sql = `
         INSERT INTO book(
