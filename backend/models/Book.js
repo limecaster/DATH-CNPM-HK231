@@ -6,7 +6,7 @@ export class Book {
     this.title = title;
     this.description = description;
   }
-  async save() {
+  save = async () => {
     let sql = `
         INSERT INTO book(
             ISBN,
@@ -20,5 +20,5 @@ export class Book {
         )`;
     const [newBook, _] = await db.execute(sql);
     return newBook;
-  }
+  };
 }
