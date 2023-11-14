@@ -43,7 +43,7 @@ const Sidebar = () => {
           <SidebarHeader>
             <div className="logotext">
               {/* Icon change using menucollapse state */}
-              <p>{menuCollapse ? <GiAbstract050 /> : <SiApacheairflow />}</p>
+              <p style={{ marginLeft: "30px" }}>{menuCollapse ? <GiAbstract050 /> : <SiApacheairflow />}</p>
             </div>
             <div className="closemenu" onClick={menuIconClick}>
               {/* changing menu collapse icon on click */}
