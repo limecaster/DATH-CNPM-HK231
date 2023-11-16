@@ -5,17 +5,24 @@ import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import ShowList from './ShowList';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Container from "react-bootstrap/Container";
 
 const ListPage = () => {
     return (
         <div>
             <Row>
-                <Col xs={2} sm={2}>
+                <Col xs={2} sm={1}>
                     <Sidebar />
                 </Col>
-                <Col xs={10} sm={9}>
-                    <ShowList />
-                </Col>
+                <Container>
+                    <Row>
+                        <Col xs={1} sm={1}></Col>
+                        <Col xs={10} sm={10}>
+                            <ShowList />
+                        </Col>
+                        <Col xs={1} sm={1}></Col>
+                    </Row>
+                </Container>
             </Row>
         </div>
     )
