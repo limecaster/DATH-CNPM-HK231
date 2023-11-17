@@ -2,22 +2,28 @@
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import React, { useEffect, useState } from "react";
-import ReactSearchBox from "react-search-box";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import axios from "axios";
 import Forms from '../../../components/AddBooks/Addbooks'
 import Modal from 'react-bootstrap/Modal';
+import Pagination from "../../../components/Pagination/Pagination";
+import SearchBox from "../../../components/Search/Search";
 
 
 const ShowList = () => {
+
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
+
+
     const [books, setBooks] = useState([])
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8;
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const displayedBooks = books.slice(startIndex, endIndex);
+
+
+
+
 
 
     // # Show Popup 
@@ -50,7 +56,7 @@ const ShowList = () => {
     }
 
 
-
+    const [searchKeyword, setSearchKeyword] = useState('');
 
     const handleNextPage = () => {
         setCurrentPage((prevPage) => prevPage + 1);
@@ -60,9 +66,28 @@ const ShowList = () => {
         setCurrentPage((prevPage) => prevPage - 1);
     };
 
+    const handleSearch = (keyword) => {
+        setCurrentPage(1); // Reset trang về 1 khi bắt đầu tìm kiếm mới
+        const searchString = keyword.toString().toLowerCase();
+        setSearchKeyword(searchString);
+    };
 
-    const totalPages = Math.ceil(books.length / itemsPerPage);
-    const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+    const filteredBooks = books.filter((book) =>
+        Object.values(book).some((value) =>
+            typeof value === 'string' && value.toLowerCase().includes(searchKeyword.toLowerCase())
+        )
+    );
+
+    const totalFilteredResults = filteredBooks.length;
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    const totalPages = Math.ceil(totalFilteredResults / itemsPerPage);
+
+
+    const displayedBooks = filteredBooks.slice(startIndex, endIndex);
+
 
     if (loading) {
         return <div>Loading...</div>;
@@ -81,10 +106,7 @@ const ShowList = () => {
             </Row>
             <Row style={{ width: "100%", marginTop: "15px" }}>
                 <Col xs={6}>
-                    <ReactSearchBox
-                        width="150%"
-                        placeholder="Search Here..."
-                    />
+                    <SearchBox onSearch={handleSearch} />
                 </Col>
                 <Col xs={4} style={{ display: "flex" }}>
                     <Button variant="outlined" color="success" style={{ width: "80px", marginRight: "20px" }}>Search</Button>
@@ -93,11 +115,12 @@ const ShowList = () => {
                     <Button onClick={handleShow} variant="contained" color="success" style={{ width: "120px" }}>Thêm sách</Button>
                 </Col>
             </Row>
+
             <Row style={{ width: "105%", marginTop: "30px" }}>
                 <TableContainer component={Paper} style={{ border: "3px solid grey" }}>
                     <Table>
                         <TableHead>
-                            <TableRow style={{ backgroundColor: '#EEEEEE', textAlign: 'center', padding: '5px' }}>
+                            <TableRow style={{ backgroundColor: '#EEEEEE', textAlign: 'center', padding: '2px' }}>
                                 <TableCell align="center">ISBN</TableCell>
                                 <TableCell align="center">Tiêu đề</TableCell>
                                 <TableCell align="center">Tác giả</TableCell>
@@ -111,7 +134,7 @@ const ShowList = () => {
                                 <TableRow key={book.ISBN}>
                                     <TableCell style={{ padding: '5px' }} align="center">{book.ISBN}</TableCell>
                                     <TableCell style={{ padding: '5px', width: '230px' }} align="center">{book.title}</TableCell>
-                                    <TableCell style={{ padding: '5px' }} align="center">{book.name}</TableCell>
+                                    <TableCell style={{ padding: '5px' }} align="center">{book.authorName}</TableCell>
                                     <TableCell style={{ padding: '5px' }} align="center">{book.publisher}</TableCell>
                                     <TableCell style={{ padding: '5px' }} align="center">{book.publishDate}</TableCell>
                                     <TableCell style={{ padding: '5px', width: '230px' }} align="center" >
@@ -125,34 +148,13 @@ const ShowList = () => {
                 </TableContainer>
             </Row>
             <Col xs={12} style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}>
-                <Button
-                    variant="outlined"
-                    color="success"
-                    style={{ marginRight: "10px" }}
-                    onClick={handlePreviousPage}
-                    disabled={currentPage === 1}
-                >
-                    Previous
-                </Button>
-                {pageNumbers.map((number) => (
-                    <Button
-                        key={number}
-                        variant={number === currentPage ? "contained" : "outlined"}
-                        color="success"
-                        style={{ marginRight: "10px" }}
-                        onClick={() => setCurrentPage(number)}
-                    >
-                        {number}
-                    </Button>
-                ))}
-                <Button
-                    variant="outlined"
-                    color="success"
-                    onClick={handleNextPage}
-                    disabled={endIndex >= books.length}
-                >
-                    Next
-                </Button>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                    onPreviousPage={handlePreviousPage}
+                    onNextPage={handleNextPage}
+                />
             </Col>
 
 
