@@ -6,13 +6,14 @@ export const createBook = async (req, res) => {
     const {
       ISBN,
       title,
+      coverlink,
       desc,
+      authorName,
       publisher,
       publishDate,
       coverType,
       noPages,
       language,
-      author,
     } = req.body;
     if (!ISBN || !title || !desc) {
       return res.status(400).send({ message: "Pls send all required fields!" });
@@ -20,13 +21,14 @@ export const createBook = async (req, res) => {
     let book = new Book(
       ISBN,
       title,
+      coverlink,
       desc,
+      authorName,
       publisher,
       publishDate,
       coverType,
       noPages,
-      language,
-      author
+      language
     );
     book = await book.save();
     console.log("Create new book");
