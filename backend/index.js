@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import { bookRouter } from "./routes/bookRouter.js";
 const app = express();
 
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(json());
 app.use(cors());
 
