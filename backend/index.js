@@ -5,10 +5,14 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import jwt from "jsonwebtoken";
 import { bookRouter } from "./routes/bookRouter.js";
+
+import fileUpload from 'express-fileupload';
+
 const app = express();
 
 app.use(json());
 app.use(cors());
+app.use(fileUpload());
 
 app.use("/books", bookRouter);
 
