@@ -10,7 +10,7 @@ import { bookRouter } from "./routes/bookRouter.js";
 
 import multer from "multer";
 import fs from "fs";
-
+import path from "path";
 const app = express();
 
 
@@ -33,7 +33,9 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix);
+    const extension = path.extname(file.originalname);
+    const fileName = `${file.fieldname}-${uniqueSuffix}${extension}`;
+    cb(null, fileName);
   },
 });
 
