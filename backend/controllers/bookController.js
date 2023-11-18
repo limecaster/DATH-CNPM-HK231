@@ -6,7 +6,7 @@ export const createBook = async (req, res) => {
     const {
       ISBN,
       title,
-      coverlink,
+      image,
       desc,
       authorName,
       publisher,
@@ -18,6 +18,8 @@ export const createBook = async (req, res) => {
     if (!ISBN || !title || !desc) {
       return res.status(400).send({ message: "Pls send all required fields!" });
     }
+
+    const coverlink = image ? `uploads/${image.name}` : null;
     let book = new Book(
       ISBN,
       title,
@@ -31,6 +33,16 @@ export const createBook = async (req, res) => {
       language
     );
     book = await book.save();
+
+
+    if (image) {
+      image.mv(`public/uploads/${image.name}`, (err) => {
+        if (err) {
+          console.error('Error saving image:', err);
+        }
+      });
+    }
+
     console.log("Create new book");
     return res.status(201).send(book);
   } catch (error) {
