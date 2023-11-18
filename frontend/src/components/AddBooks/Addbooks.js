@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import React, { useState, useRef, useEffect } from 'react';
 
 
-const Forms = () => {
+const Forms = ({ onBookAdded }) => {
 
     const fileInputRef = useRef(null);
 
@@ -75,6 +75,7 @@ const Forms = () => {
                 if (response.ok) {
                     console.log('Book created successfully!');
                     handleShowSuccessModal();
+                    onBookAdded();
                 } else {
                     console.error('Failed to create book');
                 }

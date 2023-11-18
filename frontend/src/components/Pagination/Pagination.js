@@ -1,8 +1,9 @@
+
 import React from 'react';
 import Button from '@mui/material/Button';
 
 const Pagination = ({ currentPage, totalPages, onPageChange, onPreviousPage, onNextPage }) => {
-    const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+    const pageNumbers = generatePageNumbers(currentPage, totalPages);
 
     return (
         <div>
@@ -15,16 +16,21 @@ const Pagination = ({ currentPage, totalPages, onPageChange, onPreviousPage, onN
             >
                 Previous
             </Button>
-            {pageNumbers.map((number) => (
-                <Button
-                    key={number}
-                    variant={number === currentPage ? 'contained' : 'outlined'}
-                    color="success"
-                    style={{ marginRight: '10px' }}
-                    onClick={() => onPageChange(number)}
-                >
-                    {number}
-                </Button>
+            {pageNumbers.map((number, index) => (
+                <React.Fragment key={index}>
+                    {number === '...' ? (
+                        <span style={{ marginRight: '10px' }}>{number}</span>
+                    ) : (
+                        <Button
+                            variant={number === currentPage ? 'contained' : 'outlined'}
+                            color="success"
+                            style={{ marginRight: '10px' }}
+                            onClick={() => onPageChange(number)}
+                        >
+                            {number}
+                        </Button>
+                    )}
+                </React.Fragment>
             ))}
             <Button
                 variant="outlined"
@@ -36,6 +42,44 @@ const Pagination = ({ currentPage, totalPages, onPageChange, onPreviousPage, onN
             </Button>
         </div>
     );
+};
+
+// Hàm để tạo danh sách trang cần hiển thị
+const generatePageNumbers = (currentPage, totalPages) => {
+    const maxPageNumbers = 5; // Số trang tối đa hiển thị (bao gồm cả "...")
+    const pageNumbers = [];
+
+    if (totalPages <= maxPageNumbers) {
+        for (let i = 1; i <= totalPages; i++) {
+            pageNumbers.push(i);
+        }
+    } else {
+        const halfMaxPageNumbers = Math.floor(maxPageNumbers / 2);
+
+        if (currentPage <= halfMaxPageNumbers) {
+            for (let i = 1; i <= maxPageNumbers - 1; i++) {
+                pageNumbers.push(i);
+            }
+            pageNumbers.push('...');
+            pageNumbers.push(totalPages);
+        } else if (currentPage >= totalPages - halfMaxPageNumbers) {
+            pageNumbers.push(1);
+            pageNumbers.push('...');
+            for (let i = totalPages - maxPageNumbers + 2; i <= totalPages; i++) {
+                pageNumbers.push(i);
+            }
+        } else {
+            pageNumbers.push(1);
+            pageNumbers.push('...');
+            for (let i = currentPage - halfMaxPageNumbers + 1; i <= currentPage + halfMaxPageNumbers - 1; i++) {
+                pageNumbers.push(i);
+            }
+            pageNumbers.push('...');
+            pageNumbers.push(totalPages);
+        }
+    }
+
+    return pageNumbers;
 };
 
 export default Pagination;
