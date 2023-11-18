@@ -88,8 +88,7 @@ const ShowList = () => {
     const totalPages = Math.ceil(totalFilteredResults / itemsPerPage);
 
 
-    const displayedBooks = filteredBooks.slice(startIndex, endIndex);
-
+    const displayedBooks = filteredBooks.slice(startIndex, endIndex).reverse();
 
 
     // Callback này được gọi khi sách được thêm mới thành công
@@ -104,7 +103,11 @@ const ShowList = () => {
         const fetchBooks = async () => {
             try {
                 const response = await axios.get('http://localhost:3001/books');
-                setBooks(response.data);
+                const sortedBooks = response.data.sort((a, b) => {
+                    // Sắp xếp theo thời gian thêm mới giảm dần
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                });
+                setBooks(sortedBooks);
                 setLoading(false);
             } catch (err) {
                 setError(err);
