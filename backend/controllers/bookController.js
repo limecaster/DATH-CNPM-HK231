@@ -2,11 +2,13 @@ import { Book } from "../models/Book.js";
 import { db } from "../config/dbConfig.js";
 
 export const createBook = async (req, res) => {
+
+  console.log('Request Body:', req.body);
+  console.log('Request File:', req.file);
   try {
     const {
       ISBN,
       title,
-      image,
       desc,
       authorName,
       publisher,
@@ -18,8 +20,11 @@ export const createBook = async (req, res) => {
     if (!ISBN || !title || !desc) {
       return res.status(400).send({ message: "Pls send all required fields!" });
     }
+    const coverlink = req.file.path;
 
-    const coverlink = image ? `uploads/${image.name}` : null;
+    console.log("SetLink:", coverlink);
+
+
     let book = new Book(
       ISBN,
       title,
@@ -35,13 +40,7 @@ export const createBook = async (req, res) => {
     book = await book.save();
 
 
-    if (image) {
-      image.mv(`public/uploads/${image.name}`, (err) => {
-        if (err) {
-          console.error('Error saving image:', err);
-        }
-      });
-    }
+
 
     console.log("Create new book");
     return res.status(201).send(book);
