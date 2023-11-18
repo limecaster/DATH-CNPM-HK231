@@ -31,10 +31,9 @@ const Forms = () => {
 
     const handleImageChange = (e, setFieldValue) => {
         const file = e.target.files[0];
-        // console.log('Selected Image:', file);
+        console.log('Selected Image:', file);
 
         if (file instanceof File) {
-            // console.log('File format:', file.type);
             setSelectedImage(file);
             setFieldValue('image', file);
         } else {
@@ -64,9 +63,13 @@ const Forms = () => {
     const handleFormSubmit = async () => {
         try {
             if (formData) {
+
+                console.log([...formData]);
+
                 const response = await fetch('http://localhost:3001/books', {
                     method: 'POST',
                     body: formData,
+
                 });
 
                 if (response.ok) {
@@ -135,7 +138,7 @@ const Forms = () => {
 
         >
             {({ handleSubmit, handleChange, setFieldValue, values, touched, errors, resetForm }) => (
-                <Form id="yourFormId" noValidate onSubmit={(e) => e.preventDefault()}>
+                <Form id="yourFormId" noValidate onSubmit={(e) => e.preventDefault()} encType="multipart/form-data">
                     <Row>
                         <Form.Group
                             controlId="validationFormik101"
@@ -319,8 +322,8 @@ const Forms = () => {
                                 isInvalid={touched.coverType && !!errors.coverType}
                             >
                                 <option value="">Chọn dạng sách</option>
-                                <option value="english">Paperback</option>
-                                <option value="vietnamese">Hardcover</option>
+                                <option value="Paperback">Paperback</option>
+                                <option value="Hardcover">Hardcover</option>
                                 {/* Thêm các ngôn ngữ khác nếu cần */}
                             </Form.Control>
                             <Form.Control.Feedback type="invalid" tooltip>
@@ -339,8 +342,8 @@ const Forms = () => {
                                 isInvalid={touched.language && !!errors.language}
                             >
                                 <option value="">Chọn ngôn ngữ</option>
-                                <option value="english">English</option>
-                                <option value="vietnamese">Vietnamese</option>
+                                <option value="English">English</option>
+                                <option value="Vietnamese">Vietnamese</option>
                                 {/* Thêm các ngôn ngữ khác nếu cần */}
                             </Form.Control>
                             <Form.Control.Feedback type="invalid" tooltip>
