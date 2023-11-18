@@ -1,8 +1,9 @@
 import Button from 'react-bootstrap/Button';
-// import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Modal from 'react-bootstrap/Modal';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import React, { useState, useRef, useEffect } from 'react';
@@ -16,6 +17,14 @@ const Forms = () => {
         fileInputRef.current?.click();
     };
 
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const [formData, setFormData] = useState(null);
+
+
+
+
+
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
     // upload file image
 
     const [selectedImage, setSelectedImage] = useState(null);
@@ -33,9 +42,51 @@ const Forms = () => {
         }
     };
 
+
+    const handleShowConfirmationModal = () => {
+        setShowConfirmationModal(true);
+    };
+
+    const handleCloseConfirmationModal = () => {
+        setShowConfirmationModal(false);
+    };
+
+    const handleShowSuccessModal = () => {
+        setShowSuccessModal(true);
+    };
+
+    const handleCloseSuccessModal = (resetForm) => {
+        setShowSuccessModal(false);
+        resetForm();
+    };
+
+
+    const handleFormSubmit = async () => {
+        try {
+            if (formData) {
+                const response = await fetch('http://localhost:3001/books', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    console.log('Book created successfully!');
+                    handleShowSuccessModal();
+                } else {
+                    console.error('Failed to create book');
+                }
+            } else {
+                console.error('Form data is missing.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+
     const schema = yup.object().shape({
         title: yup.string().required('Vui lòng nhập tiêu đề.'),
-        name: yup.string().required('Vui lòng nhập tên tác giả.'),
+        authorName: yup.string().required('Vui lòng nhập tên tác giả.'),
         image: yup
             .mixed()
             .required('Vui lòng chọn một tệp.')
@@ -49,9 +100,12 @@ const Forms = () => {
             }),
         publisher: yup.string().required('Vui lòng nhập nhà xuất bản.'),
         publishDate: yup.string().required('Vui lòng nhập năm xuất bản.'),
+        noPages: yup.number().required('Vui lòng nhập số trang'),
         ISBN: yup.string().required('Vui lòng nhập ISBN.'),
-        desc: yup.string().required('Vui lòng nhập mô tả.')
-    });
+        desc: yup.string().required('Vui lòng nhập mô tả.'),
+        language: yup.string().required('Vui lòng chọn ngôn ngữ.'),
+        coverType: yup.string().required('Vui lòng chọn dạng sách.')
+    })
 
     useEffect(() => {
         // console.log("File:", selectedImage);
@@ -62,22 +116,26 @@ const Forms = () => {
         <Formik
             validationSchema={schema}
             encType="multipart/form-data"
-            onSubmit={console.log}
+            onSubmit={() => { }}
+            // onSubmit={console.log}
 
             initialValues={{
                 title: '',
-                name: '',
+                authorName: '',
                 // file: null,
                 image: null,
                 publisher: '',
                 publishDate: '',
                 ISBN: '',
+                noPages: "",
                 desc: '',
+                coverType: "",
+                language: ""
             }}
 
         >
-            {({ handleSubmit, handleChange, setFieldValue, values, touched, errors }) => (
-                <Form noValidate onSubmit={handleSubmit}>
+            {({ handleSubmit, handleChange, setFieldValue, values, touched, errors, resetForm }) => (
+                <Form id="yourFormId" noValidate onSubmit={(e) => e.preventDefault()}>
                     <Row>
                         <Form.Group
                             controlId="validationFormik101"
@@ -148,14 +206,14 @@ const Forms = () => {
                             <Form.Label>Tác giả</Form.Label>
                             <Form.Control
                                 type="text"
-                                name="name"
+                                name="authorName"
                                 required
-                                value={values.name}
+                                value={values.authorName}
                                 onChange={handleChange}
                                 placeholder="Nhập tên tác giả..."
-                                isInvalid={!!errors.name}
+                                isInvalid={!!errors.authorName}
                             />
-                            <Form.Control.Feedback type="invalid" tooltip>{errors.name}</Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid" tooltip>{errors.authorName}</Form.Control.Feedback>
                         </Form.Group>
                     </Row>
                     <Row style={{ marginTop: '10px' }}>
@@ -212,6 +270,24 @@ const Forms = () => {
                             <Form.Control.Feedback type="invalid" tooltip>{errors.ISBN}</Form.Control.Feedback>
                         </Form.Group>
                     </Row>
+                    <Row style={{ marginTop: '10px' }}>
+                        <Form.Group
+                            controlId="validationFormik105"
+                            className="position-relative"
+                        >
+                            <Form.Label>Số trang</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="noPages"
+                                required
+                                value={values.noPages}
+                                onChange={handleChange}
+                                placeholder="Nhập số trang..."
+                                isInvalid={!!errors.noPages}
+                            />
+                            <Form.Control.Feedback type="invalid" tooltip>{errors.noPages}</Form.Control.Feedback>
+                        </Form.Group>
+                    </Row>
 
                     <Row style={{ marginTop: '10px' }}>
                         <Form.Group
@@ -227,11 +303,103 @@ const Forms = () => {
                                 onChange={handleChange}
                                 placeholder="Nhập mô tả..."
                                 isInvalid={!!errors.desc}
+                                style={{ width: '100%', height: '100px' }}
                             />
                             <Form.Control.Feedback type="invalid" tooltip>{errors.desc}</Form.Control.Feedback>
                         </Form.Group>
                     </Row>
-                    <Button style={{ marginTop: '10px' }} type="submit">Submit form</Button>
+                    <Row style={{ marginTop: '10px' }}>
+                        <Form.Group controlId="validationFormikLanguage" className="position-relative">
+                            <Form.Label>Dạng sách</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="coverType"
+                                value={values.coverType}
+                                onChange={handleChange}
+                                isInvalid={touched.coverType && !!errors.coverType}
+                            >
+                                <option value="">Chọn dạng sách</option>
+                                <option value="english">Paperback</option>
+                                <option value="vietnamese">Hardcover</option>
+                                {/* Thêm các ngôn ngữ khác nếu cần */}
+                            </Form.Control>
+                            <Form.Control.Feedback type="invalid" tooltip>
+                                {errors.coverType}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Row>
+                    <Row style={{ marginTop: '10px' }}>
+                        <Form.Group controlId="validationFormikLanguage" className="position-relative">
+                            <Form.Label>Ngôn ngữ</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="language"
+                                value={values.language}
+                                onChange={handleChange}
+                                isInvalid={touched.language && !!errors.language}
+                            >
+                                <option value="">Chọn ngôn ngữ</option>
+                                <option value="english">English</option>
+                                <option value="vietnamese">Vietnamese</option>
+                                {/* Thêm các ngôn ngữ khác nếu cần */}
+                            </Form.Control>
+                            <Form.Control.Feedback type="invalid" tooltip>
+                                {errors.language}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Row>
+                    <Row style={{ marginTop: '20px', textAlign: 'center' }}>
+                        <Col>
+                            <Button
+                                variant="outline-danger"
+                                onClick={() => {
+                                    resetForm();
+                                }}
+                            >
+                                Hủy bỏ
+                            </Button>
+                        </Col>
+                        <Col>
+                            <Button variant="outline-success" onClick={(e) => {
+                                const formElement = document.getElementById('yourFormId');
+                                if (formElement) {
+                                    setFormData(new FormData(formElement));
+                                    handleShowConfirmationModal();
+                                } else {
+                                    console.error('Form element not found');
+                                }
+                            }}>Xác nhận</Button>
+                        </Col>
+                    </Row>
+                    <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Xác nhận</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            Bạn có chắc chắn muốn thêm sách này không?
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleCloseConfirmationModal}>
+                                Hủy bỏ
+                            </Button>
+                            <Button variant="primary" onClick={() => { handleFormSubmit(); handleCloseConfirmationModal(); }}>
+                                Xác nhận
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                    <Modal show={showSuccessModal} onHide={handleCloseSuccessModal}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Thành công</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            Sách đã được thêm thành công!
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="primary" onClick={() => handleCloseSuccessModal(resetForm)}>
+                                OK
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
                 </Form>
             )}
         </Formik>
