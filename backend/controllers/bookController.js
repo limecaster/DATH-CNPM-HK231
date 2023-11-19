@@ -2,9 +2,8 @@ import { Book } from "../models/Book.js";
 import { db } from "../config/dbConfig.js";
 
 export const createBook = async (req, res) => {
-
-  console.log('Request Body:', req.body);
-  console.log('Request File:', req.file);
+  console.log("Request Body:", req.body);
+  console.log("Request File:", req.file);
   try {
     const {
       ISBN,
@@ -20,10 +19,9 @@ export const createBook = async (req, res) => {
     if (!ISBN || !title || !desc) {
       return res.status(400).send({ message: "Pls send all required fields!" });
     }
-    const coverlink = req.file.path;
+    const coverlink = req.file.path.replace(/\\/g, "\\\\");
 
     console.log("SetLink:", coverlink);
-
 
     let book = new Book(
       ISBN,
@@ -38,9 +36,6 @@ export const createBook = async (req, res) => {
       language
     );
     book = await book.save();
-
-
-
 
     console.log("Create new book");
     return res.status(201).send(book);
