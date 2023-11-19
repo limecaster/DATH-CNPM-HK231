@@ -13,6 +13,8 @@ import SearchBox from "../../../components/Search/Search";
 const ShowList = () => {
 
 
+
+
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
 
@@ -21,7 +23,7 @@ const ShowList = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-
+    const [updateBooks, setUpdateBooks] = useState(false);
 
 
 
@@ -86,8 +88,36 @@ const ShowList = () => {
     const totalPages = Math.ceil(totalFilteredResults / itemsPerPage);
 
 
-    const displayedBooks = filteredBooks.slice(startIndex, endIndex);
+    const displayedBooks = filteredBooks.slice(startIndex, endIndex).reverse();
 
+
+    // Callback này được gọi khi sách được thêm mới thành công
+    const handleBookAdded = () => {
+        // Đóng modal thêm sách (nếu bạn muốn đóng)
+        // handleClose();
+        // Gọi hàm để cập nhật danh sách sau khi thêm sách
+        setUpdateBooks(prevState => !prevState);
+    };
+
+    useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/books');
+                const sortedBooks = response.data.sort((a, b) => {
+                    // Sắp xếp theo thời gian thêm mới giảm dần
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                });
+                setBooks(sortedBooks);
+                setLoading(false);
+            } catch (err) {
+                setError(err);
+                setLoading(false);
+            }
+        };
+
+        // Fetch lại danh sách khi state updateBooks thay đổi
+        fetchBooks();
+    }, [updateBooks]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -163,7 +193,7 @@ const ShowList = () => {
                     <Modal.Title style={{ marginLeft: '160px' }} >Thêm sách</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Forms />
+                    <Forms onBookAdded={handleBookAdded} />
                 </Modal.Body>
             </Modal>
         </div >
