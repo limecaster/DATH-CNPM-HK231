@@ -15,6 +15,7 @@ export const createBook = async (req, res) => {
       coverType,
       noPages,
       language,
+      genres,
     } = req.body;
     if (!ISBN || !title || !desc) {
       return res.status(400).send({ message: "Pls send all required fields!" });
@@ -33,7 +34,9 @@ export const createBook = async (req, res) => {
       publishDate,
       coverType,
       noPages,
-      language
+      language,
+      genres,
+      coverlink
     );
     book = await book.save();
 
@@ -49,9 +52,54 @@ export const getAllBook = async (req, res) => {
   try {
     let sql = `
     SELECT ISBN, title, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\` 
-FROM (((book natural join edition) natural join author_write_book) join author on author_write_book.authorID=author.authorID);`;
+FROM ((book natural join author_write_book) join author on author_write_book.authorID=author.authorID);`;
     const data = await db.execute(sql);
     return res.json(data[0]);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
+export const updateBookByISBN = async (req, res) => {
+  try {
+    const {
+      ISBN,
+      title,
+      desc,
+      authorName,
+      publisher,
+      publishDate,
+      coverType,
+      noPages,
+      language,
+      genres,
+    } = req.body;
+    if (!ISBN || !title || !desc) {
+      return res.status(400).send({ message: "Pls send all required fields!" });
+    }
+    const coverlink = req.file.path.replace(/\\/g, "\\\\");
+
+    console.log("SetLink:", coverlink);
+
+    let book = new Book(
+      ISBN,
+      title,
+      coverlink,
+      desc,
+      authorName,
+      publisher,
+      publishDate,
+      coverType,
+      noPages,
+      language,
+      genres,
+      coverlink
+    );
+    book = await book.update();
+
+    console.log("Update book");
+    return res.status(201).send(book);
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });

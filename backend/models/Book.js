@@ -11,7 +11,8 @@ export class Book {
     publishDate,
     coverType,
     noPages,
-    language
+    language,
+    genres //list
   ) {
     this.ISBN = ISBN;
     this.title = title;
@@ -23,11 +24,29 @@ export class Book {
     this.coverType = coverType;
     this.noPages = noPages;
     this.language = language;
+    this.genres = genres;
   }
   save = async () => {
     let sql = `CALL InsertBook('${this.ISBN}','${this.title}','${this.coverlink}','${this.desc}','${this.authorName}',
     '${this.publisher}',${this.publishDate},'${this.coverType}',${this.noPages},'${this.language}')`;
     const [newBook, _] = await db.execute(sql);
+    for (const genre of this.genres) {
+      await db.execute(
+        `INSERT INTO genre_of_book VALUES ('${genre}','${this.ISBN}');`
+      );
+    }
+    return newBook;
+  };
+  update = async () => {
+    let sql = `CALL UpdateBook('${this.ISBN}','${this.title}','${this.coverlink}','${this.desc}','${this.authorName}',
+    '${this.publisher}',${this.publishDate},'${this.coverType}',${this.noPages},'${this.language}')`;
+    const [newBook, _] = await db.execute(sql);
+    await db.execute(`DELETE FROM genre_of_book WHERE ISBN='${this.ISBN}';`);
+    for (const genre of this.genres) {
+      await db.execute(
+        `INSERT INTO genre_of_book VALUES ('${genre}','${this.ISBN}');`
+      );
+    }
     return newBook;
   };
 }
