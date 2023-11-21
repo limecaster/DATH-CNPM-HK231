@@ -123,6 +123,12 @@ const Forms = ({ onBookAdded, editBook }) => {
                         // Đối với trường image, nếu là File thì thêm vào FormData
                         updatedFormData.append(key, value);
                     }
+                    else if (key === 'genres') {
+                        // Nếu là trường genres, thêm từng giá trị trong mảng vào FormData
+                        value.forEach((genre) => {
+                            updatedFormData.append('genres', genre);
+                        });
+                    }
                     else {
                         // Ngược lại, thêm giá trị vào FormData
                         updatedFormData.append(key, value);
