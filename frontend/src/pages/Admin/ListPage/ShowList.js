@@ -49,10 +49,6 @@ const ShowList = () => {
             });
     }, []);
 
-    const handleEdit = (bookId) => {
-        console.log(`Edit book with ID ${bookId}`);
-    };
-
     const handleDelete = (bookId) => {
         console.log(`Delete book with ID ${bookId}`);
     }
@@ -99,6 +95,26 @@ const ShowList = () => {
         setUpdateBooks(prevState => !prevState);
     };
 
+    const [editBook, setEditBook] = useState(null);
+
+
+    const handleEdit = (bookId) => {
+        console.log("Editing book with ID:", bookId);
+        const bookToEdit = books.find((book) => book.ISBN === bookId);
+        console.log("Book to edit:", bookToEdit);
+        const bookWithDefaults = {
+            ...bookToEdit,
+            image: bookToEdit.image || null,
+            genres: bookToEdit.genres || [],
+        };
+        console.log("Book to edit:", bookWithDefaults);
+        setEditBook(bookWithDefaults);
+
+
+        handleShow(); // Open the modal for editing
+    };
+
+
     useEffect(() => {
         const fetchBooks = async () => {
             try {
@@ -118,6 +134,8 @@ const ShowList = () => {
         // Fetch lại danh sách khi state updateBooks thay đổi
         fetchBooks();
     }, [updateBooks]);
+
+
 
     if (loading) {
         return <div>Loading...</div>;
@@ -168,7 +186,7 @@ const ShowList = () => {
                                     <TableCell style={{ padding: '5px' }} align="center">{book.publisher}</TableCell>
                                     <TableCell style={{ padding: '5px' }} align="center">{book.publishDate}</TableCell>
                                     <TableCell style={{ padding: '5px', width: '230px' }} align="center" >
-                                        <Button style={{ padding: '5px', marginRight: '15px' }} variant="outlined" color="success" size="small" onClick={() => handleEdit(book.id)}>Chỉnh sửa</Button>
+                                        <Button style={{ padding: '5px', marginRight: '15px' }} variant="outlined" color="success" size="small" onClick={() => handleEdit(book.ISBN)}>Chỉnh sửa</Button>
                                         <Button style={{ padding: '5px' }} variant="outlined" color="error" size="small" onClick={() => handleDelete(book.id)}>Xóa</Button>
                                     </TableCell>
                                 </TableRow>
@@ -190,10 +208,10 @@ const ShowList = () => {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title style={{ marginLeft: '160px' }} >Thêm sách</Modal.Title>
+                    <Modal.Title style={{ marginLeft: '160px' }} > {editBook ? 'Chỉnh sửa sách' : 'Thêm sách'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Forms onBookAdded={handleBookAdded} />
+                    <Forms onBookAdded={handleBookAdded} editBook={editBook} />
                 </Modal.Body>
             </Modal>
         </div >

@@ -62,22 +62,53 @@ const Forms = ({ onBookAdded, editBook }) => {
     const handleSelectChange = (e, setFieldValue, values) => {
         const { name, checked, value } = e.target;
 
-        // Update the formik values using setFieldValue
-        setFieldValue(name, checked ? [...values[name], value] : values[name].filter((v) => v !== value));
+        // Tạo một mảng mới từ giá trị hiện tại của genres
+        let updatedGenres = [...values[name]];
 
-    };
-    const prepareDataForBackend = (values) => {
-        if (typeof values.genres === 'string') {
-            values.genres = [values.genres];
+        if (checked) {
+            // Thêm giá trị mới vào mảng genres nếu chưa tồn tại
+            if (!updatedGenres.includes(value)) {
+                updatedGenres.push(value);
+            }
+        } else {
+            // Lọc bỏ giá trị khỏi mảng genres
+            updatedGenres = updatedGenres.filter((v) => v !== value);
         }
-        values.genres = values.genres || [];
-        return values;
+
+        // Set empty array if no genres are selected
+        setFieldValue(name, updatedGenres.length > 0 ? updatedGenres : []);
+    };
+    // const prepareDataForBackend = (values) => {
+    //     if (typeof values.genres === 'string') {
+    //         try {
+    //             // Chuyển đổi chuỗi JSON thành mảng
+    //             values.genres = JSON.parse(values.genres);
+    //         } catch (error) {
+    //             console.error('Error parsing genres:', error);
+    //             // Xử lý lỗi nếu có
+    //         }
+    //     }
+
+    //     // Nếu genres không phải là mảng, đặt giá trị mặc định là một mảng trống
+    //     values.genres = Array.isArray(values.genres) ? values.genres : [];
+
+    //     return values;
+    // };
+    const prepareDataForBackend = (values) => {
+        const updatedValues = { ...values }; // Tạo một bản sao của values để không làm thay đổi giá trị gốc
+
+        if (!Array.isArray(updatedValues.genres)) {
+            // Nếu genres không phải là mảng, đặt giá trị mặc định là một mảng chứa giá trị đó
+            updatedValues.genres = updatedValues.genres ? [updatedValues.genres] : [];
+        }
+        console.log('Updated Values:', updatedValues);
+        return updatedValues;
     };
     const handleFormSubmit = async (values) => {
         try {
             if (formData) {
-
                 const updatedValues = prepareDataForBackend(values);
+                // values.genres = Array.isArray(values.genres) ? values.genres : [values.genres];
                 console.log([...formData]);
 
                 const apiUrl = editBook ? `http://localhost:3001/books/${editBook.id}` : 'http://localhost:3001/books';
@@ -91,14 +122,13 @@ const Forms = ({ onBookAdded, editBook }) => {
                     if (key === 'image' && value instanceof File) {
                         // Đối với trường image, nếu là File thì thêm vào FormData
                         updatedFormData.append(key, value);
-                    } else if (Array.isArray(value)) {
-                        // Nếu là mảng, chuyển thành dạng JSON trước khi thêm vào FormData
-                        updatedFormData.append(key, JSON.stringify(value));
-                    } else {
+                    }
+                    else {
                         // Ngược lại, thêm giá trị vào FormData
                         updatedFormData.append(key, value);
                     }
                 });
+                console.log("Updates forms data", [...updatedFormData])
 
                 const response = await fetch(apiUrl, {
                     method,
@@ -397,6 +427,25 @@ const Forms = ({ onBookAdded, editBook }) => {
                     </Row>
 
                     <Row style={{ marginTop: '15px' }}>
+                        {/* <Form.Group controlId="validationFormikGenres" className="position-relative">
+                            <Form.Label>Thể loại sách</Form.Label>
+                            {['mystery', 'horror', 'adventure'].map((genre) => (
+                                <Form.Check
+                                    key={genre}
+                                    type="checkbox"
+                                    id={`genre-${genre}`}
+                                    label={genre}
+                                    name="genres"
+                                    value={genre}
+                                    checked={values.genres?.includes(genre) ?? false}
+                                    onChange={(e) => handleSelectChange(e, setFieldValue, values)}
+                                />
+                            ))}
+                            <Form.Control.Feedback type="invalid" tooltip>
+                                {errors.genres}
+                            </Form.Control.Feedback>
+                        </Form.Group> */}
+
                         <Form.Group controlId="validationFormikGenres" className="position-relative">
                             <Form.Label>Thể loại sách</Form.Label>
                             {['mystery', 'horror', 'adventure'].map((genre) => (
@@ -407,8 +456,20 @@ const Forms = ({ onBookAdded, editBook }) => {
                                     label={genre}
                                     name="genres"
                                     value={genre}
-                                    checked={values.genres.includes(genre)}
-                                    onChange={(e) => handleSelectChange(e, setFieldValue, values)}
+                                    checked={values.genres?.includes(genre) ?? false}
+                                    onChange={(e) => {
+                                        const { checked, value } = e.target;
+                                        const updatedGenres = checked
+                                            ? [...values.genres, value]
+                                            : values.genres.filter((v) => v !== value);
+
+                                        handleChange({
+                                            target: {
+                                                name: 'genres',
+                                                value: updatedGenres,
+                                            },
+                                        });
+                                    }}
                                 />
                             ))}
                             <Form.Control.Feedback type="invalid" tooltip>
