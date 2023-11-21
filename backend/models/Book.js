@@ -26,6 +26,10 @@ export class Book {
     this.language = language;
     this.genres = genres;
     this.dateAdded = new Date();
+    this.dateAdded = this.dateAdded
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
   }
   save = async () => {
     let sql = `CALL InsertBook('${this.ISBN}','${this.title}','${this.coverlink}','${this.desc}','${this.authorName}',
