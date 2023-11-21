@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import React, { useState, useRef, useEffect } from 'react';
 
 
-const Forms = ({ onBookAdded }) => {
+const Forms = ({ onBookAdded, editBook }) => {
 
     const fileInputRef = useRef(null);
 
@@ -58,31 +58,62 @@ const Forms = ({ onBookAdded }) => {
         setShowSuccessModal(false);
         resetForm();
     };
-    const [selectedValues, setSelectedValues] = useState([]);
+    // const [selectedValues, setSelectedValues] = useState([]);
     const handleSelectChange = (e, setFieldValue, values) => {
         const { name, checked, value } = e.target;
 
         // Update the formik values using setFieldValue
         setFieldValue(name, checked ? [...values[name], value] : values[name].filter((v) => v !== value));
+
     };
-    const handleFormSubmit = async () => {
+    const prepareDataForBackend = (values) => {
+        if (typeof values.genres === 'string') {
+            values.genres = [values.genres];
+        }
+        values.genres = values.genres || [];
+        return values;
+    };
+    const handleFormSubmit = async (values) => {
         try {
             if (formData) {
 
+                const updatedValues = prepareDataForBackend(values);
                 console.log([...formData]);
 
-                const response = await fetch('http://localhost:3001/books', {
-                    method: 'POST',
-                    body: formData,
+                const apiUrl = editBook ? `http://localhost:3001/books/${editBook.id}` : 'http://localhost:3001/books';
 
+                const method = editBook ? 'PUT' : 'POST';
+
+                const updatedFormData = new FormData();
+
+                // Append từng trường và giá trị vào FormData
+                Object.entries(updatedValues).forEach(([key, value]) => {
+                    if (key === 'image' && value instanceof File) {
+                        // Đối với trường image, nếu là File thì thêm vào FormData
+                        updatedFormData.append(key, value);
+                    } else if (Array.isArray(value)) {
+                        // Nếu là mảng, chuyển thành dạng JSON trước khi thêm vào FormData
+                        updatedFormData.append(key, JSON.stringify(value));
+                    } else {
+                        // Ngược lại, thêm giá trị vào FormData
+                        updatedFormData.append(key, value);
+                    }
                 });
 
+                const response = await fetch(apiUrl, {
+                    method,
+                    // body: formData,
+                    body: updatedFormData,
+                });
+
+
                 if (response.ok) {
-                    console.log('Book created successfully!');
+                    console.log(editBook ? 'Book updated successfully!' : 'Book created successfully!');
                     handleShowSuccessModal();
                     onBookAdded();
+                    editBook(null); // Clear editBook state after successful action
                 } else {
-                    console.error('Failed to create book');
+                    console.error(editBook ? 'Failed to update book' : 'Failed to create book');
                 }
             } else {
                 console.error('Form data is missing.');
@@ -130,18 +161,17 @@ const Forms = ({ onBookAdded }) => {
             // onSubmit={console.log}
 
             initialValues={{
-                title: '',
-                authorName: '',
-                // file: null,
-                image: null,
-                publisher: '',
-                publishDate: '',
-                ISBN: '',
-                noPages: "",
-                desc: '',
-                coverType: "",
-                language: "",
-                genres: []
+                title: editBook ? editBook.title : '',
+                authorName: editBook ? editBook.authorName : '',
+                image: editBook ? editBook.image : null,
+                publisher: editBook ? editBook.publisher : '',
+                publishDate: editBook ? editBook.publishDate : '',
+                ISBN: editBook ? editBook.ISBN : '',
+                noPages: editBook ? editBook.noPages : '',
+                desc: editBook ? editBook.desc : '',
+                coverType: editBook ? editBook.coverType : '',
+                language: editBook ? editBook.language : '',
+                genres: editBook ? editBook.genres : []
             }}
 
         >
@@ -423,7 +453,7 @@ const Forms = ({ onBookAdded }) => {
                             <Button variant="secondary" onClick={handleCloseConfirmationModal}>
                                 Hủy bỏ
                             </Button>
-                            <Button variant="primary" onClick={() => { handleFormSubmit(); handleCloseConfirmationModal(); }}>
+                            <Button variant="primary" onClick={() => { handleFormSubmit(values); handleCloseConfirmationModal(); }}>
                                 Xác nhận
                             </Button>
                         </Modal.Footer>
