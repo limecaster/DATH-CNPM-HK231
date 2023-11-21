@@ -25,10 +25,11 @@ export class Book {
     this.noPages = noPages;
     this.language = language;
     this.genres = genres;
+    this.dateAdded = new Date();
   }
   save = async () => {
     let sql = `CALL InsertBook('${this.ISBN}','${this.title}','${this.coverlink}','${this.desc}','${this.authorName}',
-    '${this.publisher}',${this.publishDate},'${this.coverType}',${this.noPages},'${this.language}')`;
+    '${this.publisher}',${this.publishDate},'${this.coverType}',${this.noPages},'${this.language}', '${this.dateAdded}')`;
     const [newBook, _] = await db.execute(sql);
     for (const genre of this.genres) {
       await db.execute(
