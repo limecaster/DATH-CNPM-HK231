@@ -3,6 +3,7 @@ import { db } from "../config/dbConfig.js";
 
 export const createBook = async (req, res) => {
   console.log("Request Body:", req.body);
+  console.log("Type of: ", typeof (req.body.genres));
   console.log("Request File:", req.file);
   try {
     const {
