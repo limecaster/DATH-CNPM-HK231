@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import React, { useState, useRef, useEffect } from 'react';
 
 
-const Forms = ({ onBookAdded }) => {
+const Forms = ({ onBookAdded, editBook }) => {
 
     const fileInputRef = useRef(null);
 
@@ -58,26 +58,98 @@ const Forms = ({ onBookAdded }) => {
         setShowSuccessModal(false);
         resetForm();
     };
+    // const [selectedValues, setSelectedValues] = useState([]);
+    const handleSelectChange = (e, setFieldValue, values) => {
+        const { name, checked, value } = e.target;
 
+        // Tạo một mảng mới từ giá trị hiện tại của genres
+        let updatedGenres = [...values[name]];
 
-    const handleFormSubmit = async () => {
+        if (checked) {
+            // Thêm giá trị mới vào mảng genres nếu chưa tồn tại
+            if (!updatedGenres.includes(value)) {
+                updatedGenres.push(value);
+            }
+        } else {
+            // Lọc bỏ giá trị khỏi mảng genres
+            updatedGenres = updatedGenres.filter((v) => v !== value);
+        }
+
+        // Set empty array if no genres are selected
+        setFieldValue(name, updatedGenres.length > 0 ? updatedGenres : []);
+    };
+    // const prepareDataForBackend = (values) => {
+    //     if (typeof values.genres === 'string') {
+    //         try {
+    //             // Chuyển đổi chuỗi JSON thành mảng
+    //             values.genres = JSON.parse(values.genres);
+    //         } catch (error) {
+    //             console.error('Error parsing genres:', error);
+    //             // Xử lý lỗi nếu có
+    //         }
+    //     }
+
+    //     // Nếu genres không phải là mảng, đặt giá trị mặc định là một mảng trống
+    //     values.genres = Array.isArray(values.genres) ? values.genres : [];
+
+    //     return values;
+    // };
+    const prepareDataForBackend = (values) => {
+        const updatedValues = { ...values }; // Tạo một bản sao của values để không làm thay đổi giá trị gốc
+
+        if (!Array.isArray(updatedValues.genres)) {
+            // Nếu genres không phải là mảng, đặt giá trị mặc định là một mảng chứa giá trị đó
+            updatedValues.genres = updatedValues.genres ? [updatedValues.genres] : [];
+        }
+        console.log('Updated Values:', updatedValues);
+        return updatedValues;
+    };
+    const handleFormSubmit = async (values) => {
         try {
             if (formData) {
-
+                const updatedValues = prepareDataForBackend(values);
+                // values.genres = Array.isArray(values.genres) ? values.genres : [values.genres];
                 console.log([...formData]);
 
-                const response = await fetch('http://localhost:3001/books', {
-                    method: 'POST',
-                    body: formData,
+                const apiUrl = editBook ? `http://localhost:3001/books/${editBook.id}` : 'http://localhost:3001/books';
 
+                const method = editBook ? 'PUT' : 'POST';
+
+                const updatedFormData = new FormData();
+
+                // Append từng trường và giá trị vào FormData
+                Object.entries(updatedValues).forEach(([key, value]) => {
+                    if (key === 'image' && value instanceof File) {
+                        // Đối với trường image, nếu là File thì thêm vào FormData
+                        updatedFormData.append(key, value);
+                    }
+                    else if (key === 'genres') {
+                        // Nếu là trường genres, thêm từng giá trị trong mảng vào FormData
+                        value.forEach((genre) => {
+                            updatedFormData.append('genres', genre);
+                        });
+                    }
+                    else {
+                        // Ngược lại, thêm giá trị vào FormData
+                        updatedFormData.append(key, value);
+                    }
+                });
+                console.log("Updates forms data", [...updatedFormData])
+
+                const response = await fetch(apiUrl, {
+                    method,
+                    // body: formData,
+                    body: updatedFormData,
                 });
 
+
                 if (response.ok) {
-                    console.log('Book created successfully!');
+                    console.log(editBook ? 'Book updated successfully!' : 'Book created successfully!');
                     handleShowSuccessModal();
                     onBookAdded();
+                    editBook(null); // Clear editBook state after successful action
                 } else {
-                    console.error('Failed to create book');
+                    console.error(editBook ? 'Failed to update book' : 'Failed to create book');
                 }
             } else {
                 console.error('Form data is missing.');
@@ -108,7 +180,8 @@ const Forms = ({ onBookAdded }) => {
         ISBN: yup.string().required('Vui lòng nhập ISBN.'),
         desc: yup.string().required('Vui lòng nhập mô tả.'),
         language: yup.string().required('Vui lòng chọn ngôn ngữ.'),
-        coverType: yup.string().required('Vui lòng chọn dạng sách.')
+        coverType: yup.string().required('Vui lòng chọn dạng sách.'),
+        genres: yup.array().required('Vui lòng chọn ít nhất một thể loại sách.')
     })
 
     useEffect(() => {
@@ -124,21 +197,21 @@ const Forms = ({ onBookAdded }) => {
             // onSubmit={console.log}
 
             initialValues={{
-                title: '',
-                authorName: '',
-                // file: null,
-                image: null,
-                publisher: '',
-                publishDate: '',
-                ISBN: '',
-                noPages: "",
-                desc: '',
-                coverType: "",
-                language: ""
+                title: editBook ? editBook.title : '',
+                authorName: editBook ? editBook.authorName : '',
+                image: editBook ? editBook.image : null,
+                publisher: editBook ? editBook.publisher : '',
+                publishDate: editBook ? editBook.publishDate : '',
+                ISBN: editBook ? editBook.ISBN : '',
+                noPages: editBook ? editBook.noPages : '',
+                desc: editBook ? editBook.desc : '',
+                coverType: editBook ? editBook.coverType : '',
+                language: editBook ? editBook.language : '',
+                genres: editBook ? editBook.genres : []
             }}
 
         >
-            {({ handleSubmit, handleChange, setFieldValue, values, touched, errors, resetForm }) => (
+            {({ handleSubmit, handleChange, setFieldValue, values, touched, errors, resetForm, handleBlur }) => (
                 <Form id="yourFormId" noValidate onSubmit={(e) => e.preventDefault()} encType="multipart/form-data">
                     <Row>
                         <Form.Group
@@ -158,7 +231,7 @@ const Forms = ({ onBookAdded }) => {
                             <Form.Control.Feedback type="invalid" tooltip>{errors.title}</Form.Control.Feedback>
                         </Form.Group>
                     </Row>
-                    <Row style={{ marginTop: '10px' }}>
+                    <Row style={{ marginTop: '15px' }}>
                         <Form.Group className="position-relative mb-3">
                             <Form.Label>Bìa sách</Form.Label>
                             {/* Hidden file input */}
@@ -220,7 +293,7 @@ const Forms = ({ onBookAdded }) => {
                             <Form.Control.Feedback type="invalid" tooltip>{errors.authorName}</Form.Control.Feedback>
                         </Form.Group>
                     </Row>
-                    <Row style={{ marginTop: '10px' }}>
+                    <Row style={{ marginTop: '15px' }}>
                         <Form.Group
                             controlId="validationFormik103"
                             className="position-relative"
@@ -239,61 +312,64 @@ const Forms = ({ onBookAdded }) => {
                         </Form.Group>
                     </Row>
                     <Row style={{ marginTop: '10px' }}>
-                        <Form.Group
-                            controlId="validationFormik104"
-                            className="position-relative"
-                        >
-                            <Form.Label>Năm xuất bản</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="publishDate"
-                                required
-                                value={values.publishDate}
-                                onChange={handleChange}
-                                placeholder="Nhập năm xuất bản..."
-                                isInvalid={!!errors.publishDate}
-                            />
-                            <Form.Control.Feedback type="invalid" tooltip>{errors.publishDate}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Row>
-                    <Row style={{ marginTop: '10px' }}>
-                        <Form.Group
-                            controlId="validationFormik105"
-                            className="position-relative"
-                        >
-                            <Form.Label>ISBN</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="ISBN"
-                                required
-                                value={values.ISBN}
-                                onChange={handleChange}
-                                placeholder="Nhập ISBN..."
-                                isInvalid={!!errors.ISBN}
-                            />
-                            <Form.Control.Feedback type="invalid" tooltip>{errors.ISBN}</Form.Control.Feedback>
-                        </Form.Group>
-                    </Row>
-                    <Row style={{ marginTop: '10px' }}>
-                        <Form.Group
-                            controlId="validationFormik105"
-                            className="position-relative"
-                        >
-                            <Form.Label>Số trang</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="noPages"
-                                required
-                                value={values.noPages}
-                                onChange={handleChange}
-                                placeholder="Nhập số trang..."
-                                isInvalid={!!errors.noPages}
-                            />
-                            <Form.Control.Feedback type="invalid" tooltip>{errors.noPages}</Form.Control.Feedback>
-                        </Form.Group>
+                        <Col md={4}>
+                            <Form.Group
+                                controlId="validationFormik104"
+                                className="position-relative"
+                            >
+                                <Form.Label>Năm xuất bản</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="publishDate"
+                                    required
+                                    value={values.publishDate}
+                                    onChange={handleChange}
+                                    placeholder="VD:2000..."
+                                    isInvalid={!!errors.publishDate}
+                                />
+                                <Form.Control.Feedback type="invalid" tooltip>{errors.publishDate}</Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+                        <Col md={4}>
+                            <Form.Group
+                                controlId="validationFormik105"
+                                className="position-relative"
+                            >
+                                <Form.Label>ISBN</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="ISBN"
+                                    required
+                                    value={values.ISBN}
+                                    onChange={handleChange}
+                                    placeholder="Nhập ISBN..."
+                                    isInvalid={!!errors.ISBN}
+                                />
+                                <Form.Control.Feedback type="invalid" tooltip>{errors.ISBN}</Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+                        <Col md={4}>
+                            <Form.Group
+                                controlId="validationFormik105"
+                                className="position-relative"
+                            >
+                                <Form.Label>Số trang</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="noPages"
+                                    required
+                                    value={values.noPages}
+                                    onChange={handleChange}
+                                    placeholder="VD:20..."
+                                    isInvalid={!!errors.noPages}
+                                />
+                                <Form.Control.Feedback type="invalid" tooltip>{errors.noPages}</Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+
                     </Row>
 
-                    <Row style={{ marginTop: '10px' }}>
+                    <Row style={{ marginTop: '15px' }}>
                         <Form.Group
                             controlId="validationFormik105"
                             className="position-relative"
@@ -312,45 +388,102 @@ const Forms = ({ onBookAdded }) => {
                             <Form.Control.Feedback type="invalid" tooltip>{errors.desc}</Form.Control.Feedback>
                         </Form.Group>
                     </Row>
-                    <Row style={{ marginTop: '10px' }}>
-                        <Form.Group controlId="validationFormikLanguage" className="position-relative">
-                            <Form.Label>Dạng sách</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="coverType"
-                                value={values.coverType}
-                                onChange={handleChange}
-                                isInvalid={touched.coverType && !!errors.coverType}
-                            >
-                                <option value="">Chọn dạng sách</option>
-                                <option value="Paperback">Paperback</option>
-                                <option value="Hardcover">Hardcover</option>
-                                {/* Thêm các ngôn ngữ khác nếu cần */}
-                            </Form.Control>
+                    <Row style={{ marginTop: '15px' }}>
+                        <Col>
+                            <Form.Group controlId="validationFormikLanguage" className="position-relative">
+                                <Form.Label>Dạng sách</Form.Label>
+                                <Form.Control
+                                    as="select"
+                                    name="coverType"
+                                    value={values.coverType}
+                                    onChange={handleChange}
+                                    isInvalid={touched.coverType && !!errors.coverType}
+                                >
+                                    <option value="">Chọn dạng sách</option>
+                                    <option value="Paperback">Paperback</option>
+                                    <option value="Hardcover">Hardcover</option>
+                                    {/* Thêm các ngôn ngữ khác nếu cần */}
+                                </Form.Control>
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                    {errors.coverType}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group controlId="validationFormikLanguage" className="position-relative">
+                                <Form.Label>Ngôn ngữ</Form.Label>
+                                <Form.Control
+                                    as="select"
+                                    name="language"
+                                    value={values.language}
+                                    onChange={handleChange}
+                                    isInvalid={touched.language && !!errors.language}
+                                >
+                                    <option value="">Chọn ngôn ngữ</option>
+                                    <option value="English">English</option>
+                                    <option value="Vietnamese">Vietnamese</option>
+                                    {/* Thêm các ngôn ngữ khác nếu cần */}
+                                </Form.Control>
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                    {errors.language}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+
+                    </Row>
+
+                    <Row style={{ marginTop: '15px' }}>
+                        {/* <Form.Group controlId="validationFormikGenres" className="position-relative">
+                            <Form.Label>Thể loại sách</Form.Label>
+                            {['mystery', 'horror', 'adventure'].map((genre) => (
+                                <Form.Check
+                                    key={genre}
+                                    type="checkbox"
+                                    id={`genre-${genre}`}
+                                    label={genre}
+                                    name="genres"
+                                    value={genre}
+                                    checked={values.genres?.includes(genre) ?? false}
+                                    onChange={(e) => handleSelectChange(e, setFieldValue, values)}
+                                />
+                            ))}
                             <Form.Control.Feedback type="invalid" tooltip>
-                                {errors.coverType}
+                                {errors.genres}
+                            </Form.Control.Feedback>
+                        </Form.Group> */}
+
+                        <Form.Group controlId="validationFormikGenres" className="position-relative">
+                            <Form.Label>Thể loại sách</Form.Label>
+                            {['mystery', 'horror', 'adventure'].map((genre) => (
+                                <Form.Check
+                                    key={genre}
+                                    type="checkbox"
+                                    id={`genre-${genre}`}
+                                    label={genre}
+                                    name="genres"
+                                    value={genre}
+                                    checked={values.genres?.includes(genre) ?? false}
+                                    onChange={(e) => {
+                                        const { checked, value } = e.target;
+                                        const updatedGenres = checked
+                                            ? [...values.genres, value]
+                                            : values.genres.filter((v) => v !== value);
+
+                                        handleChange({
+                                            target: {
+                                                name: 'genres',
+                                                value: updatedGenres,
+                                            },
+                                        });
+                                    }}
+                                />
+                            ))}
+                            <Form.Control.Feedback type="invalid" tooltip>
+                                {errors.genres}
                             </Form.Control.Feedback>
                         </Form.Group>
                     </Row>
-                    <Row style={{ marginTop: '10px' }}>
-                        <Form.Group controlId="validationFormikLanguage" className="position-relative">
-                            <Form.Label>Ngôn ngữ</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="language"
-                                value={values.language}
-                                onChange={handleChange}
-                                isInvalid={touched.language && !!errors.language}
-                            >
-                                <option value="">Chọn ngôn ngữ</option>
-                                <option value="English">English</option>
-                                <option value="Vietnamese">Vietnamese</option>
-                                {/* Thêm các ngôn ngữ khác nếu cần */}
-                            </Form.Control>
-                            <Form.Control.Feedback type="invalid" tooltip>
-                                {errors.language}
-                            </Form.Control.Feedback>
-                        </Form.Group>
+                    <Row style={{ marginTop: '15px' }}>
                     </Row>
                     <Row style={{ marginTop: '20px', textAlign: 'center' }}>
                         <Col>
@@ -375,6 +508,7 @@ const Forms = ({ onBookAdded }) => {
                             }}>Xác nhận</Button>
                         </Col>
                     </Row>
+
                     <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
                         <Modal.Header closeButton>
                             <Modal.Title>Xác nhận</Modal.Title>
@@ -386,7 +520,7 @@ const Forms = ({ onBookAdded }) => {
                             <Button variant="secondary" onClick={handleCloseConfirmationModal}>
                                 Hủy bỏ
                             </Button>
-                            <Button variant="primary" onClick={() => { handleFormSubmit(); handleCloseConfirmationModal(); }}>
+                            <Button variant="primary" onClick={() => { handleFormSubmit(values); handleCloseConfirmationModal(); }}>
                                 Xác nhận
                             </Button>
                         </Modal.Footer>

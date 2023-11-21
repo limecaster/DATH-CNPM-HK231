@@ -3,6 +3,7 @@ import { db } from "../config/dbConfig.js";
 
 export const createBook = async (req, res) => {
   console.log("Request Body:", req.body);
+  console.log("Type of:", typeof (req.body.genres));
   console.log("Request File:", req.file);
   try {
     const {
@@ -20,9 +21,14 @@ export const createBook = async (req, res) => {
     if (!ISBN || !title || !desc) {
       return res.status(400).send({ message: "Pls send all required fields!" });
     }
+
+    const genresArray = Array.isArray(genres) ? genres : [genres];
+    console.log("Genres:", genresArray)
+
     const coverlink = req.file.path.replace(/\\/g, "\\\\");
 
     console.log("SetLink:", coverlink);
+
 
     let book = new Book(
       ISBN,
@@ -35,9 +41,10 @@ export const createBook = async (req, res) => {
       coverType,
       noPages,
       language,
-      genres,
+      genresArray,
       coverlink
     );
+
     book = await book.save();
 
     console.log("Create new book");
