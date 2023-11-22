@@ -49,6 +49,30 @@ const ShowList = () => {
             });
     }, []);
 
+    useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/books');
+                // console.log(response.data)
+                const sortedBooks = response.data.sort((a, b) => {
+                    // Sắp xếp theo thời gian thêm mới giảm dần
+                    console.log("Date:", new Date(b.dateAdded) - new Date(a.dateAdded))
+                    return new Date(b.dateAdded) - new Date(a.dateAdded);
+                });
+
+                console.log("Log:", sortedBooks)
+                setBooks(sortedBooks);
+                setLoading(false);
+            } catch (err) {
+                setError(err);
+                setLoading(false);
+            }
+        };
+
+        // Fetch lại danh sách khi state updateBooks thay đổi
+        fetchBooks();
+    }, [updateBooks]);
+
     const handleDelete = (bookId) => {
         console.log(`Delete book with ID ${bookId}`);
     }
@@ -84,7 +108,7 @@ const ShowList = () => {
     const totalPages = Math.ceil(totalFilteredResults / itemsPerPage);
 
 
-    const displayedBooks = filteredBooks.slice(startIndex, endIndex).reverse();
+    const displayedBooks = filteredBooks.slice(startIndex, endIndex);
 
 
     // Callback này được gọi khi sách được thêm mới thành công
@@ -115,25 +139,7 @@ const ShowList = () => {
     };
 
 
-    useEffect(() => {
-        const fetchBooks = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/books');
-                const sortedBooks = response.data.sort((a, b) => {
-                    // Sắp xếp theo thời gian thêm mới giảm dần
-                    return new Date(b.createdAt) - new Date(a.createdAt);
-                });
-                setBooks(sortedBooks);
-                setLoading(false);
-            } catch (err) {
-                setError(err);
-                setLoading(false);
-            }
-        };
 
-        // Fetch lại danh sách khi state updateBooks thay đổi
-        fetchBooks();
-    }, [updateBooks]);
 
 
 

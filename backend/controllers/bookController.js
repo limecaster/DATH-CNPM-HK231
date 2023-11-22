@@ -57,7 +57,7 @@ export const createBook = async (req, res) => {
 export const getAllBook = async (req, res) => {
   try {
     let sql = `
-    SELECT ISBN, title, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\` 
+    SELECT ISBN, title, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\` , dateAdded
 FROM ((book natural join author_write_book) join author on author_write_book.authorID=author.authorID);`;
     const data = await db.execute(sql);
     return res.json(data[0]);

@@ -58,42 +58,7 @@ const Forms = ({ onBookAdded, editBook }) => {
         setShowSuccessModal(false);
         resetForm();
     };
-    // const [selectedValues, setSelectedValues] = useState([]);
-    const handleSelectChange = (e, setFieldValue, values) => {
-        const { name, checked, value } = e.target;
 
-        // Tạo một mảng mới từ giá trị hiện tại của genres
-        let updatedGenres = [...values[name]];
-
-        if (checked) {
-            // Thêm giá trị mới vào mảng genres nếu chưa tồn tại
-            if (!updatedGenres.includes(value)) {
-                updatedGenres.push(value);
-            }
-        } else {
-            // Lọc bỏ giá trị khỏi mảng genres
-            updatedGenres = updatedGenres.filter((v) => v !== value);
-        }
-
-        // Set empty array if no genres are selected
-        setFieldValue(name, updatedGenres.length > 0 ? updatedGenres : []);
-    };
-    // const prepareDataForBackend = (values) => {
-    //     if (typeof values.genres === 'string') {
-    //         try {
-    //             // Chuyển đổi chuỗi JSON thành mảng
-    //             values.genres = JSON.parse(values.genres);
-    //         } catch (error) {
-    //             console.error('Error parsing genres:', error);
-    //             // Xử lý lỗi nếu có
-    //         }
-    //     }
-
-    //     // Nếu genres không phải là mảng, đặt giá trị mặc định là một mảng trống
-    //     values.genres = Array.isArray(values.genres) ? values.genres : [];
-
-    //     return values;
-    // };
     const prepareDataForBackend = (values) => {
         const updatedValues = { ...values }; // Tạo một bản sao của values để không làm thay đổi giá trị gốc
 
