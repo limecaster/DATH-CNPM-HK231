@@ -3,7 +3,7 @@ import { db } from "../config/dbConfig.js";
 
 export const createBook = async (req, res) => {
   console.log("Request Body:", req.body);
-  console.log("Type of:", typeof (req.body.genres));
+  console.log("Type of:", typeof req.body.genres);
   console.log("Request File:", req.file);
   try {
     const {
@@ -23,12 +23,11 @@ export const createBook = async (req, res) => {
     }
 
     const genresArray = Array.isArray(genres) ? genres : [genres];
-    console.log("Genres:", genresArray)
+    console.log("Genres:", genresArray);
 
     const coverlink = req.file.path.replace(/\\/g, "\\\\");
 
     console.log("SetLink:", coverlink);
-
 
     let book = new Book(
       ISBN,
@@ -58,7 +57,7 @@ export const createBook = async (req, res) => {
 export const getAllBook = async (req, res) => {
   try {
     let sql = `
-    SELECT ISBN, title, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\` 
+    SELECT ISBN, title, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\` , dateAdded
 FROM ((book natural join author_write_book) join author on author_write_book.authorID=author.authorID);`;
     const data = await db.execute(sql);
     return res.json(data[0]);
@@ -107,6 +106,23 @@ export const updateBookByISBN = async (req, res) => {
 
     console.log("Update book");
     return res.status(201).send(book);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
+export const DeleteBookByISBN = async (req, res) => {
+  try {
+    const { isbn } = req.params;
+    if (!isbn) {
+      return res
+        .status(400)
+        .send({ message: "ISBN is required for deleting a book." });
+    }
+    await Book.deleteOne(isbn);
+    console.log("Delete book");
+    return res.status(200).send({ message: "Delete success" });
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
