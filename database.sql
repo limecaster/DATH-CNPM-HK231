@@ -140,6 +140,8 @@
     `status`      bool DEFAULT 1, -- 0 = borrowed
     PRIMARY KEY (`ISBN`, `noEdition`, `copyId`),
     KEY `ISBN_copied_idx` (`ISBN`),
+    INDEX `noEdition_idx` (`noEdition`),
+	INDEX `copyId_idx` (`copyId`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
   ALTER Table `copy`
@@ -152,7 +154,10 @@
     `copyId`      varchar(9) NOT NULL, -- LIBrabry base - TITle - Edition - SoThuTu // BKUDSA223
     `readerId`    char(9) NOT NULL, -- first 2 chars is type (MS for manager, ST for student), 7 chars left is used to define owner 
     PRIMARY KEY (`ISBN`, `noEdition`, `copyId`, `readerId`),
-    KEY `ISBN_borrow_idx` (`ISBN`), 
+    KEY `ISBN_borrow_idx` (`ISBN`),
+	INDEX `copyId_idx` (`copyId`),
+    INDEX `readerID_idx` (`readerId`),
+	INDEX `noEdition_idx` (`noEdition`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
   ALTER TABLE `borrow`
@@ -172,6 +177,7 @@
     `givebackDate` date,
     PRIMARY KEY (`ISBN`, `noEdition`, `copyId`, `readerId`),
     KEY `ISBN_borrowedTimes_idx` (`ISBN`)
+    
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
   ALTER TABLE `borrowTimes`
@@ -181,7 +187,7 @@
   ALTER TABLE `borrowTimes`
       ADD CONSTRAINT `FK_copyId_borrowTimes_to_borrow` FOREIGN KEY (`copyId`) REFERENCES `borrow` (`copyId`);
   ALTER Table `borrowTimes`
-      ADD CONSTRAINT `FK_readerId_borrowTimes_to_borrow` FOREIGN KEY (`readeId`) REFERENCES `borrow` (`readerId`);
+      ADD CONSTRAINT `FK_readerId_borrowTimes_to_borrow` FOREIGN KEY (`readerId`) REFERENCES `borrow` (`readerId`);
 
 
   DROP TABLE IF EXISTS `manager`;
