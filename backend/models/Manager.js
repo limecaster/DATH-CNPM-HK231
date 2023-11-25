@@ -1,4 +1,4 @@
-import { db } from '../config/dbConfig'
+import { db } from '../config/dbConfig.js'
 
 export class Manager {
   constructor(name, sex, dob, phoneNumber, email, accountId, 
