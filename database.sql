@@ -315,6 +315,8 @@ UNLOCK TABLES;
 
   END ;;
   DELIMITER ;
+  
+
   /*!50003 SET sql_mode              = @saved_sql_mode */ ;
   /*!50003 SET character_set_client  = @saved_cs_client */ ;
   /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -377,6 +379,150 @@ UNLOCK TABLES;
 
   END ;;
   DELIMITER ;
+  
+ /*!50003 SET sql_mode              = @saved_sql_mode */ ;
+  /*!50003 SET character_set_client  = @saved_cs_client */ ;
+  /*!50003 SET character_set_results = @saved_cs_results */ ;
+  /*!50003 SET collation_connection  = @saved_col_connection */ ;
+  /*!50003 DROP PROCEDURE IF EXISTS `InsertManager` */;
+  /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+  /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+  /*!50003 SET @saved_col_connection = @@collation_connection */ ;
+  /*!50003 SET character_set_client  = utf8mb4 */ ;
+  /*!50003 SET character_set_results = utf8mb4 */ ;
+  /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+  /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+  /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+
+
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertManager`(
+    IN p_managerId CHAR(9),
+    IN p_name VARCHAR(30),
+    IN p_sex VARCHAR(1),
+    IN p_dob DATE,
+    IN p_phoneNumber VARCHAR(12),
+    IN p_email VARCHAR(50),
+    IN p_accountId CHAR(9),
+    IN p_username VARCHAR(20),
+    IN p_password VARCHAR(256),
+    IN p_openedDay DATE,
+    IN p_accountType VARCHAR(2)
+)
+BEGIN
+	DECLARE hashedPassword VARCHAR(256);
+	SET hashedPassword = SHA2(p_password, 256);
+    
+    INSERT INTO `manager` (
+        `managerId`,
+        `name`,
+        `sex`,
+        `dob`,
+        `phoneNumber`,
+        `email`,
+        `accountId`,
+        `username`,
+        `password`,
+        `openedDay`,
+        `accountType`
+    ) VALUES (
+        p_managerId,
+        CONVERT(p_name USING utf8mb4),
+        p_sex,
+        p_dob,
+        p_phoneNumber,
+        p_email,
+        p_accountId,
+        p_username,
+        hashedPassword,
+        p_openedDay,
+        p_accountType
+	);
+END //
+
+DELIMITER ;
+
+
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+  /*!50003 SET character_set_client  = @saved_cs_client */ ;
+  /*!50003 SET character_set_results = @saved_cs_results */ ;
+  /*!50003 SET collation_connection  = @saved_col_connection */ ;
+  /*!50003 DROP PROCEDURE IF EXISTS `InsertReader` */;
+  /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+  /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+  /*!50003 SET @saved_col_connection = @@collation_connection */ ;
+  /*!50003 SET character_set_client  = utf8mb4 */ ;
+  /*!50003 SET character_set_results = utf8mb4 */ ;
+  /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+  /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+  /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+
+DELIMITER //
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertReader`(
+    IN p_readerId CHAR(9),
+    IN p_name VARCHAR(30),
+    IN p_sex VARCHAR(1),
+    IN p_dob DATE,
+    IN p_phoneNumber VARCHAR(12),
+    IN p_email VARCHAR(50),
+    IN p_university VARCHAR(100),
+    IN p_accountId CHAR(9),
+    IN p_username VARCHAR(20),
+    IN p_password VARCHAR(256),
+    IN p_openedDay DATE,
+    IN p_accountType VARCHAR(2)
+)
+BEGIN
+	DECLARE hashedPassword VARCHAR(256);
+    SET hashedPassword = SHA2(p_password, 256);
+    
+    INSERT INTO `reader` (
+        `readerId`,
+        `name`,
+        `sex`,
+        `dob`,
+        `phoneNumber`,
+        `email`,
+        `university`,
+        `accountId`,
+        `username`,
+        `password`,
+        `openedDay`,
+        `accountType`
+    ) VALUES (
+        p_managerId,
+        CONVERT(p_name USING utf8mb4),
+        p_sex,
+        p_dob,
+        p_phoneNumber,
+        p_email,
+        CONVERT(p_university USING utf8mb4),
+        p_accountId,
+        p_username,
+        hashedPassword,
+        p_openedDay,
+        p_accountType
+	);
+END //
+
+DELIMITER ;
+  
+CALL InsertManager(
+    'MS1234567', -- example managerId
+    'John Doe Sáng',  -- example name
+    'M',         -- example sex
+    '1990-01-01', -- example dob
+    '1234567890', -- example phoneNumber
+    'john@example.com', -- example email
+    'ACC123456',  -- example accountId
+    'john_doe',   -- example username
+    'Abc@1234', -- example password (it's recommended to store hashed passwords)
+    '2023-01-01', -- example openedDay
+    'MS'          -- example accountType
+);
+
+
   /*!50003 SET sql_mode              = @saved_sql_mode */ ;
   /*!50003 SET character_set_client  = @saved_cs_client */ ;
   /*!50003 SET character_set_results = @saved_cs_results */ ;
