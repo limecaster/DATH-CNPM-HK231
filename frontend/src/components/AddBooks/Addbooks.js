@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import React, { useState, useRef, useEffect } from 'react';
 
 
-const Forms = ({ onBookAdded, editBook }) => {
+const Forms = ({ onBookAdded, editBook, setEditBook, handleClose }) => {
 
     const fileInputRef = useRef(null);
 
@@ -41,9 +41,11 @@ const Forms = ({ onBookAdded, editBook }) => {
         }
     };
 
+    const [isEditMode, setIsEditMode] = useState(!!editBook);
 
     const handleShowConfirmationModal = () => {
         setShowConfirmationModal(true);
+        setIsEditMode(!!editBook);
     };
 
     const handleCloseConfirmationModal = () => {
@@ -69,14 +71,14 @@ const Forms = ({ onBookAdded, editBook }) => {
         console.log('Updated Values:', updatedValues);
         return updatedValues;
     };
-    const handleFormSubmit = async (values) => {
+    const handleFormSubmit = async (values, resetForm) => {
         try {
             if (formData) {
                 const updatedValues = prepareDataForBackend(values);
                 // values.genres = Array.isArray(values.genres) ? values.genres : [values.genres];
                 console.log([...formData]);
 
-                const apiUrl = editBook ? `http://localhost:3001/books/${editBook.id}` : 'http://localhost:3001/books';
+                const apiUrl = editBook ? `http://localhost:3001/books` : 'http://localhost:3001/books';
 
                 const method = editBook ? 'PUT' : 'POST';
 
@@ -112,7 +114,14 @@ const Forms = ({ onBookAdded, editBook }) => {
                     console.log(editBook ? 'Book updated successfully!' : 'Book created successfully!');
                     handleShowSuccessModal();
                     onBookAdded();
-                    editBook(null); // Clear editBook state after successful action
+                    // Clear editBook state after successful action
+                    if (editBook) {
+                        setEditBook(null);
+                        setTimeout(() => {
+                            resetForm();
+                            handleClose();
+                        }, 3000); // Delay for 5 seconds before closing
+                    }
                 } else {
                     console.error(editBook ? 'Failed to update book' : 'Failed to create book');
                 }
@@ -151,6 +160,7 @@ const Forms = ({ onBookAdded, editBook }) => {
 
     useEffect(() => {
         // console.log("File:", selectedImage);
+        console.log('Selected Image in useEffect:', selectedImage);
         // Thực hiện các hành động khác sau khi selectedImage thay đổi
     }, [selectedImage]);
 
@@ -164,8 +174,9 @@ const Forms = ({ onBookAdded, editBook }) => {
             initialValues={{
                 title: editBook ? editBook.title : '',
                 authorName: editBook ? editBook.authorName : '',
-                image: editBook ? editBook.image : null,
+                image: editBook ? editBook.coverLink : null,
                 publisher: editBook ? editBook.publisher : '',
+
                 publishDate: editBook ? editBook.publishDate : '',
                 ISBN: editBook ? editBook.ISBN : '',
                 noPages: editBook ? editBook.noPages : '',
@@ -225,6 +236,13 @@ const Forms = ({ onBookAdded, editBook }) => {
                                 {selectedImage ? (
                                     <Image
                                         src={URL.createObjectURL(selectedImage)}
+                                        alt="Selected"
+                                        style={{ width: '100%', height: '100%' }}
+                                        thumbnail
+                                    />
+                                ) : values.image ? (
+                                    <Image
+                                        src={`${values.image}`}
                                         alt="Selected"
                                         style={{ width: '100%', height: '100%' }}
                                         thumbnail
@@ -398,24 +416,6 @@ const Forms = ({ onBookAdded, editBook }) => {
                     </Row>
 
                     <Row style={{ marginTop: '15px' }}>
-                        {/* <Form.Group controlId="validationFormikGenres" className="position-relative">
-                            <Form.Label>Thể loại sách</Form.Label>
-                            {['mystery', 'horror', 'adventure'].map((genre) => (
-                                <Form.Check
-                                    key={genre}
-                                    type="checkbox"
-                                    id={`genre-${genre}`}
-                                    label={genre}
-                                    name="genres"
-                                    value={genre}
-                                    checked={values.genres?.includes(genre) ?? false}
-                                    onChange={(e) => handleSelectChange(e, setFieldValue, values)}
-                                />
-                            ))}
-                            <Form.Control.Feedback type="invalid" tooltip>
-                                {errors.genres}
-                            </Form.Control.Feedback>
-                        </Form.Group> */}
 
                         <Form.Group controlId="validationFormikGenres" className="position-relative">
                             <Form.Label>Thể loại sách</Form.Label>
@@ -479,13 +479,13 @@ const Forms = ({ onBookAdded, editBook }) => {
                             <Modal.Title>Xác nhận</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            Bạn có chắc chắn muốn thêm sách này không?
+                            {isEditMode ? 'Bạn có chắc chắn muốn chỉnh sửa sách này không?' : 'Bạn có chắc chắn muốn thêm sách này không?'}
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="secondary" onClick={handleCloseConfirmationModal}>
                                 Hủy bỏ
                             </Button>
-                            <Button variant="primary" onClick={() => { handleFormSubmit(values); handleCloseConfirmationModal(); }}>
+                            <Button variant="primary" onClick={() => { handleFormSubmit(values, resetForm); handleCloseConfirmationModal(); }}>
                                 Xác nhận
                             </Button>
                         </Modal.Footer>
@@ -495,7 +495,7 @@ const Forms = ({ onBookAdded, editBook }) => {
                             <Modal.Title>Thành công</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            Sách đã được thêm thành công!
+                            {isEditMode ? 'Bạn đã chỉnh sửa thành công!' : 'Sách đã được thêm thành công!'}
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="primary" onClick={() => handleCloseSuccessModal(resetForm)}>
