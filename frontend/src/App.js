@@ -19,7 +19,7 @@ function App() {
       <section>
             <Routes>
               <Route path="/" element={<Homepage />} />
-              <Route path="/selectmember" element={<SelectMember/>} />
+              <Route path="/selectmember/*" element={<SelectMember/>} />
               <Route path="/user/login" element={<Login func='login' title='user'/>} />
               <Route path="/admin/login" element={<Login func='login' title='admin'/>} />
               <Route path="/register" element={<Login func='register' title='user'/>} />

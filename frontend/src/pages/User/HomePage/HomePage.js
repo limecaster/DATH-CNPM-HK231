@@ -1,6 +1,6 @@
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import Header from '../../../components/Header/Header';
+import Header from '../../../components/Header/header';
 import Welcome from '../../../components/Homepage/welcome';
 import Trending from '../../../components/Homepage/trending';
 import New from '../../../components/Homepage/new';
@@ -33,10 +33,10 @@ function Homepage() {
         // console.error(err);
       });
   }, []);
-  const newsData = displayedBooks.map((book) => <New title={book.title} authorName={book.authorName} />);
-  const trendData = displayedBooks.map((book) => <Trending title={book.title} authorName={book.authorName} />);
-  const favoriteData = displayedBooks.map((book) => <Favor title={book.title} authorName={book.authorName} />);
-  const categData = displayedBooks.map((book) => <Category desc={book.desc} />);
+  const newsData = displayedBooks.map((book) => <New key={book.ISBN} title={book.title} authorName={book.authorName} />);
+  const trendData = displayedBooks.map((book) => <Trending key={book.ISBN} title={book.title} authorName={book.authorName} />);
+  const favoriteData = displayedBooks.map((book) => <Favor key={book.ISBN} title={book.title} authorName={book.authorName} />);
+  const categData = displayedBooks.map((book) => <Category key={book.ISBN} desc={book.desc} />);
   // const newsData = newData.map((item) => <New name={item.name} url={item.imageurl} author={item.author}/>);
   // const trendData = trendingData.map((item) => <Trending name={item.name} url={item.imageurl} author={item.author}/>);
   // const favoriteData = favorData.map((item) => <Favor name={item.name} url={item.imageurl} author={item.author}/>);
