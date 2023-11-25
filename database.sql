@@ -4,7 +4,7 @@
   -- ------------------------------------------------------
   -- Server version	8.0.34
 
-  CREATE DATABASE  IF NOT EXISTS `library` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+  CREATE DATABASE  IF NOT EXISTS `library` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
   USE `library`;
 
   /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -30,7 +30,7 @@
     `authorName` varchar(45) DEFAULT NULL,
     PRIMARY KEY (`authorID`),
     UNIQUE KEY `authorName_UNIQUE` (`authorName`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  ) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
 
   --
@@ -57,7 +57,7 @@
     KEY `author_write_book_ibfk_2_idx` (`authorID`),
     CONSTRAINT `author_write_book_ibfk_1` FOREIGN KEY (`ISBN`) REFERENCES `book` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `author_write_book_ibfk_2` FOREIGN KEY (`authorID`) REFERENCES `author` (`authorID`) ON DELETE CASCADE ON UPDATE CASCADE
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
 
   --
@@ -90,7 +90,7 @@
     `dateAdded` datetime DEFAULT NULL,
     PRIMARY KEY (`ISBN`),
     UNIQUE KEY `ISBN_UNIQUE` (`ISBN`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
 
   --
@@ -116,7 +116,7 @@
     PRIMARY KEY (`genre`,`ISBN`),
     KEY `ISBN_idx` (`ISBN`),
     CONSTRAINT `ISBN` FOREIGN KEY (`ISBN`) REFERENCES `book` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
 
   --
@@ -130,30 +130,23 @@
   UNLOCK TABLES;
 
 
+
+
   DROP TABLE IF EXISTS `copy`;
   CREATE TABLE `copy` (
     `ISBN`        varchar(13) NOT NULL,
     `noEdition`   int NOT NULL,
-    `copyId`      varchar(9) NOT NULL, -- LIBrabry base - TITle - SoThuTu // BKUDSA223
+    `copyId`      varchar(9) NOT NULL, -- LIBrabry base - TITle - Edition - SoThuTu // BKUDSA223
     `status`      bool DEFAULT 1, -- 0 = borrowed
     PRIMARY KEY (`ISBN`, `noEdition`, `copyId`),
     KEY `ISBN_copied_idx` (`ISBN`),
     INDEX `noEdition_idx` (`noEdition`),
 	INDEX `copyId_idx` (`copyId`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
   ALTER Table `copy`
       ADD CONSTRAINT `FK_ISBN_copy_to_book` FOREIGN KEY (`ISBN`) REFERENCES `book` (`ISBN`);
 
-  -- Mockup data
-  LOCK TABLES `copy` WRITE;
-  /*!40000 ALTER TABLE `copy` DISABLE KEYS */;
-  INSERT INTO `copy`
-	VALUES ("9780000000000", 1, "BKUGT1001", 0), ("97800000000000", 2, "BKUGT1002", 0), ("9780000000001", 3, "BKUGT2003", 1), ("9780000000002", 1, "BKUDSA001", 1);
-  /*!40000 ALTER TABLE `copy` ENABLE KEYS */;
-  UNLOCK TABLES;
-  
-  
   DROP TABLE IF EXISTS `borrow`;
   CREATE TABLE `borrow` (
     `ISBN`        varchar(13) NOT NULL,
@@ -165,7 +158,7 @@
 	INDEX `copyId_idx` (`copyId`),
     INDEX `readerID_idx` (`readerId`),
 	INDEX `noEdition_idx` (`noEdition`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
   ALTER TABLE `borrow`
       ADD CONSTRAINT `FK_ISBN_borrow_to_copy` FOREIGN KEY (`ISBN`) REFERENCES `copy` (`ISBN`);
@@ -173,13 +166,6 @@
       ADD CONSTRAINT `FK_noEdition_borrow_to_copy` FOREIGN KEY (`noEdition`) REFERENCES `copy` (`noEdition`);
   ALTER TABLE `borrow`
       ADD CONSTRAINT `FK_copyId_borrow_to_copy` FOREIGN KEY (`copyId`) REFERENCES `copy` (`copyId`);
-
-  LOCK TABLE `borrow` WRITE;
-  /*!40000 ALTER TABLE `borrow` DISABLE KEYS */;
-  INSERT INTO `borrow`
-	VALUES ("9780000000000", 1, "BKUGT1001", "ST1000000"), ("97800000000000", 2, "BKUGT1002", "ST1000001");
-  /*!40000 ALTER TABLE `borrow` ENABLE KEYS */;
-  UNLOCK TABLES;
 
   DROP TABLE IF EXISTS `borrowTimes`;
   CREATE TABLE `borrowTimes` (
@@ -192,7 +178,7 @@
     PRIMARY KEY (`ISBN`, `noEdition`, `copyId`, `readerId`),
     KEY `ISBN_borrowedTimes_idx` (`ISBN`)
     
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
   ALTER TABLE `borrowTimes`
       ADD CONSTRAINT `FK_ISBN_borrowTimes_to_borrow` FOREIGN KEY (`ISBN`) REFERENCES `borrow` (`ISBN`);
@@ -221,18 +207,10 @@
     `accountType`     varchar(2) DEFAULT 'MS', -- MS, ST
     PRIMARY KEY (`managerId`),
     UNIQUE KEY `MANAGER_UNIQUE` (`managerId`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- Mockup data
 
-LOCK TABLE `manager` WRITE;
-/*!40000 ALTER TABLE `manager` DISABLE KEYS */;
-INSERT INTO `manager`
-	VALUE ("MS1000000", "Đỗ Văn Bâng", "M", "2003-09-29", "0123456789", "bang.do38@hcmut.edu.vn", "MS1000000", "bangdo", "123456", "2023-11-1", "MS");
-INSERT INTO `manager`
-	VALUE ("MS1000001", "Trương Thị Dũng", "F", "2003-01-22", "0123456789", "example@hcmut.edu.vn", "MS1000001", "dungtruongthi", "123456", "2023-11-1", "MS");
-/*!40000 ALTER TABLE `manager` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
   DROP TABLE IF EXISTS `reader`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -244,7 +222,7 @@ UNLOCK TABLES;
     `dob`             date,
     `phoneNumber`     varchar(12),
     `email`           varchar(50),
-    `university`      varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    `university`      varchar(100),
     `accountId`       char(9) NOT NULL,
     `username`        varchar(20) NOT NULL,
     `password`        varchar(256) NOT NULL,
@@ -252,16 +230,10 @@ UNLOCK TABLES;
     `accountType`     varchar(2) DEFAULT 'MS', -- MS, ST
     PRIMARY KEY (`readerId`),
     UNIQUE KEY `READER_UNIQUE` (`readerId`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-LOCK TABLE `reader` WRITE;
-/*!40000 ALTER TABLE `reader` DISABLE KEYS */;
-INSERT INTO `reader`
-	VALUE ("ST1000000", "Cù Hoàng Nguyễn Sơn", "M", "2003-04-01", "0123456789", "soncu@hcmut.edu.vn", "Đại học Bách Khoa" ,"ST1000000", "soncuvippro", "123456", "2023-11-1", "ST");
-INSERT INTO `reader`
-	VALUE ("ST1000001", "Phạm Bá Hoàng", "M", "2003-06-21", "0123456789", "hoangpham@hcmut.edu.vn", "Đại học Bách Khoa", "ST1000001", "hoangphamt1con", "123456", "2023-11-1", "ST");
-/*!40000 ALTER TABLE `reader` ENABLE KEYS */;
-UNLOCK TABLES;
+
+
 
   --
   -- Dumping events for database 'library'
@@ -276,7 +248,7 @@ UNLOCK TABLES;
   /*!50003 SET @saved_col_connection = @@collation_connection */ ;
   /*!50003 SET character_set_client  = utf8mb4 */ ;
   /*!50003 SET character_set_results = utf8mb4 */ ;
-  /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+  /*!50003 SET collation_connection  = utf8_general_ci */ ;
   /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
   /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
   DELIMITER ;;
@@ -325,7 +297,7 @@ UNLOCK TABLES;
   /*!50003 SET @saved_col_connection = @@collation_connection */ ;
   /*!50003 SET character_set_client  = utf8mb4 */ ;
   /*!50003 SET character_set_results = utf8mb4 */ ;
-  /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+  /*!50003 SET collation_connection  = utf8_general_ci */ ;
   /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
   /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
   DELIMITER ;;
@@ -392,3 +364,5 @@ UNLOCK TABLES;
   /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
   -- Dump completed on 2023-11-22 13:34:46
+
+
