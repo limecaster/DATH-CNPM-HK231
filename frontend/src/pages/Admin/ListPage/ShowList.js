@@ -198,8 +198,8 @@ const ShowList = () => {
                 <strong style={{ fontSize: "55px", fontWeight: "700" }}>Quản lý danh sách của thư viện</strong>
             </Row>
             <Row style={{ width: "100%", marginTop: "15px" }}>
-                <Col xs={6}>
-                    <SearchBox onSearch={handleSearch} />
+                <Col style={{ display: 'flex' }} xs={6}>
+                    <SearchBox style={{ borderRadius: '8px' }} onSearch={handleSearch} />
                 </Col>
                 <Col xs={4} style={{ display: "flex" }}>
                     <Button variant="outlined" color="success" style={{ width: "80px", marginRight: "20px" }}>Search</Button>

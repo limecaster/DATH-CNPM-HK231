@@ -1,6 +1,6 @@
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import Header from '../../../components/Header/header';
+import Header from '../../../components/Header/Header';
 import Welcome from '../../../components/Homepage/welcome';
 import Trending from '../../../components/Homepage/trending';
 import New from '../../../components/Homepage/new';
