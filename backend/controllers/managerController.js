@@ -86,3 +86,19 @@ export const validateManagerAccount = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+
+export const getAllManager = async (req, res) => {
+  console.log('Request Body:', req.body);
+  console.log('Request File:', req.file);
+
+  try {
+    let sql = `
+    SELECT * FROM manager;
+    `;
+    const data = await db.execute(sql);
+    return res.json(data[0]);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};

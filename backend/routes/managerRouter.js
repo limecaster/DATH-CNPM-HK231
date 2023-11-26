@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { createManager, validateManagerAccount } from "../controllers/managerController.js";
+import { createManager, validateManagerAccount, getAllManager } from "../controllers/managerController.js";
 
 const router = Router()
 
-router.route("/").post(createManager).post(validateManagerAccount);
+router.route("/").get(getAllManager).post(createManager).post(validateManagerAccount);
 
 export const managerRouter = router;
