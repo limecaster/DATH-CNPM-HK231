@@ -115,4 +115,30 @@ export class Book {
       }
     }
   };
+
+  static getGenres = async (isbn) => {
+    let connection;
+    try {
+      connection = await db.getConnection();
+      await connection.beginTransaction();
+
+      const [result] = await connection.execute(
+        `SELECT genre FROM genre_of_book NATURAL JOIN book WHERE ISBN = ?;`,
+        [isbn]
+      );
+
+      await connection.commit();
+
+      return result;
+    } catch (error) {
+      if (connection) {
+        await connection.rollback();
+      }
+      throw error;
+    } finally {
+      if (connection) {
+        connection.release();
+      }
+    }
+  };
 }
