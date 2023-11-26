@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "js-sha256": "^0.10.1",
+    "react-multi-carousel": "^2.8.4"
+  }
+}

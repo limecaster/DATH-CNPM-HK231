@@ -4,7 +4,8 @@ import Col from "react-bootstrap/Col"
 import React, { useEffect, useState } from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import axios from "axios";
-import Forms from '../../../components/AddBooks/Addbooks'
+import Forms from '../../../components/AddBooks/Addbooks';
+import Buttons from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal';
 import Pagination from "../../../components/Pagination/Pagination";
 import SearchBox from "../../../components/Search/Search";
@@ -49,13 +50,68 @@ const ShowList = () => {
             });
     }, []);
 
-    const handleEdit = (bookId) => {
-        console.log(`Edit book with ID ${bookId}`);
+    useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/books');
+                // console.log(response.data)
+                const sortedBooks = response.data.sort((a, b) => {
+                    // Sắp xếp theo thời gian thêm mới giảm dần
+                    // console.log("Date:", new Date(b.dateAdded) - new Date(a.dateAdded))
+                    return new Date(b.dateAdded) - new Date(a.dateAdded);
+                });
+
+                // console.log("Log:", sortedBooks)
+                setBooks(sortedBooks);
+                setLoading(false);
+            } catch (err) {
+                setError(err);
+                setLoading(false);
+            }
+        };
+
+        // Fetch lại danh sách khi state updateBooks thay đổi
+        fetchBooks();
+    }, [updateBooks]);
+
+
+    const [bookToDelete, setBookToDelete] = useState(null);
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const handleShowConfirmationModal = () => {
+        setShowConfirmationModal(true);
     };
 
-    const handleDelete = (bookId) => {
-        console.log(`Delete book with ID ${bookId}`);
-    }
+    const handleCloseConfirmationModal = () => {
+        setShowConfirmationModal(false);
+        setBookToDelete(null); // Đặt lại bookToDelete sau khi đóng modal
+    };
+
+    const handleCloseSuccessModal = () => {
+        setShowSuccessModal(false);
+    };
+
+    const handleDelete = (ISBN) => {
+        const bookToDelete = books.find((book) => book.ISBN === ISBN);
+        setBookToDelete(bookToDelete);
+        handleShowConfirmationModal();
+    };
+
+    const handleDeleteConfirmed = async (ISBN) => {
+        try {
+            await axios.delete(`http://localhost:3001/books/${ISBN}`);
+
+
+            setShowConfirmationModal(false);
+            setShowSuccessModal(true);
+
+            setUpdateBooks(prevState => !prevState);
+        } catch (error) {
+            console.error('Failed to delete book:', error);
+        }
+    };
+
+
 
 
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -91,7 +147,6 @@ const ShowList = () => {
     const displayedBooks = filteredBooks.slice(startIndex, endIndex);
 
 
-
     // Callback này được gọi khi sách được thêm mới thành công
     const handleBookAdded = () => {
         // Đóng modal thêm sách (nếu bạn muốn đóng)
@@ -100,21 +155,32 @@ const ShowList = () => {
         setUpdateBooks(prevState => !prevState);
     };
 
-    useEffect(() => {
-        const fetchBooks = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/books');
-                setBooks(response.data);
-                setLoading(false);
-            } catch (err) {
-                setError(err);
-                setLoading(false);
-            }
-        };
+    const [editBook, setEditBook] = useState(null);
 
-        // Fetch lại danh sách khi state updateBooks thay đổi
-        fetchBooks();
-    }, [updateBooks]);
+
+    const handleEdit = (bookId) => {
+        console.log("Editing book with ID:", bookId);
+        console.log("Books:", books)
+        const bookToEdit = books.find((book) => book.ISBN === bookId);
+        // const bookToEdit = updateBooks.find((book) => book.ISBN === bookId);
+
+        console.log("Book to edit:", bookToEdit);
+        const bookWithDefaults = {
+            ...bookToEdit,
+            image: bookToEdit.coverLink || null,
+            genres: bookToEdit.genres || [],
+        };
+        console.log("Book to edit to:", bookWithDefaults);
+        setEditBook(bookWithDefaults);
+
+
+        handleShow(); // Open the modal for editing
+    };
+
+
+
+
+
 
     if (loading) {
         return <div>Loading...</div>;
@@ -132,8 +198,8 @@ const ShowList = () => {
                 <strong style={{ fontSize: "55px", fontWeight: "700" }}>Quản lý danh sách của thư viện</strong>
             </Row>
             <Row style={{ width: "100%", marginTop: "15px" }}>
-                <Col xs={6}>
-                    <SearchBox onSearch={handleSearch} />
+                <Col style={{ display: 'flex' }} xs={6}>
+                    <SearchBox style={{ borderRadius: '8px' }} onSearch={handleSearch} />
                 </Col>
                 <Col xs={4} style={{ display: "flex" }}>
                     <Button variant="outlined" color="success" style={{ width: "80px", marginRight: "20px" }}>Search</Button>
@@ -165,8 +231,8 @@ const ShowList = () => {
                                     <TableCell style={{ padding: '5px' }} align="center">{book.publisher}</TableCell>
                                     <TableCell style={{ padding: '5px' }} align="center">{book.publishDate}</TableCell>
                                     <TableCell style={{ padding: '5px', width: '230px' }} align="center" >
-                                        <Button style={{ padding: '5px', marginRight: '15px' }} variant="outlined" color="success" size="small" onClick={() => handleEdit(book.id)}>Chỉnh sửa</Button>
-                                        <Button style={{ padding: '5px' }} variant="outlined" color="error" size="small" onClick={() => handleDelete(book.id)}>Xóa</Button>
+                                        <Button style={{ padding: '5px', marginRight: '15px' }} variant="outlined" color="success" size="small" onClick={() => handleEdit(book.ISBN)}>Chỉnh sửa</Button>
+                                        <Button style={{ padding: '5px' }} variant="outlined" color="error" size="small" onClick={() => handleDelete(book.ISBN)}>Xóa</Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -184,13 +250,41 @@ const ShowList = () => {
                 />
             </Col>
 
-
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title style={{ marginLeft: '160px' }} >Thêm sách</Modal.Title>
+                    <Modal.Title>Xác nhận</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Forms onBookAdded={handleBookAdded} />
+                    Bạn có chắc chắn muốn xóa sách "{bookToDelete?.title}" không?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Buttons variant="secondary" onClick={handleCloseConfirmationModal}>
+                        Hủy bỏ
+                    </Buttons>
+                    <Buttons variant="primary" onClick={() => { handleDeleteConfirmed(bookToDelete?.ISBN); handleCloseConfirmationModal(); }}>
+                        Xác nhận
+                    </Buttons>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={showSuccessModal} onHide={handleCloseSuccessModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Thành công</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Sách đã được xóa thành công!
+                </Modal.Body>
+                <Modal.Footer>
+                    <Buttons variant="primary" onClick={handleCloseSuccessModal}>
+                        OK
+                    </Buttons>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title style={{ marginLeft: '160px' }} > {editBook ? 'Chỉnh sửa sách' : 'Thêm sách'}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Forms onBookAdded={handleBookAdded} editBook={editBook} setEditBook={setEditBook} handleClose={handleClose} />
                 </Modal.Body>
             </Modal>
         </Container >

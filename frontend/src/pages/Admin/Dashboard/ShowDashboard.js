@@ -121,10 +121,11 @@ function ShowDashboard() {
                 <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
                     <div style={{width:'fit-content'}}>
                         <img src={userIcon} class="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
+
                     </div>
-                    <div class="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
-                        <h5 class="text-secondary">Tổng số người dùng</h5>
-                        <p class="mt-4 fw-bold">220</p>
+                    <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
+                        <h5 className="text-secondary">Tổng số người dùng</h5>
+                        <p className="mt-4 fw-bold">220</p>
                     </div>
                 </div>
             </div>
@@ -132,10 +133,11 @@ function ShowDashboard() {
                 <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
                     <div style={{width:'fit-content'}}>
                         <img src={bookIcon} class="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
+
                     </div>
-                    <div class="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
-                        <h5 class="text-secondary">Tổng số sách</h5>
-                        <p class="mt-4 fw-bold">220</p>
+                    <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
+                        <h5 className="text-secondary">Tổng số sách</h5>
+                        <p className="mt-4 fw-bold">220</p>
                     </div>
                 </div>
             </div>
@@ -143,10 +145,11 @@ function ShowDashboard() {
                 <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
                     <div style={{width:'fit-content'}}>
                         <img src={borrowIcon} class="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
+
                     </div>
-                    <div class="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
-                        <h5 class="text-secondary">Số lượt mượn / trả</h5>
-                        <p class="mt-4 fw-bold">300/280</p>
+                    <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
+                        <h5 className="text-secondary">Số lượt mượn / trả</h5>
+                        <p className="mt-4 fw-bold">300/280</p>
                     </div>
                 </div>
             </div>
@@ -245,7 +248,7 @@ function ShowDashboard() {
                         </TableHead>
                         <TableBody>
                             {displayedBooks.map((book) => (
-                                <TableRow key={book.id}>
+                                <TableRow key={book.ISBN}>
                                     <TableCell style={{ padding: '5px' }} align="center">{book.ISBN}</TableCell>
                                     <TableCell style={{ padding: '5px', width: '230px' }} align="center">{book.title}</TableCell>
                                     <TableCell style={{ padding: '5px' }} align="center">100</TableCell>
