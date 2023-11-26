@@ -14,13 +14,15 @@ const ListPage = () => {
     return (
         <Container fluid className='p-0'>
             <div className='d-flex'>
-                <div style={{ position: 'static' }}>
+
+                <div className='h-auto' style={{position:'static'}}>
                     <Sidebar />
                 </div>
-                <div style={{ flex: '1' }}>
-                    <Container fluid className='ps-2 pe-2'>
-                        <Row style={{ marginLeft: '50px', marginRight: '100px' }}>
-                            <Col xs={12} sm={12}>
+                <div style={{flex:'1'}}>
+                    <Container className='m-2'>
+                        <Row >
+                            <Col xs={12} sm={12} >
+              
                                 <ShowList />
                             </Col>
                         </Row>

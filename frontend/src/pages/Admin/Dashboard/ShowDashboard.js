@@ -1,8 +1,7 @@
  import 
- { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } 
+ { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } 
  from 'recharts';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
-
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import './ShowDashboard.css'
 import bookIcon from '../../../assets/image/bookIcon.png';
 import userIcon from '../../../assets/image/userIcon.png';
@@ -13,7 +12,7 @@ import React, { useEffect, useState } from "react";
 function ShowDashboard() {
 
     const [books, setBooks] = useState([]);
-    const displayedBooks = books.slice(1, 7);
+    const displayedBooks = books.slice(53, 60);
 
     useEffect(() => {
         axios.get('http://localhost:3001/books')
@@ -117,11 +116,12 @@ function ShowDashboard() {
 
   return (
     <main className='container-fluid'>
-        <div className='row mt-3 gx-5'>
+        <div className='row mt-3 gx-5 gy-5'>
             <div className='col'>
                 <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
                     <div style={{width:'fit-content'}}>
-                        <img src={userIcon} className="img-fluid" style={{width:'75px',height:'75px'}}/>
+                        <img src={userIcon} class="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
+
                     </div>
                     <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
                         <h5 className="text-secondary">Tổng số người dùng</h5>
@@ -132,7 +132,8 @@ function ShowDashboard() {
             <div className='col'>
                 <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
                     <div style={{width:'fit-content'}}>
-                        <img src={bookIcon} className="img-fluid" style={{width:'75px',height:'75px'}}/>
+                        <img src={bookIcon} class="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
+
                     </div>
                     <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
                         <h5 className="text-secondary">Tổng số sách</h5>
@@ -143,7 +144,8 @@ function ShowDashboard() {
             <div className='col'>
                 <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
                     <div style={{width:'fit-content'}}>
-                        <img src={borrowIcon} className="img-fluid" style={{width:'75px',height:'75px'}}/>
+                        <img src={borrowIcon} class="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
+
                     </div>
                     <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
                         <h5 className="text-secondary">Số lượt mượn / trả</h5>
@@ -153,8 +155,34 @@ function ShowDashboard() {
             </div>
         </div>
 
-        <div className='charts'>
-            <ResponsiveContainer width="100%" height="100%">
+        <div className='charts mb-5 '>
+            <div style={{ textAlign: 'center', marginBottom: '100px' }}>
+            <h5>Biểu đồ thống kê số lượng truy cập và số sách mượn</h5>
+            <ResponsiveContainer width="100%" height={300}>
+                <LineChart
+                width={500}
+                height={300}
+                data={dataChart}
+                margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                }}
+                >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} name="Số lượt truy cập" />
+                <Line type="monotone" dataKey="amt" stroke="#82ca9d" name="Số sách mượn" />
+                </LineChart>
+            </ResponsiveContainer>
+            </div>
+            <div style={{ textAlign: 'center', marginBottom: '100px' }}>
+            <h5>Biểu đồ thống kê số lượng sách mượn và trả</h5>
+            <ResponsiveContainer width="100%" height={300}>
             <BarChart
             width={500}
             height={300}
@@ -175,37 +203,18 @@ function ShowDashboard() {
                 <Bar dataKey="uv" fill="#82ca9d" name='Số sách mượn'/>
                 </BarChart>
             </ResponsiveContainer>
+            </div>
 
-            <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                width={500}
-                height={300}
-                data={dataChart}
-                margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                }}
-                >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} name='Số lượt truy cập'/>
-                <Line type="monotone" dataKey="amt" stroke="#82ca9d" name='Số sách mượn'/>
-                </LineChart>
-            </ResponsiveContainer>
-
+            
         </div>
 
-        <div className='row mt-3 gx-5'>
+        <div className='row mt-5 gx-5 gy-5'>
             <div className='col'>
-                <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
+                <div className='d-flex flex-wrap p-3 shadow rounded border border-secondary'>
+                    <h5 className='w-100 d-block'>Danh sách người dùng</h5>
                     <Table>
                         <TableHead>
-                            <TableRow style={{ backgroundColor: '#EEEEEE', textAlign: 'center', padding: '5px' }}>
+                            <TableRow className='overflow-auto' style={{ backgroundColor: '#EEEEEE', textAlign: 'center', padding: '5px' }}>
                                 <TableCell align="center">ID</TableCell>
                                 <TableCell align="center">Tên</TableCell>
                                 <TableCell align="center">Số sách mượn</TableCell>
@@ -214,19 +223,20 @@ function ShowDashboard() {
                         </TableHead>
                         <TableBody>
                             {dataUser.map((user) => (
-                                <TableRow key={user.id}>
-                                    <TableCell style={{ padding: '5px' }} align="center">{user.id}</TableCell>
-                                    <TableCell style={{ padding: '5px', width: '230px' }} align="center">{user.name}</TableCell>
-                                    <TableCell style={{ padding: '5px' }} align="center">{user.borrows}</TableCell>
-                                    <TableCell style={{ padding: '5px' }} align="center">{user.returns}</TableCell>
-                                </TableRow>
+                                    <TableRow className='overflow-auto' key={user.id} >
+                                        <TableCell style={{ padding: '5px' }} align="center">{user.id}</TableCell>
+                                        <TableCell style={{ padding: '5px', width: '230px' }} align="center">{user.name}</TableCell>
+                                        <TableCell style={{ padding: '5px' }} align="center">{user.borrows}</TableCell>
+                                        <TableCell style={{ padding: '5px' }} align="center">{user.returns}</TableCell>
+                                    </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </div>
             </div>
             <div className='col'>
-                <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
+                <div className='d-flex flex-wrap p-3 shadow rounded border border-secondary'>
+                    <h5 className='w-100 d-block'>Danh sách sách được mượn nhiều nhất</h5>
                     <Table>
                         <TableHead>
                             <TableRow style={{ backgroundColor: '#EEEEEE', textAlign: 'center', padding: '5px' }}>

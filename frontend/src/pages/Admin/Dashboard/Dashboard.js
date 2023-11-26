@@ -9,12 +9,13 @@ const Dashboard = () => {
     return (
         <Container fluid className='p-0'>
             <div className='d-flex'>
-                <div style={{ position: 'static' }}>
+
+                <div className='h-auto' style={{position:'static'}}>
                     <Sidebar />
                 </div>
-                <div style={{ flex: '1' }}>
-                    <Container fluid className='ps-2 pe-2'>
-                        <Row style={{ marginLeft: '30px', marginRight: '30px' }}>
+                <div style={{flex:'1'}}>
+                    <Container >
+                        <Row>
                             <Col xs={12} sm={12}>
                                 <ShowDashboard />
                             </Col>

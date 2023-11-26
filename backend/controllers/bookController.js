@@ -128,3 +128,20 @@ export const DeleteBookByISBN = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+
+export const GetBookGenres = async (req, res) => {
+  try {
+    const { isbn } = req.params;
+    if (!isbn) {
+      return res
+        .status(400)
+        .send({ message: "ISBN is required for deleting a book." });
+    }
+    const genres = await Book.getGenres(isbn);
+    console.log("Get genres of book");
+    return res.status(200).send(genres);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
