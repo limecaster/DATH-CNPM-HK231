@@ -18,19 +18,37 @@ export class Reader {
   }
 
   save = async () => {
-    let sql = `
-      INSERT INTO manager(
-        name, sex, dob, phoneNumber, email, university, 
-        accountId, username, password, openedDay, accountType
-      )
-      VALUES(
-        '${this.name}', '${this.sex}', '${this.dob}', '${this.phoneNumber}', '${this.email}', '${this.university}', 
-        '${this.accountId}', '${this.username}', '${this.password}', '${this.openedDay}', '${this.accountType}' 
-      )
-    `;
+    let connection;
+    try {
+      connection = await db.getConnection();
+      await connection.beginTransaction();
+      let sql = `
+      CALL InsertReader(
+        '${this.name}',
+        '${this.sex}',
+        '${this.dob}',
+        '${this.phoneNumber}',
+        '${this.email}',
+        '${this.university}',
+        '${this.accountId}',
+        '${this.username}',
+        '${this.password}',
+        '${this.openedDay}',
+        '${this.accountType}'
+        )`;
+      const [newReader, _] = await connection.execute(sql);
+      await connection.commit();
 
-    const [newReader, _] = await db.execute(sql);
-
-    return newReader;
+      return newReader;
+    } catch (error) {
+      if (connection) {
+        await connection.rollback();
+      }
+      throw error;
+    } finally {
+      if (connection) {
+        connection.release();
+      }
+    }
   }
 }

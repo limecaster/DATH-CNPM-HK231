@@ -8,6 +8,8 @@ import Dashboard from './pages/Admin/Dashboard/Dashboard';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import 'react-multi-carousel/lib/styles.css';
 import Login from './pages/Login/login';
+
+import Homepage from './pages/User/HomePage/HomePage';
 import SelectMember from './pages/Login/selectmember';
 // import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
