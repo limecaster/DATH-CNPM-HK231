@@ -410,9 +410,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertManager`(
     IN p_accountType VARCHAR(2)
 )
 BEGIN
-	DECLARE hashedPassword VARCHAR(256);
-	SET hashedPassword = SHA2(p_password, 256);
-    
+   
     INSERT INTO `manager` (
         `managerId`,
         `name`,
@@ -434,7 +432,7 @@ BEGIN
         p_email,
         p_accountId,
         p_username,
-        hashedPassword,
+        p_password,
         p_openedDay,
         p_accountType
 	);
@@ -473,10 +471,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertReader`(
     IN p_openedDay DATE,
     IN p_accountType VARCHAR(2)
 )
-BEGIN
-	DECLARE hashedPassword VARCHAR(256);
-    SET hashedPassword = SHA2(p_password, 256);
-    
+BEGIN    
     INSERT INTO `reader` (
         `readerId`,
         `name`,
@@ -500,7 +495,7 @@ BEGIN
         CONVERT(p_university USING utf8mb4),
         p_accountId,
         p_username,
-        hashedPassword,
+        p_password,
         p_openedDay,
         p_accountType
 	);
