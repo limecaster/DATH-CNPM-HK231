@@ -25,7 +25,7 @@ const Header = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         
         <Navbar.Collapse id="basic-navbar-nav" className='justify-content-end'>
-          <Form inline style={{width: '65%'}}>
+          <Form inline={+true} style={{width: '65%'}}>
             <Row style={{width:'100%'}}>
               <Col xs="auto" style={{width:'90%', paddingRight: '0',color: '#566976', fontSize: 16.26, fontFamily: 'Work Sans', fontWeight: '400', wordWrap: 'break-word'}}>
                 <Form.Control
@@ -56,7 +56,7 @@ const Header = () => {
                   className="border-success ms-2 me-4"
                   style={{ backgroundColor: 'white', color: '#21717A' }}
                 >
-                  <Link to='/selectmember'>
+                  <Link to='/selectmember/*'>
                   <span style={{textAlign: 'center', color: '#21717A', fontSize: 16.26, fontFamily: 'Work Sans', fontWeight: '400', wordWrap: 'break-word'}}>Đăng nhập</span>
                   </Link>
                 </Button>
