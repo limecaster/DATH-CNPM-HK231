@@ -6,26 +6,20 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import { bookRouter } from "./routes/bookRouter.js";
 
-
-
 import multer from "multer";
 import fs from "fs";
 import path from "path";
 const app = express();
 
-
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(json());
 app.use(cors());
 
-
 const uploadDir = "./public/uploads";
-
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
-
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -39,11 +33,9 @@ const storage = multer.diskStorage({
   },
 });
 
-
 const upload = multer({ storage: storage });
 
 app.use(upload.single("image"));
-
 
 app.use("/books", bookRouter);
 
