@@ -263,10 +263,7 @@ INSERT INTO `reader`
 /*!40000 ALTER TABLE `reader` ENABLE KEYS */;
 UNLOCK TABLES;
 
-  --
-  -- Dumping events for database 'library'
-  --
-
+    
   --
   -- Dumping routines for database 'library'
   --

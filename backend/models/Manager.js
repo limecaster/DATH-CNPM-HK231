@@ -1,4 +1,17 @@
 import { db } from '../config/dbConfig.js'
+import bcrypt from 'bcrypt';
+
+
+// Function to hash password before storing them to the database
+const saltRounds = 10;
+const hashPassword = async (plainPassword) => {
+  try {
+    const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+    return hashedPassword;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export class Manager {
   constructor(name, sex, dob, phoneNumber, email, accountId, 
@@ -11,7 +24,7 @@ export class Manager {
     this.email = email;
     this.accountId = accountId;
     this.username = username;
-    this.password = password;
+    this.password = hashPassword(password); // Hash password before storing them
     this.openedDay = openedDay;
     this.accountType = accountType;
   }

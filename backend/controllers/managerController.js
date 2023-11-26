@@ -1,6 +1,5 @@
 import { Manager } from "../models/Manager.js";
 import { db } from "../config/dbConfig.js";
-import { sha256 } from 'js-sha256'
 
 export const createManager = async (req, res) => {
 
@@ -56,36 +55,6 @@ export const createManager = async (req, res) => {
   }
 };
 
-export const validateManagerAccount = async (req, res) => {
-  console.log('Request Body:', req.body);
-  console.log('Request File:', req.file);
-
-  try {
-    const {
-      email,
-      password
-    } = req.body;
-
-    let sql = 
-    `
-    SELECT email, hashedPassword
-    FROM manager
-    WHERE manager.email = '${email}';
-    `;
-    const data = await db.execute(sql);
-
-    if (email == data[0] && sha256(password) == data[1]) {
-      return res.status(200).send({ message: "Log in success." });
-    }
-    else {
-      return res.status(401).send({ message: "Log in fail. Please check your email or password again."})
-    }
-  } 
-  catch (error) {
-    console.log(error.message);
-    res.status(500).send({ message: error.message });
-  }
-};
 
 export const getAllManager = async (req, res) => {
   console.log('Request Body:', req.body);
