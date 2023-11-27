@@ -515,6 +515,7 @@ CALL InsertManager(
 );
 
 
+
   /*!50003 SET sql_mode              = @saved_sql_mode */ ;
   /*!50003 SET character_set_client  = @saved_cs_client */ ;
   /*!50003 SET character_set_results = @saved_cs_results */ ;

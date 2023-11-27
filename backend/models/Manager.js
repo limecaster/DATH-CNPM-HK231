@@ -14,9 +14,10 @@ const hashPassword = async (plainPassword) => {
 };
 
 export class Manager {
-  constructor(name, sex, dob, phoneNumber, email, accountId, 
+  constructor(managerId, name, sex, dob, phoneNumber, email, accountId, 
               username, password, openedDay, accountType) 
   {
+    this.managerId = managerId;
     this.name = name;
     this.sex = sex;
     this.dob = dob;
@@ -36,6 +37,7 @@ export class Manager {
       await connection.beginTransaction();
       let sql = `
       CALL InsertManager(
+        '${this.managerId}',
         '${this.name}',
         '${this.sex}',
         '${this.dob}',

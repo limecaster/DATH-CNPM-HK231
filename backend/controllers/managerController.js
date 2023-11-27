@@ -7,6 +7,7 @@ export const createManager = async (req, res) => {
   console.log('Request File:', req.file);
   try {
     const {
+      managerId,
       name,
       sex,
       dob,
@@ -19,7 +20,8 @@ export const createManager = async (req, res) => {
       accountType
     } = req.body;
 
-    if (!name ||
+    if (!managerId ||
+        !name ||
         !sex  ||
         !dob  ||
         !phoneNumber  ||
@@ -34,6 +36,7 @@ export const createManager = async (req, res) => {
     }
 
     let manager = new Manager(
+      managerId,
       name,
       sex,
       dob,
