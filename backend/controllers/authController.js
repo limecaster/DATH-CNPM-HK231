@@ -6,14 +6,21 @@ export const loginManager = async (req, res) => {
 
   const { email, password } = req.body;
 
-  // Simulated database query to get manager data by email
   let sql = `
       SELECT \`email\`, \`password\`
       FROM manager
       WHERE \`email\` = '${email}';  
-  `
-  const manager = await db.execute(sql);
-  if (!manager || !await bcrypt.compare(password, manager[0][0].password)) {
+  `;
+
+  try {
+    var manager = await db.execute(sql);
+  }
+  catch (error) {
+      console.log(error.message);
+      res.status(500).send({ message: error.message });
+  }
+  console.log(manager)
+  if (!manager[0][0] || !await bcrypt.compare(password, manager[0][0].password)) {
     return res.status(401).json({ message: 'Invalid email or password' });
   }
 
