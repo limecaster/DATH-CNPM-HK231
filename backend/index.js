@@ -11,20 +11,17 @@ import multer from "multer";
 import fs from "fs";
 import path from "path";
 const app = express();
-
-
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use("/books/covers", express.static(path.join("public", "uploads")));
 app.use(json());
 app.use(cors());
 
-
 const uploadDir = "./public/uploads";
-
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
-
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -37,7 +34,6 @@ const storage = multer.diskStorage({
     cb(null, fileName);
   },
 });
-
 
 const upload = multer({ storage: storage });
 
