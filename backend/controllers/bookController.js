@@ -56,9 +56,17 @@ export const createBook = async (req, res) => {
 export const getAllBook = async (req, res) => {
   try {
     let sql = `
-    SELECT ISBN, title, coverLink, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\` , dateAdded 
+    SELECT ISBN, title, coverLink, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\` , DATE_FORMAT(dateAdded, "%Y-%m-%d %H:%i:%s") AS dateAdded 
 FROM ((book natural join author_write_book) join author on author_write_book.authorID=author.authorID) ORDER BY dateAdded DESC;`;
-    const data = await db.execute(sql);
+    let data = await db.execute(sql);
+
+    await Promise.all(
+      data[0].map(async (obj) => {
+        const genres = await Book.getGenres(obj.ISBN);
+        const genreValues = genres.map((genre) => genre.genre);
+        obj.genres = genreValues;
+      })
+    );
     return res.json(data[0]);
   } catch (error) {
     console.log(error.message);
@@ -153,8 +161,11 @@ export const GetBookGenres = async (req, res) => {
         .send({ message: "ISBN is required for getting genres of book." });
     }
     const genres = await Book.getGenres(isbn);
+    const genreValues = genres.map((genre) => {
+      return genre.genre;
+    });
     console.log("Get genres of book");
-    return res.status(200).send(genres);
+    if (req) return res.status(200).send(genreValues);
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
