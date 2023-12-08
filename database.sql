@@ -1,283 +1,251 @@
-  -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
-  --
-  -- Host: localhost    Database: library
-  -- ------------------------------------------------------
-  -- Server version	8.0.34
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: library
+-- ------------------------------------------------------
+-- Server version	8.0.34
 
-  CREATE DATABASE  IF NOT EXISTS `library` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-  USE `library`;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-  /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-  /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-  /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-  /*!50503 SET NAMES utf8 */;
-  /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-  /*!40103 SET TIME_ZONE='+00:00' */;
-  /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-  /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-  /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-  /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+--
+-- Table structure for table `author`
+--
 
-  --
-  -- Table structure for table `author`
-  --
+DROP TABLE IF EXISTS `author`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `author` (
+  `authorID` int NOT NULL AUTO_INCREMENT,
+  `authorName` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`authorID`),
+  UNIQUE KEY `authorName_UNIQUE` (`authorName`)
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-  DROP TABLE IF EXISTS `author`;
-  /*!40101 SET @saved_cs_client     = @@character_set_client */;
-  /*!50503 SET character_set_client = utf8mb4 */;
-  CREATE TABLE `author` (
-    `authorID` int NOT NULL AUTO_INCREMENT,
-    `authorName` varchar(45) DEFAULT NULL,
-    PRIMARY KEY (`authorID`),
-    UNIQUE KEY `authorName_UNIQUE` (`authorName`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-  /*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Dumping data for table `author`
+--
 
-  --
-  -- Dumping data for table `author`
-  --
+LOCK TABLES `author` WRITE;
+/*!40000 ALTER TABLE `author` DISABLE KEYS */;
+INSERT INTO `author` VALUES (81,'Blake Crouch'),(87,'Bram Stoker'),(82,'Colleen Hoover'),(77,'Freida McFadden'),(80,'Harper Lee'),(79,'Karin Slaughter'),(76,'Kelly Rimmer'),(78,'Lisa Jewell'),(83,'Riley Sager'),(85,'Shirley Jackson'),(75,'Stephen King');
+/*!40000 ALTER TABLE `author` ENABLE KEYS */;
+UNLOCK TABLES;
 
-  LOCK TABLES `author` WRITE;
-  /*!40000 ALTER TABLE `author` DISABLE KEYS */;
-  INSERT INTO `author` VALUES (42,'ádsadas'),(39,'asdsdas'),(38,'bxcvb'),(58,'fadgag'),(41,'fasdf'),(43,'final?'),(37,'làm lại'),(36,'ông nào đó');
-  /*!40000 ALTER TABLE `author` ENABLE KEYS */;
-  UNLOCK TABLES;
+--
+-- Table structure for table `author_write_book`
+--
 
-  --
-  -- Table structure for table `author_write_book`
-  --
+DROP TABLE IF EXISTS `author_write_book`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `author_write_book` (
+  `authorID` int NOT NULL,
+  `ISBN` varchar(13) NOT NULL,
+  KEY `ISBN_idx` (`ISBN`),
+  KEY `author_write_book_ibfk_2_idx` (`authorID`),
+  CONSTRAINT `author_write_book_ibfk_1` FOREIGN KEY (`ISBN`) REFERENCES `book` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `author_write_book_ibfk_2` FOREIGN KEY (`authorID`) REFERENCES `author` (`authorID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-  DROP TABLE IF EXISTS `author_write_book`;
-  /*!40101 SET @saved_cs_client     = @@character_set_client */;
-  /*!50503 SET character_set_client = utf8mb4 */;
-  CREATE TABLE `author_write_book` (
-    `authorID` int NOT NULL,
-    `ISBN` varchar(13) NOT NULL,
-    KEY `ISBN_idx` (`ISBN`),
-    KEY `author_write_book_ibfk_2_idx` (`authorID`),
-    CONSTRAINT `author_write_book_ibfk_1` FOREIGN KEY (`ISBN`) REFERENCES `book` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `author_write_book_ibfk_2` FOREIGN KEY (`authorID`) REFERENCES `author` (`authorID`) ON DELETE CASCADE ON UPDATE CASCADE
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-  /*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Dumping data for table `author_write_book`
+--
 
-  --
-  -- Dumping data for table `author_write_book`
-  --
+LOCK TABLES `author_write_book` WRITE;
+/*!40000 ALTER TABLE `author_write_book` DISABLE KEYS */;
+INSERT INTO `author_write_book` VALUES (75,'9781668016138'),(76,'9781525823565'),(77,'9798352831533'),(78,'9781501154652'),(79,'9780062499554'),(80,'9780060935467'),(81,'9781101904244'),(82,'9781335004888'),(83,'9780593183212'),(75,'9781501142970'),(85,'9780143039976'),(75,'9781982110581'),(87,'9780141196886');
+/*!40000 ALTER TABLE `author_write_book` ENABLE KEYS */;
+UNLOCK TABLES;
 
-  LOCK TABLES `author_write_book` WRITE;
-  /*!40000 ALTER TABLE `author_write_book` DISABLE KEYS */;
-  INSERT INTO `author_write_book` VALUES (36,'1111222233'),(38,'127346891'),(39,'123699361'),(39,'12369936114'),(41,'124124124'),(42,'2148971928'),(43,'124214124'),(42,'214897221928'),(42,'214891928'),(42,'1123113'),(42,'712487912'),(42,'1241242566'),(42,'14144141'),(42,'5125'),(42,'14245'),(42,'15412'),(42,'15151515'),(42,'14141444'),(42,'0001302'),(42,'666'),(58,'111111'),(42,'1244562');
-  /*!40000 ALTER TABLE `author_write_book` ENABLE KEYS */;
-  UNLOCK TABLES;
+--
+-- Table structure for table `book`
+--
 
-  --
-  -- Table structure for table `book`
-  --
+DROP TABLE IF EXISTS `book`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `book` (
+  `ISBN` varchar(13) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `desc` text,
+  `coverLink` text,
+  `publisher` varchar(45) DEFAULT NULL,
+  `publishDate` year DEFAULT NULL,
+  `coverType` varchar(45) DEFAULT 'Paperback',
+  `noPages` int DEFAULT NULL,
+  `language` varchar(45) DEFAULT NULL,
+  `dateAdded` datetime DEFAULT NULL,
+  `copyNumber` int DEFAULT '20',
+  PRIMARY KEY (`ISBN`),
+  UNIQUE KEY `ISBN_UNIQUE` (`ISBN`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-  DROP TABLE IF EXISTS `book`;
-  /*!40101 SET @saved_cs_client     = @@character_set_client */;
-  /*!50503 SET character_set_client = utf8mb4 */;
-  CREATE TABLE `book` (
-    `ISBN` varchar(13) NOT NULL,
-    `title` varchar(100) NOT NULL,
-    `desc` text,
-    `coverLink` text,
-    `publisher` varchar(45) DEFAULT NULL,
-    `publishDate` year DEFAULT NULL,
-    `coverType` varchar(45) DEFAULT 'Paperback',
-    `noPages` int DEFAULT NULL,
-    `language` varchar(45) DEFAULT NULL,
-    `dateAdded` datetime DEFAULT NULL,
-    PRIMARY KEY (`ISBN`),
-    UNIQUE KEY `ISBN_UNIQUE` (`ISBN`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-  /*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Dumping data for table `book`
+--
 
-  --
-  -- Dumping data for table `book`
-  --
+LOCK TABLES `book` WRITE;
+/*!40000 ALTER TABLE `book` DISABLE KEYS */;
+INSERT INTO `book` VALUES ('9780060935467','To Kill a Mockingbird','One of the most cherished stories of all time, To Kill a Mockingbird has been translated into more than forty languages, sold more than forty million copies worldwide, served as the basis for an enormously popular motion picture, and was voted one of the best novels of the twentieth century by librarians across the country. A gripping, heart-wrenching, and wholly remarkable tale of coming-of-age in a South poisoned by virulent prejudice, it views a world of great beauty and savage inequities through the eyes of a young girl, as her father—a crusading local lawyer—risks everything to defend a black man unjustly accused of a terrible crime.','http://localhost:3001/books/covers/image-1702050763426-386079086.jpg','Harper Perennial',2002,'Hardcover',335,'English','2023-12-08 15:52:43',20),('9780062499554','Pretty Girls','Sisters. Strangers. Survivors.  More than twenty years ago, Claire and Lydi’s teenaged sister Julia vanished without a trace. The two women have not spoken since, and now their lives could not be more different. Claire is the glamorous trophy wife of an Atlanta millionaire. Lydia, a single mother, dates an ex-con and struggles to make ends meet. But neither has recovered from the horror and heartbreak of their shared loss - a devastating wound that’s cruelly ripped open when Claire’s husband is killed. The disappearance of a teenage girl and the murder of a middle-aged man, almost a quarter-century apart: what could connect them? Forming a wary truce, the surviving sisters look to the past to find the truth, unearthing the secrets that destroyed their family all those years ago... and uncovering the possibility of redemption, and revenge, where they least expect it.','http://localhost:3001/books/covers/image-1702050569746-967200579.jpg','William Morrow',2017,'Paperback',432,'English','2023-12-08 15:49:29',20),('9780141196886','Dracula','Part of Penguin’s beautiful hardback Clothbound Classics series, designed by the award-winning Coralie Bickford-Smith, these delectable and collectible editions are bound in high-quality colourful, tactile cloth with foil stamped into the design When Jonathan Harker visits Transylvania to help Count Dracula with the purchase of a London house, he makes a series of horrific discoveries about his client. Soon afterwards, various bizarre incidents unfold in England: an apparently unmanned ship is wrecked off the coast of Whitby; a young woman discovers strange puncture marks on her neck; and the inmate of a lunatic asylum raves about the ‘Master’ and his imminent arrival. In Dracula, Bram Stoker created one of the great masterpieces of the horror genre, brilliantly evoking a nightmare world of vampires and vampire hunters and also illuminating the dark corners of Victorian sexuality and desire.','http://localhost:3001/books/covers/image-1702052471225-265251131.jpg','Penguin Classics',2011,'Hardcover',512,'English','2023-12-08 16:21:11',20),('9780143039976','We Have Always Lived in the Castle','Shirley Jackson’s beloved gothic tale of a peculiar girl named Merricat and her family’s dark secret  Taking readers deep into a labyrinth of dark neurosis, We Have Always Lived in the Castle is a deliciously unsettling novel about a perverse, isolated, and possibly murderous family and the struggle that ensues when a cousin arrives at their estate. This edition features a new introduction by Jonathan Lethem.  For more than seventy years, Penguin has been the leading publisher of classic literature in the English-speaking world. With more than 1,700 titles, Penguin Classics represents a global bookshelf of the best works throughout history and across genres and disciplines. Readers trust the series to provide authoritative texts enhanced by introductions and notes by distinguished scholars and contemporary authors, as well as up-to-date translations by award-winning translators.','http://localhost:3001/books/covers/image-1702052258307-549492895.jpg','Penguin Classics',2006,'Hardcover',146,'English','2023-12-08 16:17:38',20),('9780593183212','The House Across the Lake','Casey Fletcher, a recently widowed actress trying to escape a streak of bad press, has retreated to the peace and quiet of her family’s lake house in Vermont. Armed with a pair of binoculars and several bottles of bourbon, she passes the time watching Tom and Katherine Royce, the glamorous couple living in the house across the lake. They make for good viewing—a tech innovator, Tom is powerful; and a former model, Katherine is gorgeous.  One day on the lake, Casey saves Katherine from drowning, and the two strike up a budding friendship. But the more they get to know each other—and the longer Casey watches—it becomes clear that Katherine and Tom’s marriage isn’t as perfect as it appears. When Katherine suddenly vanishes, Casey immediately suspects Tom of foul play. What she doesn’t realize is that there’s more to the story than meets the eye—and that shocking secrets can lurk beneath the most placid of surfaces.','http://localhost:3001/books/covers/image-1702052004821-468729739.jpg','Dutton',2023,'Paperback',384,'English','2023-12-08 16:13:24',20),('9781101904244','Dark Matter','Those are the last words Jason Dessen hears before the masked abductor knocks him unconscious. Before he awakens to find himself strapped to a gurney, surrounded by strangers in hazmat suits. Before a man Jason’s never met smiles down at him and says, \"Welcome back, my friend.\" In this world he’s woken up to, Jason’s life is not the one he knows. His wife is not his wife. His son was never born. And Jason is not an ordinary college physics professor, but a celebrated genius who has achieved something remarkable. Something impossible.','http://localhost:3001/books/covers/image-1702051169893-996882585.jpg','Ballantine Books',2017,'Paperback',368,'English','2023-12-08 15:59:29',20),('9781335004888','Never Never','Charlie Wynwood and Silas Nash have been best friends since they could walk. They’ve been in love since the age of fourteen. But as of this morning...they are complete strangers. Their first kiss, their first fight, the moment they fell in love...every memory has vanished. Now Charlie and Silas must work together to uncover the truth about what happened to them and why.  But the more they learn about the couple they used to be...the more they question why they were ever together to begin with. Forgetting is terrifying, but remembering may be worse.','http://localhost:3001/books/covers/image-1702051651794-509970591.jpg','Canary Street Press',2023,'Paperback',416,'English','2023-12-08 16:07:31',20),('9781501142970','It','Welcome to Derry, Maine. It’s a small city, a place as hauntingly familiar as your own hometown. Only in Derry the haunting is real.  They were seven teenagers when they first stumbled upon the horror. Now they are grown-up men and women who have gone out into the big world to gain success and happiness. But the promise they made twenty-eight years ago calls them reunite in the same place where, as teenagers, they battled an evil creature that preyed on the city’s children. Now, children are being murdered again and their repressed memories of that terrifying summer return as they prepare to once again battle the monster lurking in Derry’s sewers.  Readers of Stephen King know that Derry, Maine, is a place with a deep, dark hold on the author. It reappears in many of his books, including Bag of Bones, Hearts in Atlantis, and 11/22/63. But it all starts with It.','http://localhost:3001/books/covers/image-1702052168237-520698838.jpg','Scribner',2016,'Paperback',1168,'English','2023-12-08 16:16:08',20),('9781501154652','Then She Was Gone','Ellie Mack was the perfect daughter. She was fifteen, the youngest of three. Beloved by her parents, friends, and teachers, and half of a teenaged golden couple. Ellie was days away from an idyllic post-exams summer vacation, with her whole life ahead of her.  And then she was gone.  Now, her mother Laurel Mack is trying to put her life back together. It’s been ten years since her daughter disappeared, seven years since her marriage ended, and only months since the last clue in Ellie’s case was unearthed. So when she meets an unexpectedly charming man in a café, no one is more surprised than Laurel at how quickly their flirtation develops into something deeper. Before she knows it, she’s meeting Floyd’s daughters—and his youngest, Poppy, takes Laurel’s breath away.  Because looking at Poppy is like looking at Ellie. And now, the unanswered questions she’s tried so hard to put to rest begin to haunt Laurel anew. Where did Ellie go? Did she really run away from home, as the police have long suspected, or was there a more sinister reason for her disappearance? Who is Floyd, really? And why does his daughter remind Laurel so viscerally of her own missing girl?','http://localhost:3001/books/covers/image-1702049724035-923856281.jpg','Atria Books',2018,'Paperback',384,'English','2023-12-08 15:35:24',20),('9781525823565','The Things We Cannot Say','In 1942, Europe remains in the relentless grip of war. Just beyond the tents of the refugee camp she calls home, a young woman speaks her wedding vows. It’s a decision that will alter her destiny…and it’s a lie that will remain buried until the next century.  Since she was nine years old, Alina Dziak knew she would marry her best friend, Tomasz. Now fifteen and engaged, Alina is unconcerned by reports of Nazi soldiers at the Polish border, believing her neighbors that they pose no real threat, and dreams instead of the day Tomasz returns from college in Warsaw so they can be married. But little by little, injustice by brutal injustice, the Nazi occupation takes hold, and Alina’s tiny rural village, its families, are divided by fear and hate.  Then, as the fabric of their lives is slowly picked apart, Tomasz disappears. Where Alina used to measure time between visits from her beloved, now she measures the spaces between hope and despair, waiting for word from Tomasz and avoiding the attentions of the soldiers who patrol her parents’ farm. But for now, even deafening silence is preferable to grief.','http://localhost:3001/books/covers/image-1702048276295-952557804.jpg','Graydon House',2019,'Paperback',440,'English','2023-12-08 15:11:16',20),('9781668016138','Holly','Stephen King’s Holly marks the triumphant return of beloved King character Holly Gibney. Readers have witnessed Holly’s gradual transformation from a shy (but also brave and ethical) recluse in Mr. Mercedes to Bill Hodges’s partner in Finders Keepers to a full-fledged, smart, and occasionally tough private detective in The Outsider. In King’s new novel, Holly is on her own, and up against a pair of unimaginably depraved and brilliantly disguised adversaries.  When Penny Dahl calls the Finders Keepers detective agency hoping for help locating her missing daughter, Holly is reluctant to accept the case. Her partner, Pete, has Covid. Her (very complicated) mother has just died. And Holly is meant to be on leave. But something in Penny Dahl’s desperate voice makes it impossible for Holly to turn her down.  Mere blocks from where Bonnie Dahl disappeared live Professors Rodney and Emily Harris. They are the picture of bourgeois respectability: married octogenarians, devoted to each other, and semi-retired lifelong academics. But they are harboring an unholy secret in the basement of their well-kept, book-lined home, one that may be related to Bonnie’s disappearance. And it will prove nearly impossible to discover what they are up to: they are savvy, they are patient, and they are ruthless.','http://localhost:3001/books/covers/image-1702048119006-875617641.jpg','Scribner',2023,'Paperback',464,'English','2023-12-08 15:08:39',20),('9781982110581','The Institute','In the middle of the night, in a house on a quiet street in suburban Minneapolis, intruders silently murder Luke Ellis’s parents and load him into a black SUV. The operation takes less than two minutes. Luke will wake up at The Institute, in a room that looks just like his own, except there’s no window. And outside his door are other doors, behind which are other kids with special talents—telekinesis and telepathy—who got to this place the same way Luke did: Kalisha, Nick, George, Iris, and ten-year-old Avery Dixon. They are all in Front Half. Others, Luke learns, graduated to Back Half, “like the roach motel,” Kalisha says. “You check in, but you don’t check out.”  In this most sinister of institutions, the director, Mrs. Sigsby, and her staff are ruthlessly dedicated to extracting from these children the force of their extranormal gifts. There are no scruples here. If you go along, you get tokens for the vending machines. If you don’t, punishment is brutal. As each new victim disappears to Back Half, Luke becomes more and more desperate to get out and get help. But no one has ever escaped from the Institute.','http://localhost:3001/books/covers/image-1702052375011-47281983.jpg','Gallery Books',2020,'Paperback',576,'English','2023-12-08 16:19:35',20),('9798352831533','Never Lie: An addictive psychological thriller','Newlyweds Tricia and Ethan are searching for the house of their dreams.  But when they visit the remote manor that once belonged to Dr. Adrienne Hale, a renowned psychiatrist who vanished without a trace four years earlier, a violent winter storm traps them at the estate… with no chance of escape until the blizzard comes to an end.  In search of a book to keep her entertained until the snow abates, Tricia happens upon a secret room. One that contains audio transcripts from every single patient Dr. Hale has ever interviewed. As Tricia listens to the cassette tapes, she learns about the terrifying chain of events leading up to Dr. Hale’s mysterious disappearance.  Tricia plays the tapes one by one, late into the night. With each one, another shocking piece of the puzzle falls into place, and Dr. Adrienne Hale’s web of lies slowly unravels.  And then Tricia reaches the final cassette.','http://localhost:3001/books/covers/image-1702048384777-16870033.jpg','Independently published',2022,'Paperback',336,'English','2023-12-08 15:13:04',20);
+/*!40000 ALTER TABLE `book` ENABLE KEYS */;
+UNLOCK TABLES;
 
-  LOCK TABLES `book` WRITE;
-  /*!40000 ALTER TABLE `book` DISABLE KEYS */;
-  INSERT INTO `book` VALUES ('0001302','ádasd','fadgag','public\\uploads\\image-1700573698203-952835268.png','ádsad',2000,'Hardcover',131,'Vietnamese','2023-11-21 13:34:58'),('111111','update','update','update','update',2000,'Paperback',1000,'Vietnamese',NULL),('1111222233','Giải tích 1','update mô tả','undefined','BKU',1977,'Paperback',1023,'English',NULL),('1123113','ádasd','fadgag','public\\uploads\\image-1700559265949-294791276.png','ádsad',2000,'Hardcover',131,'English','2023-11-21 09:34:25'),('123699361','dasdasd','moádoihjfoap','public\\uploads\\image-1700552638330-555365587.png','ông nào đó',2000,'Paperback',10,'English','2023-11-21 07:43:58'),('12369936114','dasdasd','moádoihjfoap','public\\uploads\\image-1700552851875-627536726.png','ông nào đó',2000,'Paperback',10,'English','2023-11-21 07:47:31'),('124124124','fafdasf','124142','public\\uploads\\image-1700552938795-2114608.png','ádfasd',2000,'Paperback',142,'English','2023-11-21 07:48:58'),('1241242566','ádasd','fadgag','public\\uploads\\image-1700564674647-807821499.png','ádsad',2000,'Paperback',131,'English','2023-11-21 11:04:34'),('124214124','final?','final?','public\\uploads\\image-1700559081763-540309218.png','final?',2000,'Hardcover',124,'Vietnamese','2023-11-21 09:31:21'),('1244562','ádasd','fadgag','public\\uploads\\image-1700634642174-33535554.png','ádsad',2000,'Paperback',131,'Vietnamese','2023-11-22 06:30:42'),('127346891','react','mô tả','public\\uploads\\image-1700552072451-249185542.png','bxcvbbx',2000,'Paperback',12,'Vietnamese','2023-11-21 07:34:32'),('14141444','ádasd','fadgag','public\\uploads\\image-1700566565373-985852121.png','ádsad',2000,'Hardcover',131,'Vietnamese','2023-11-21 11:36:05'),('14144141','ádasd','fadgag','public\\uploads\\image-1700565128175-800193883.png','ádsad',2000,'',131,'','2023-11-21 11:12:08'),('14245','ádasd','fadgag','public\\uploads\\image-1700565934333-818848861.png','ádsad',2000,'Paperback',131,'English','2023-11-21 11:25:34'),('15151515','ádasd','fadgag','public\\uploads\\image-1700566446503-57093533.png','ádsad',2000,'Paperback',131,'Vietnamese','2023-11-21 11:34:06'),('15412','ádasd','fadgag','public\\uploads\\image-1700566017214-258145401.png','ádsad',2000,'Paperback',131,'English','2023-11-21 11:26:57'),('214891928','ádasd','fadgag','public\\uploads\\image-1700559237267-182372400.png','ádsad',2000,'Hardcover',131,'English','2023-11-21 09:33:57'),('2148971928','ádasd','fadgag','public\\uploads\\image-1700552995474-569979152.png','ádsad',2000,'Paperback',131,'Vietnamese','2023-11-21 07:49:55'),('214897221928','ádasd','fadgag','public\\uploads\\image-1700559208599-64378883.png','ádsad',2000,'Hardcover',131,'English','2023-11-21 09:33:28'),('5125','ádasd','fadgag','public\\uploads\\image-1700565889722-30944112.png','ádsad',2000,'Hardcover',131,'Vietnamese','2023-11-21 11:24:49'),('666','ádasd','fadgag','public\\uploads\\image-1700574125905-845308962.png','ádsad',2000,'',131,'','2023-11-21 13:42:05'),('712487912','ádasd','fadgag','public\\uploads\\image-1700564332759-798119371.png','ádsad',2000,'Paperback',131,'English','2023-11-21 10:58:52');
-  /*!40000 ALTER TABLE `book` ENABLE KEYS */;
-  UNLOCK TABLES;
+--
+-- Table structure for table `borrow`
+--
 
-  --
-  -- Table structure for table `genre_of_book`
-  --
+DROP TABLE IF EXISTS `borrow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `borrow` (
+  `ISBN` varchar(13) NOT NULL,
+  `readerId` char(9) NOT NULL,
+  `borrowDate` datetime NOT NULL,
+  `givebackDate` datetime NOT NULL,
+  `registerDate` datetime DEFAULT NULL,
+  `status` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`ISBN`,`readerId`),
+  KEY `ISBN_borrow_idx` (`ISBN`),
+  KEY `readerID_idx` (`readerId`),
+  CONSTRAINT `borrow_book` FOREIGN KEY (`ISBN`) REFERENCES `book` (`ISBN`) ON UPDATE CASCADE,
+  CONSTRAINT `borrow_reader` FOREIGN KEY (`readerId`) REFERENCES `reader` (`readerId`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-  DROP TABLE IF EXISTS `genre_of_book`;
-  /*!40101 SET @saved_cs_client     = @@character_set_client */;
-  /*!50503 SET character_set_client = utf8mb4 */;
-  CREATE TABLE `genre_of_book` (
-    `genre` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-    `ISBN` varchar(13) NOT NULL,
-    PRIMARY KEY (`genre`,`ISBN`),
-    KEY `ISBN_idx` (`ISBN`),
-    CONSTRAINT `ISBN` FOREIGN KEY (`ISBN`) REFERENCES `book` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-  /*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Dumping data for table `borrow`
+--
 
-  --
-  -- Dumping data for table `genre_of_book`
-  --
+LOCK TABLES `borrow` WRITE;
+/*!40000 ALTER TABLE `borrow` DISABLE KEYS */;
+INSERT INTO `borrow` VALUES ('7128957','ST1000000','2023-12-08 13:27:19','2023-12-09 13:27:19','2023-12-08 11:44:44','Chờ nhận sách');
+/*!40000 ALTER TABLE `borrow` ENABLE KEYS */;
+UNLOCK TABLES;
 
-  LOCK TABLES `genre_of_book` WRITE;
-  /*!40000 ALTER TABLE `genre_of_book` DISABLE KEYS */;
-  INSERT INTO `genre_of_book` VALUES ('mystery','0001302'),('horror','1111222233'),('mystery','1111222233'),('\"','1123113'),('[','1123113'),('e','1123113'),('m','1123113'),('r','1123113'),('s','1123113'),('t','1123113'),('y','1123113'),('a','123699361'),('d','123699361'),('e','123699361'),('n','123699361'),('r','123699361'),('t','123699361'),('u','123699361'),('v','123699361'),('adventure','12369936114'),('horror','12369936114'),('horror','124124124'),('mystery','124124124'),('e','1241242566'),('m','1241242566'),('r','1241242566'),('s','1241242566'),('t','1241242566'),('y','1241242566'),('\"','124214124'),('[','124214124'),('a','124214124'),('d','124214124'),('e','124214124'),('n','124214124'),('r','124214124'),('t','124214124'),('u','124214124'),('v','124214124'),('mystery','1244562'),('adventure','127346891'),('horror','127346891'),('mystery','127346891'),('e','14141444'),('m','14141444'),('r','14141444'),('s','14141444'),('t','14141444'),('y','14141444'),('e','14144141'),('m','14144141'),('r','14144141'),('s','14144141'),('t','14144141'),('y','14144141'),('e','14245'),('m','14245'),('r','14245'),('s','14245'),('t','14245'),('y','14245'),('e','15151515'),('m','15151515'),('r','15151515'),('s','15151515'),('t','15151515'),('y','15151515'),('e','15412'),('m','15412'),('r','15412'),('s','15412'),('t','15412'),('y','15412'),('\"','214891928'),('[','214891928'),('a','214891928'),('d','214891928'),('e','214891928'),('n','214891928'),('r','214891928'),('t','214891928'),('u','214891928'),('v','214891928'),('\"','214897221928'),('[','214897221928'),('a','214897221928'),('d','214897221928'),('e','214897221928'),('n','214897221928'),('r','214897221928'),('t','214897221928'),('u','214897221928'),('v','214897221928'),('horror','5125'),('mystery','5125'),('horror','666'),('mystery','666'),('e','712487912'),('m','712487912'),('r','712487912'),('s','712487912'),('t','712487912'),('y','712487912');
-  /*!40000 ALTER TABLE `genre_of_book` ENABLE KEYS */;
-  UNLOCK TABLES;
+--
+-- Table structure for table `genre_of_book`
+--
 
+DROP TABLE IF EXISTS `genre_of_book`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `genre_of_book` (
+  `genre` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ISBN` varchar(13) NOT NULL,
+  PRIMARY KEY (`genre`,`ISBN`),
+  KEY `ISBN_idx` (`ISBN`),
+  CONSTRAINT `genre_book` FOREIGN KEY (`ISBN`) REFERENCES `book` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-  DROP TABLE IF EXISTS `copy`;
-  CREATE TABLE `copy` (
-    `ISBN`        varchar(13) NOT NULL,
-    `noEdition`   int NOT NULL,
-    `copyId`      varchar(9) NOT NULL, -- LIBrabry base - TITle - SoThuTu // BKUDSA223
-    `status`      bool DEFAULT 1, -- 0 = borrowed
-    PRIMARY KEY (`ISBN`, `noEdition`, `copyId`),
-    KEY `ISBN_copied_idx` (`ISBN`),
-    INDEX `noEdition_idx` (`noEdition`),
-	INDEX `copyId_idx` (`copyId`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+--
+-- Dumping data for table `genre_of_book`
+--
 
-  ALTER Table `copy`
-      ADD CONSTRAINT `FK_ISBN_copy_to_book` FOREIGN KEY (`ISBN`) REFERENCES `book` (`ISBN`);
+LOCK TABLES `genre_of_book` WRITE;
+/*!40000 ALTER TABLE `genre_of_book` DISABLE KEYS */;
+INSERT INTO `genre_of_book` VALUES ('adventure','9780060935467'),('horror','9780062499554'),('mystery','9780062499554'),('adventure','9780141196886'),('horror','9780141196886'),('horror','9780143039976'),('horror','9780593183212'),('horror','9781101904244'),('mystery','9781335004888'),('horror','9781501142970'),('mystery','9781501154652'),('adventure','9781525823565'),('horror','9781525823565'),('horror','9781668016138'),('mystery','9781668016138'),('horror','9781982110581'),('mystery','9781982110581'),('mystery','9798352831533');
+/*!40000 ALTER TABLE `genre_of_book` ENABLE KEYS */;
+UNLOCK TABLES;
 
-  -- Mockup data
-  LOCK TABLES `copy` WRITE;
-  /*!40000 ALTER TABLE `copy` DISABLE KEYS */;
-  INSERT INTO `copy`
-	VALUES ("9780000000000", 1, "BKUGT1001", 0), ("97800000000000", 2, "BKUGT1002", 0), ("9780000000001", 3, "BKUGT2003", 1), ("9780000000002", 1, "BKUDSA001", 1);
-  /*!40000 ALTER TABLE `copy` ENABLE KEYS */;
-  UNLOCK TABLES;
-  
-  
-  DROP TABLE IF EXISTS `borrow`;
-  CREATE TABLE `borrow` (
-    `ISBN`        varchar(13) NOT NULL,
-    `noEdition`   int NOT NULL,
-    `copyId`      varchar(9) NOT NULL, -- LIBrabry base - TITle - Edition - SoThuTu // BKUDSA223
-    `readerId`    char(9) NOT NULL, -- first 2 chars is type (MS for manager, ST for student), 7 chars left is used to define owner 
-    PRIMARY KEY (`ISBN`, `noEdition`, `copyId`, `readerId`),
-    KEY `ISBN_borrow_idx` (`ISBN`),
-	INDEX `copyId_idx` (`copyId`),
-    INDEX `readerID_idx` (`readerId`),
-	INDEX `noEdition_idx` (`noEdition`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+--
+-- Table structure for table `manager`
+--
 
-  ALTER TABLE `borrow`
-      ADD CONSTRAINT `FK_ISBN_borrow_to_copy` FOREIGN KEY (`ISBN`) REFERENCES `copy` (`ISBN`);
-  ALTER TABLE `borrow`
-      ADD CONSTRAINT `FK_noEdition_borrow_to_copy` FOREIGN KEY (`noEdition`) REFERENCES `copy` (`noEdition`);
-  ALTER TABLE `borrow`
-      ADD CONSTRAINT `FK_copyId_borrow_to_copy` FOREIGN KEY (`copyId`) REFERENCES `copy` (`copyId`);
+DROP TABLE IF EXISTS `manager`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `manager` (
+  `managerId` char(9) NOT NULL,
+  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sex` varchar(1) NOT NULL,
+  `dob` date DEFAULT NULL,
+  `phoneNumber` varchar(12) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `accountId` char(9) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(256) NOT NULL,
+  `openedDay` date DEFAULT NULL,
+  `accountType` varchar(2) DEFAULT 'MS',
+  PRIMARY KEY (`managerId`),
+  UNIQUE KEY `MANAGER_UNIQUE` (`managerId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-  LOCK TABLE `borrow` WRITE;
-  /*!40000 ALTER TABLE `borrow` DISABLE KEYS */;
-  INSERT INTO `borrow`
-	VALUES ("9780000000000", 1, "BKUGT1001", "ST1000000"), ("97800000000000", 2, "BKUGT1002", "ST1000001");
-  /*!40000 ALTER TABLE `borrow` ENABLE KEYS */;
-  UNLOCK TABLES;
+--
+-- Dumping data for table `manager`
+--
 
-  DROP TABLE IF EXISTS `borrowTimes`;
-  CREATE TABLE `borrowTimes` (
-    `ISBN`        varchar(13) NOT NULL,
-    `noEdition`   int NOT NULL,
-    `copyId`      varchar(9) NOT NULL, -- LIBrabry base - TITle - Edition - SoThuTu // BKUDSA223
-    `readerId`    char(9) NOT NULL, -- first 2 chars is type (MS for manager, ST for student), 7 chars left is used to define owner 
-    `borrowedDate` date,
-    `givebackDate` date,
-    PRIMARY KEY (`ISBN`, `noEdition`, `copyId`, `readerId`),
-    KEY `ISBN_borrowedTimes_idx` (`ISBN`)
-    
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-  ALTER TABLE `borrowTimes`
-      ADD CONSTRAINT `FK_ISBN_borrowTimes_to_borrow` FOREIGN KEY (`ISBN`) REFERENCES `borrow` (`ISBN`);
-  ALTER TABLE `borrowTimes`
-      ADD CONSTRAINT `FK_noEdition_borrowTimes_to_borrow` FOREIGN KEY (`noEdition`) REFERENCES `borrow` (`noEdition`);
-  ALTER TABLE `borrowTimes`
-      ADD CONSTRAINT `FK_copyId_borrowTimes_to_borrow` FOREIGN KEY (`copyId`) REFERENCES `borrow` (`copyId`);
-  ALTER Table `borrowTimes`
-      ADD CONSTRAINT `FK_readerId_borrowTimes_to_borrow` FOREIGN KEY (`readerId`) REFERENCES `borrow` (`readerId`);
-
-
-  DROP TABLE IF EXISTS `manager`;
-  /*!40101 SET @saved_cs_client     = @@character_set_client */;
-  /*!50503 SET character_set_client = utf8mb4 */;
-  CREATE TABLE `manager` (
-    `managerId`       char(9) NOT NULL, -- first 2 chars is type (MS for manager, ST for student), 7 chars left is used to define owner 
-    `name`            varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-    `sex`             varchar(1) NOT NULL, -- M male, F female, N other
-    `dob`             date,
-    `phoneNumber`     varchar(12),
-    `email`           varchar(50),
-    `accountId`       char(9) NOT NULL,
-    `username`        varchar(20) NOT NULL,
-    `password`        varchar(256) NOT NULL,
-    `openedDay`       date,
-    `accountType`     varchar(2) DEFAULT 'MS', -- MS, ST
-    PRIMARY KEY (`managerId`),
-    UNIQUE KEY `MANAGER_UNIQUE` (`managerId`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Mockup data
-
-LOCK TABLE `manager` WRITE;
+LOCK TABLES `manager` WRITE;
 /*!40000 ALTER TABLE `manager` DISABLE KEYS */;
-INSERT INTO `manager`
-	VALUE ("MS1000000", "Đỗ Văn Bâng", "M", "2003-09-29", "0123456789", "bang.do38@hcmut.edu.vn", "MS1000000", "bangdo", "123456", "2023-11-1", "MS");
-INSERT INTO `manager`
-	VALUE ("MS1000001", "Trương Thị Dũng", "F", "2003-01-22", "0123456789", "example@hcmut.edu.vn", "MS1000001", "dungtruongthi", "123456", "2023-11-1", "MS");
+INSERT INTO `manager` VALUES ('MS1000000','Đỗ Văn Bâng','M','2003-09-29','0123456789','bang.do38@hcmut.edu.vn','MS1000000','bangdo','123456','2023-11-01','MS'),('MS1000001','Trương Thị Dũng','F','2003-01-22','0123456789','example@hcmut.edu.vn','MS1000001','dungtruongthi','123456','2023-11-01','MS'),('MS1234567','John Doe Sáng','M','1990-01-01','1234567890','john@example.com','ACC123456','john_doe','6481f8e1a060d56eeb7c10ac7809d316800dce013713c412e1d22076505b11a8','2023-01-01','MS');
 /*!40000 ALTER TABLE `manager` ENABLE KEYS */;
 UNLOCK TABLES;
 
-  DROP TABLE IF EXISTS `reader`;
-  /*!40101 SET @saved_cs_client     = @@character_set_client */;
-  /*!50503 SET character_set_client = utf8mb4 */;
-  CREATE TABLE `reader` (
-    `readerId`        char(9) NOT NULL, -- first 2 chars is type (MS for manager, ST for student), 7 chars left is used to define owner 
-    `name`            varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-    `sex`             varchar(1) NOT NULL, -- M male, F female, N other
-    `dob`             date,
-    `phoneNumber`     varchar(12),
-    `email`           varchar(50),
-    `university`      varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-    `accountId`       char(9) NOT NULL,
-    `username`        varchar(20) NOT NULL,
-    `password`        varchar(256) NOT NULL,
-    `openedDay`       date,
-    `accountType`     varchar(2) DEFAULT 'MS', -- MS, ST
-    PRIMARY KEY (`readerId`),
-    UNIQUE KEY `READER_UNIQUE` (`readerId`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+--
+-- Table structure for table `reader`
+--
 
-LOCK TABLE `reader` WRITE;
+DROP TABLE IF EXISTS `reader`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `reader` (
+  `readerId` char(9) NOT NULL,
+  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sex` varchar(1) NOT NULL,
+  `dob` date DEFAULT NULL,
+  `phoneNumber` varchar(12) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `university` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `accountId` char(9) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(256) NOT NULL,
+  `openedDay` date DEFAULT NULL,
+  `accountType` varchar(2) DEFAULT 'MS',
+  PRIMARY KEY (`readerId`),
+  UNIQUE KEY `READER_UNIQUE` (`readerId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reader`
+--
+
+LOCK TABLES `reader` WRITE;
 /*!40000 ALTER TABLE `reader` DISABLE KEYS */;
-INSERT INTO `reader`
-	VALUE ("ST1000000", "Cù Hoàng Nguyễn Sơn", "M", "2003-04-01", "0123456789", "soncu@hcmut.edu.vn", "Đại học Bách Khoa" ,"ST1000000", "soncuvippro", "123456", "2023-11-1", "ST");
-INSERT INTO `reader`
-	VALUE ("ST1000001", "Phạm Bá Hoàng", "M", "2003-06-21", "0123456789", "hoangpham@hcmut.edu.vn", "Đại học Bách Khoa", "ST1000001", "hoangphamt1con", "123456", "2023-11-1", "ST");
+INSERT INTO `reader` VALUES ('ST1000000','Cù Hoàng Nguyễn Sơn','M','2003-04-01','0123456789','soncu@hcmut.edu.vn','Đại học Bách Khoa','ST1000000','soncuvippro','123456','2023-11-01','ST'),('ST1000001','Phạm Bá Hoàng','M','2003-06-21','0123456789','hoangpham@hcmut.edu.vn','Đại học Bách Khoa','ST1000001','hoangphamt1con','123456','2023-11-01','ST');
 /*!40000 ALTER TABLE `reader` ENABLE KEYS */;
 UNLOCK TABLES;
 
-    
-  --
-  -- Dumping routines for database 'library'
-  --
-  /*!50003 DROP PROCEDURE IF EXISTS `InsertBook` */;
-  /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-  /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-  /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-  /*!50003 SET character_set_client  = utf8mb4 */ ;
-  /*!50003 SET character_set_results = utf8mb4 */ ;
-  /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-  /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-  /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-  DELIMITER ;;
-  CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertBook`(
+--
+-- Dumping events for database 'library'
+--
+
+--
+-- Dumping routines for database 'library'
+--
+/*!50003 DROP PROCEDURE IF EXISTS `InsertBook` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertBook`(
       IN p_ISBN VARCHAR(13),
       IN p_title VARCHAR(100),
       IN p_coverlink TEXT,
@@ -290,7 +258,7 @@ UNLOCK TABLES;
       IN p_language VARCHAR(45),
       IN p_dateAdded DATETIME
   )
-  BEGIN
+BEGIN
       DECLARE author_id INT;
     
       -- Insert book information
@@ -311,24 +279,141 @@ UNLOCK TABLES;
       VALUES(author_id, CONVERT(p_ISBN USING utf8mb4));
 
   END ;;
-  DELIMITER ;
-  
-
-  /*!50003 SET sql_mode              = @saved_sql_mode */ ;
-  /*!50003 SET character_set_client  = @saved_cs_client */ ;
-  /*!50003 SET character_set_results = @saved_cs_results */ ;
-  /*!50003 SET collation_connection  = @saved_col_connection */ ;
-  /*!50003 DROP PROCEDURE IF EXISTS `UpdateBook` */;
-  /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-  /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-  /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-  /*!50003 SET character_set_client  = utf8mb4 */ ;
-  /*!50003 SET character_set_results = utf8mb4 */ ;
-  /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-  /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-  /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-  DELIMITER ;;
-  CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateBook`(
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `InsertManager` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertManager`(
+    IN p_managerId CHAR(9),
+    IN p_name VARCHAR(30),
+    IN p_sex VARCHAR(1),
+    IN p_dob DATE,
+    IN p_phoneNumber VARCHAR(12),
+    IN p_email VARCHAR(50),
+    IN p_accountId CHAR(9),
+    IN p_username VARCHAR(20),
+    IN p_password VARCHAR(256),
+    IN p_openedDay DATE,
+    IN p_accountType VARCHAR(2)
+)
+BEGIN
+	DECLARE hashedPassword VARCHAR(256);
+	SET hashedPassword = SHA2(p_password, 256);
+    
+    INSERT INTO `manager` (
+        `managerId`,
+        `name`,
+        `sex`,
+        `dob`,
+        `phoneNumber`,
+        `email`,
+        `accountId`,
+        `username`,
+        `password`,
+        `openedDay`,
+        `accountType`
+    ) VALUES (
+        p_managerId,
+        CONVERT(p_name USING utf8mb4),
+        p_sex,
+        p_dob,
+        p_phoneNumber,
+        p_email,
+        p_accountId,
+        p_username,
+        hashedPassword,
+        p_openedDay,
+        p_accountType
+	);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `InsertReader` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertReader`(
+    IN p_readerId CHAR(9),
+    IN p_name VARCHAR(30),
+    IN p_sex VARCHAR(1),
+    IN p_dob DATE,
+    IN p_phoneNumber VARCHAR(12),
+    IN p_email VARCHAR(50),
+    IN p_university VARCHAR(100),
+    IN p_accountId CHAR(9),
+    IN p_username VARCHAR(20),
+    IN p_password VARCHAR(256),
+    IN p_openedDay DATE,
+    IN p_accountType VARCHAR(2)
+)
+BEGIN
+	DECLARE hashedPassword VARCHAR(256);
+    SET hashedPassword = SHA2(p_password, 256);
+    
+    INSERT INTO `reader` (
+        `readerId`,
+        `name`,
+        `sex`,
+        `dob`,
+        `phoneNumber`,
+        `email`,
+        `university`,
+        `accountId`,
+        `username`,
+        `password`,
+        `openedDay`,
+        `accountType`
+    ) VALUES (
+        p_managerId,
+        CONVERT(p_name USING utf8mb4),
+        p_sex,
+        p_dob,
+        p_phoneNumber,
+        p_email,
+        CONVERT(p_university USING utf8mb4),
+        p_accountId,
+        p_username,
+        hashedPassword,
+        p_openedDay,
+        p_accountType
+	);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `UpdateBook` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateBook`(
       IN p_ISBN VARCHAR(13),
       IN p_title VARCHAR(100),
       IN p_coverlink TEXT,
@@ -340,7 +425,7 @@ UNLOCK TABLES;
       IN p_noPages INT,
       IN p_language VARCHAR(45)
   )
-  BEGIN
+BEGIN
       DECLARE author_id INT;
 
       -- Update book information
@@ -375,159 +460,19 @@ UNLOCK TABLES;
       VALUES(author_id, CONVERT(p_ISBN USING utf8mb4));
 
   END ;;
-  DELIMITER ;
-  
- /*!50003 SET sql_mode              = @saved_sql_mode */ ;
-  /*!50003 SET character_set_client  = @saved_cs_client */ ;
-  /*!50003 SET character_set_results = @saved_cs_results */ ;
-  /*!50003 SET collation_connection  = @saved_col_connection */ ;
-  /*!50003 DROP PROCEDURE IF EXISTS `InsertManager` */;
-  /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-  /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-  /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-  /*!50003 SET character_set_client  = utf8mb4 */ ;
-  /*!50003 SET character_set_results = utf8mb4 */ ;
-  /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-  /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-  /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-
-
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertManager`(
-    IN p_managerId CHAR(9),
-    IN p_name VARCHAR(30),
-    IN p_sex VARCHAR(1),
-    IN p_dob DATE,
-    IN p_phoneNumber VARCHAR(12),
-    IN p_email VARCHAR(50),
-    IN p_accountId CHAR(9),
-    IN p_username VARCHAR(20),
-    IN p_password VARCHAR(256),
-    IN p_openedDay DATE,
-    IN p_accountType VARCHAR(2)
-)
-BEGIN
-   
-    INSERT INTO `manager` (
-        `managerId`,
-        `name`,
-        `sex`,
-        `dob`,
-        `phoneNumber`,
-        `email`,
-        `accountId`,
-        `username`,
-        `password`,
-        `openedDay`,
-        `accountType`
-    ) VALUES (
-        p_managerId,
-        CONVERT(p_name USING utf8mb4),
-        p_sex,
-        p_dob,
-        p_phoneNumber,
-        p_email,
-        p_accountId,
-        p_username,
-        p_password,
-        p_openedDay,
-        p_accountType
-	);
-END //
-
 DELIMITER ;
-
-
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
-  /*!50003 SET character_set_client  = @saved_cs_client */ ;
-  /*!50003 SET character_set_results = @saved_cs_results */ ;
-  /*!50003 SET collation_connection  = @saved_col_connection */ ;
-  /*!50003 DROP PROCEDURE IF EXISTS `InsertReader` */;
-  /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-  /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-  /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-  /*!50003 SET character_set_client  = utf8mb4 */ ;
-  /*!50003 SET character_set_results = utf8mb4 */ ;
-  /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-  /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-  /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
-DELIMITER //
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertReader`(
-    IN p_readerId CHAR(9),
-    IN p_name VARCHAR(30),
-    IN p_sex VARCHAR(1),
-    IN p_dob DATE,
-    IN p_phoneNumber VARCHAR(12),
-    IN p_email VARCHAR(50),
-    IN p_university VARCHAR(100),
-    IN p_accountId CHAR(9),
-    IN p_username VARCHAR(20),
-    IN p_password VARCHAR(256),
-    IN p_openedDay DATE,
-    IN p_accountType VARCHAR(2)
-)
-BEGIN    
-    INSERT INTO `reader` (
-        `readerId`,
-        `name`,
-        `sex`,
-        `dob`,
-        `phoneNumber`,
-        `email`,
-        `university`,
-        `accountId`,
-        `username`,
-        `password`,
-        `openedDay`,
-        `accountType`
-    ) VALUES (
-        p_managerId,
-        CONVERT(p_name USING utf8mb4),
-        p_sex,
-        p_dob,
-        p_phoneNumber,
-        p_email,
-        CONVERT(p_university USING utf8mb4),
-        p_accountId,
-        p_username,
-        p_password,
-        p_openedDay,
-        p_accountType
-	);
-END //
-
-DELIMITER ;
-  
-CALL InsertManager(
-    'MS1234567', -- example managerId
-    'John Doe Sáng',  -- example name
-    'M',         -- example sex
-    '1990-01-01', -- example dob
-    '1234567890', -- example phoneNumber
-    'john@example.com', -- example email
-    'ACC123456',  -- example accountId
-    'john_doe',   -- example username
-    'Abc@1234', -- example password (it's recommended to store hashed passwords)
-    '2023-01-01', -- example openedDay
-    'MS'          -- example accountType
-);
-
-
-
-  /*!50003 SET sql_mode              = @saved_sql_mode */ ;
-  /*!50003 SET character_set_client  = @saved_cs_client */ ;
-  /*!50003 SET character_set_results = @saved_cs_results */ ;
-  /*!50003 SET collation_connection  = @saved_col_connection */ ;
-  /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-  /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-  /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-  /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-  /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-  /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-  /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-  /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
-  -- Dump completed on 2023-11-22 13:34:46
+-- Dump completed on 2023-12-09  2:07:44
