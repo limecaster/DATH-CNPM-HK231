@@ -6,7 +6,7 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import { bookRouter } from "./routes/bookRouter.js";
 import { managerRouter } from "./routes/managerRouter.js";
-
+import { borrowRouter } from "./routes/borrowRouter.js";
 import multer from "multer";
 import fs from "fs";
 import path from "path";
@@ -40,7 +40,7 @@ const upload = multer({ storage: storage });
 app.use(upload.single("image"));
 
 app.use("/books", bookRouter);
-
+app.use("/borrow", borrowRouter);
 app.use("/manager", managerRouter);
 
 app.listen(PORT, () => {
