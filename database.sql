@@ -277,8 +277,11 @@ UNLOCK TABLES;
 --
 -- Table structure for table `reader`
 --
-
+SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `reader`;
+SET FOREIGN_KEY_CHECKS = 1;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reader` (
@@ -298,7 +301,7 @@ CREATE TABLE `reader` (
   UNIQUE KEY `READER_UNIQUE` (`readerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
+SELECT * FROM reader;
 --
 -- Dumping data for table `reader`
 --
@@ -436,7 +439,7 @@ BEGIN
         p_email,
         p_accountId,
         p_username,
-        hashedPassword,
+        p_password,
         p_openedDay,
         p_accountType
 	);
@@ -488,7 +491,7 @@ BEGIN
         `openedDay`,
         `accountType`
     ) VALUES (
-        p_managerId,
+        p_readerId,
         CONVERT(p_name USING utf8mb4),
         p_sex,
         p_dob,
@@ -497,7 +500,7 @@ BEGIN
         CONVERT(p_university USING utf8mb4),
         p_accountId,
         p_username,
-        hashedPassword,
+        p_password,
         p_openedDay,
         p_accountType
 	);
@@ -565,6 +568,7 @@ BEGIN
 
   END ;;
 DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;

@@ -29,3 +29,29 @@ export const loginManager = async (req, res) => {
   res.json({ token });
 };
 
+export const loginReader = async (req, res) => {
+
+  const { email, password } = req.body;
+
+  let sql = `
+      SELECT \`email\`, \`password\`
+      FROM reader
+      WHERE \`email\` = '${email}';  
+  `;
+
+  try {
+    var reader = await db.execute(sql);
+  }
+  catch (error) {
+      console.log(error.message);
+      res.status(500).send({ message: error.message });
+  }
+  if (!reader[0][0] || !await bcrypt.compare(password, reader[0][0].password)) {
+    return res.status(401).json({ message: 'Invalid email or password' });
+  }
+
+  // Generate JWT token
+  const token = jwt.sign({ email: reader.email }, 'T1VoDich', { expiresIn: '1h' });
+
+  res.json({ token });
+};
