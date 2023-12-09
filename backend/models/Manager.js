@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 
 // Function to hash password before storing them to the database
 const saltRounds = 10;
+console.log(bcrypt.hash("123456", saltRounds));
 const hashPassword = async (plainPassword) => {
   try {
     const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);

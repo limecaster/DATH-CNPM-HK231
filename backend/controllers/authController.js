@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import bcrypt, { genSalt } from 'bcrypt';
 import { db } from "../config/dbConfig.js";
 
 export const loginManager = async (req, res) => {
@@ -19,7 +19,6 @@ export const loginManager = async (req, res) => {
       console.log(error.message);
       res.status(500).send({ message: error.message });
   }
-  console.log(manager)
   if (!manager[0][0] || !await bcrypt.compare(password, manager[0][0].password)) {
     return res.status(401).json({ message: 'Invalid email or password' });
   }
@@ -29,3 +28,4 @@ export const loginManager = async (req, res) => {
 
   res.json({ token });
 };
+
