@@ -39,8 +39,7 @@ export const createBook = async (req, res) => {
       coverType,
       noPages,
       language,
-      genresArray,
-      coverlink
+      genresArray
     );
 
     book = await book.save();
@@ -107,8 +106,18 @@ export const updateBookByISBN = async (req, res) => {
     if (!ISBN || !title || !desc) {
       return res.status(400).send({ message: "Pls send all required fields!" });
     }
-    const coverlink = "http://localhost:3001/books/covers/" + req.file.filename;
-    await deleteOldCoverFile(ISBN);
+    let coverlink;
+    if (!req.file) {
+      const [oldLink, _] = await db.execute(
+        `SELECT coverLink FROM book WHERE ISBN=?`,
+        [ISBN]
+      );
+      coverlink = oldLink[0]["coverLink"];
+    } else {
+      coverlink = "http://localhost:3001/books/covers/" + req.file.filename;
+      await deleteOldCoverFile(ISBN);
+    }
+
     let book = new Book(
       ISBN,
       title,
@@ -120,8 +129,7 @@ export const updateBookByISBN = async (req, res) => {
       coverType,
       noPages,
       language,
-      genres,
-      coverlink
+      genres
     );
     book = await book.update();
 

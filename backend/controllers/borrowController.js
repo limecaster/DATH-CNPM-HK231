@@ -1,6 +1,34 @@
 import { Borrow } from "../models/Borrow.js";
 import { db } from "../config/dbConfig.js";
 
+export const getBorrowDetails = async (req, res) => {
+  try {
+    const { readerId } = req.params;
+
+    const borrow_details = await Borrow.getBorrowDetailsByReader(readerId);
+
+    return res.json(borrow_details);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
+export const getGeneralBorrowInfo = async (req, res) => {
+  try {
+    const { readerId } = req.params;
+
+    const [borrow_info, _] = await Borrow.getGeneralBorrowInfoByReader(
+      readerId
+    );
+
+    return res.json(borrow_info);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
 export const getAllBorrow = async (req, res) => {
   try {
     const borrows = await Borrow.getAllBorrow();
