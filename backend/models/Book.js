@@ -116,6 +116,32 @@ export class Book {
     }
   };
 
+  static getOne = async (isbn) => {
+    let connection;
+    try {
+      connection = await db.getConnection();
+      await connection.beginTransaction();
+
+      let sql = `
+    SELECT ISBN, title, coverLink, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\` , DATE_FORMAT(dateAdded, "%Y-%m-%d %H:%i:%s") AS dateAdded, copyNumber 
+FROM ((book natural join author_write_book) join author on author_write_book.authorID=author.authorID) WHERE book.ISBN = ? ORDER BY dateAdded DESC;`;
+      const [book_details, _] = await db.execute(sql, [isbn]);
+
+      await connection.commit();
+
+      return book_details;
+    } catch (error) {
+      if (connection) {
+        await connection.rollback();
+      }
+      throw error;
+    } finally {
+      if (connection) {
+        connection.release();
+      }
+    }
+  };
+
   static getGenres = async (isbn) => {
     let connection;
     try {

@@ -1,3 +1,4 @@
+import { read } from "fs";
 import { db } from "../config/dbConfig.js";
 
 export class Borrow {
@@ -41,8 +42,25 @@ export class Borrow {
     }
   };
 
+  static getBorrowDetailsByReader = async (readerId) => {
+    const [borrowDetails, _] = await db.execute(
+      `SELECT * from borrow_details WHERE readerId = ?;`,
+      [readerId]
+    );
+    return borrowDetails;
+  };
+
+  static getGeneralBorrowInfoByReader = async (readerId) => {
+    const [borrowInfo, _] = await db.execute(`CALL GetGeneralBorrowInfo(?)`, [
+      readerId,
+    ]);
+    return borrowInfo;
+  };
+
   static getAllBorrow = async () => {
-    const [borrowDetails, _] = await db.execute(`SELECT * FROM borrow;`);
+    const [borrowDetails, _] =
+      await db.execute(`SELECT ISBN, readerId, DATE_FORMAT(borrowDate, "%Y-%m-%d %H:%i:%s") AS borrowDate, DATE_FORMAT(givebackDate, "%Y-%m-%d %H:%i:%s") AS givebackDate,  DATE_FORMAT(registerDate, "%Y-%m-%d %H:%i:%s") AS registerDate, status FROM borrow;
+`);
     return borrowDetails;
   };
 
