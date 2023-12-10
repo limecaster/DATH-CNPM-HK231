@@ -1,14 +1,12 @@
  import 
  { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } 
  from 'recharts';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import './ShowDashboard.css'
-import bookIcon from '../../../assets/image/bookIcon.png';
-import userIcon from '../../../assets/image/userIcon.png';
-import borrowIcon from '../../../assets/image/borrowIcon.png';
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import ReaderList from './ReaderList';
+import GeneralInfo from './GeneralInfo';
+import BookList from './BookList';
 function ShowDashboard() {
 
     const [books, setBooks] = useState([]);
@@ -23,7 +21,7 @@ function ShowDashboard() {
             .catch(err => {
             });
     }, []);
-
+    
     const dataUser = [
         {
             id:1,
@@ -117,42 +115,7 @@ function ShowDashboard() {
   return (
     <main className='container-fluid'>
         <div className='row mt-3 gx-5 gy-5'>
-            <div className='col'>
-                <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
-                    <div style={{width:'fit-content'}}>
-                        <img src={userIcon} class="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
-
-                    </div>
-                    <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
-                        <h5 className="text-secondary">Tổng số người dùng</h5>
-                        <p className="mt-4 fw-bold">220</p>
-                    </div>
-                </div>
-            </div>
-            <div className='col'>
-                <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
-                    <div style={{width:'fit-content'}}>
-                        <img src={bookIcon} class="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
-
-                    </div>
-                    <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
-                        <h5 className="text-secondary">Tổng số sách</h5>
-                        <p className="mt-4 fw-bold">220</p>
-                    </div>
-                </div>
-            </div>
-            <div className='col'>
-                <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
-                    <div style={{width:'fit-content'}}>
-                        <img src={borrowIcon} class="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
-
-                    </div>
-                    <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
-                        <h5 className="text-secondary">Số lượt mượn / trả</h5>
-                        <p className="mt-4 fw-bold">300/280</p>
-                    </div>
-                </div>
-            </div>
+            <GeneralInfo/>
         </div>
 
         <div className='charts mb-5 '>
@@ -208,57 +171,9 @@ function ShowDashboard() {
             
         </div>
 
-        <div className='row mt-5 gx-5 gy-5'>
-            <div className='col'>
-                <div className='d-flex flex-wrap p-3 shadow rounded border border-secondary'>
-                    <h5 className='w-100 d-block'>Danh sách người dùng</h5>
-                    <Table>
-                        <TableHead>
-                            <TableRow className='overflow-auto' style={{ backgroundColor: '#EEEEEE', textAlign: 'center', padding: '5px' }}>
-                                <TableCell align="center">ID</TableCell>
-                                <TableCell align="center">Tên</TableCell>
-                                <TableCell align="center">Số sách mượn</TableCell>
-                                <TableCell align="center">Số sách trả</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {dataUser.map((user) => (
-                                    <TableRow className='overflow-auto' key={user.id} >
-                                        <TableCell style={{ padding: '5px' }} align="center">{user.id}</TableCell>
-                                        <TableCell style={{ padding: '5px', width: '230px' }} align="center">{user.name}</TableCell>
-                                        <TableCell style={{ padding: '5px' }} align="center">{user.borrows}</TableCell>
-                                        <TableCell style={{ padding: '5px' }} align="center">{user.returns}</TableCell>
-                                    </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-            </div>
-            <div className='col'>
-                <div className='d-flex flex-wrap p-3 shadow rounded border border-secondary'>
-                    <h5 className='w-100 d-block'>Danh sách sách được mượn nhiều nhất</h5>
-                    <Table>
-                        <TableHead>
-                            <TableRow style={{ backgroundColor: '#EEEEEE', textAlign: 'center', padding: '5px' }}>
-                                <TableCell align="center">ISBN</TableCell>
-                                <TableCell align="center">Tiêu đề</TableCell>
-                                <TableCell align="center">Lượt mượn</TableCell>
-                                <TableCell align="center">Lượt trả</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {displayedBooks.map((book) => (
-                                <TableRow key={book.ISBN}>
-                                    <TableCell style={{ padding: '5px' }} align="center">{book.ISBN}</TableCell>
-                                    <TableCell style={{ padding: '5px', width: '230px' }} align="center">{book.title}</TableCell>
-                                    <TableCell style={{ padding: '5px' }} align="center">100</TableCell>
-                                    <TableCell style={{ padding: '5px' }} align="center">90</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-            </div>
+        <div className='row my-5 gx-5 gy-5'>
+            <ReaderList/>
+            <BookList/>
         </div>
     </main>
   )
