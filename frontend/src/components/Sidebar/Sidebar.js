@@ -58,12 +58,12 @@ const Sidebar = () => {
             <Menu iconShape="square">
               <MenuItem active={active} icon={<FaList />} onClick={handleOnClick}
               >Danh sách
-                <Link to={'/adminlist'} element={<ListPage />} />
+                <Link to={'/admin/books'} element={<ListPage />} />
               </MenuItem>
 
               <MenuItem icon={<BarChartRoundedIcon />} active={active1} onClick={handleOnClick}
               >Thống kê
-                <Link to={'/dashboard'} element={<Dashboard />} />
+                <Link to={'/admin/dashboard'} element={<Dashboard />} />
               </MenuItem>
             </Menu>
           </SidebarContent>
