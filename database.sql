@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `library` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE  IF NOT EXISTS `library` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `library`;
 -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
@@ -23,13 +23,13 @@ USE `library`;
 
 DROP TABLE IF EXISTS `author`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `author` (
   `authorID` int NOT NULL AUTO_INCREMENT,
   `authorName` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`authorID`),
   UNIQUE KEY `authorName_UNIQUE` (`authorName`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,7 +48,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `author_write_book`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `author_write_book` (
   `authorID` int NOT NULL,
   `ISBN` varchar(13) NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE `author_write_book` (
   KEY `author_write_book_ibfk_2_idx` (`authorID`),
   CONSTRAINT `author_write_book_ibfk_1` FOREIGN KEY (`ISBN`) REFERENCES `book` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `author_write_book_ibfk_2` FOREIGN KEY (`authorID`) REFERENCES `author` (`authorID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +75,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `book`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `book` (
   `ISBN` varchar(13) NOT NULL,
   `title` varchar(100) NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE `book` (
   `copyNumber` int DEFAULT '20',
   PRIMARY KEY (`ISBN`),
   UNIQUE KEY `ISBN_UNIQUE` (`ISBN`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -109,7 +109,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `borrow`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `borrow` (
   `ISBN` varchar(13) NOT NULL,
   `readerId` char(9) NOT NULL,
@@ -122,7 +122,7 @@ CREATE TABLE `borrow` (
   KEY `readerID_idx` (`readerId`),
   CONSTRAINT `borrow_book` FOREIGN KEY (`ISBN`) REFERENCES `book` (`ISBN`) ON UPDATE CASCADE,
   CONSTRAINT `borrow_reader` FOREIGN KEY (`readerId`) REFERENCES `reader` (`readerId`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,7 +142,7 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `borrow_details`;
 /*!50001 DROP VIEW IF EXISTS `borrow_details`*/;
 SET @saved_cs_client     = @@character_set_client;
-/*!50503 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 /*!50001 CREATE VIEW `borrow_details` AS SELECT 
  1 AS `readerId`,
  1 AS `title`,
@@ -160,7 +160,7 @@ SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `dashboard_book`;
 /*!50001 DROP VIEW IF EXISTS `dashboard_book`*/;
 SET @saved_cs_client     = @@character_set_client;
-/*!50503 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 /*!50001 CREATE VIEW `dashboard_book` AS SELECT 
  1 AS `coverLink`,
  1 AS `title`,
@@ -176,7 +176,7 @@ SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `dashboard_info`;
 /*!50001 DROP VIEW IF EXISTS `dashboard_info`*/;
 SET @saved_cs_client     = @@character_set_client;
-/*!50503 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 /*!50001 CREATE VIEW `dashboard_info` AS SELECT 
  1 AS `readerCount`,
  1 AS `bookCount`,
@@ -191,7 +191,7 @@ SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `dashboard_reader`;
 /*!50001 DROP VIEW IF EXISTS `dashboard_reader`*/;
 SET @saved_cs_client     = @@character_set_client;
-/*!50503 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 /*!50001 CREATE VIEW `dashboard_reader` AS SELECT 
  1 AS `readerId`,
  1 AS `readerName`,
@@ -206,7 +206,7 @@ SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `general_borrow_info`;
 /*!50001 DROP VIEW IF EXISTS `general_borrow_info`*/;
 SET @saved_cs_client     = @@character_set_client;
-/*!50503 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 /*!50001 CREATE VIEW `general_borrow_info` AS SELECT 
  1 AS `latestDeadline`,
  1 AS `notGiveBack`,
@@ -220,14 +220,14 @@ SET character_set_client = @saved_cs_client;
 
 DROP TABLE IF EXISTS `genre_of_book`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `genre_of_book` (
-  `genre` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `genre` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ISBN` varchar(13) NOT NULL,
   PRIMARY KEY (`genre`,`ISBN`),
   KEY `ISBN_idx` (`ISBN`),
   CONSTRAINT `genre_book` FOREIGN KEY (`ISBN`) REFERENCES `book` (`ISBN`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,28 +246,22 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `manager`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `manager` (
   `managerId` char(9) NOT NULL,
-  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `sex` varchar(1) NOT NULL,
   `dob` date DEFAULT NULL,
   `phoneNumber` varchar(12) DEFAULT NULL,
-  `email` varchar(50) NOT NULL,
+  `email` varchar(50) DEFAULT NULL,
   `accountId` char(9) NOT NULL,
-  `username` varchar(100) DEFAULT NULL,
+  `username` varchar(100) NOT NULL,
   `password` varchar(256) NOT NULL,
   `openedDay` date DEFAULT NULL,
   `accountType` varchar(2) DEFAULT 'MS',
   PRIMARY KEY (`managerId`),
-<<<<<<< HEAD
   UNIQUE KEY `MANAGER_UNIQUE` (`managerId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-=======
-  UNIQUE KEY `MANAGER_UNIQUE` (`managerId`),
-  UNIQUE KEY `Manager_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> f8850de0e603cf3aa349a60e46da52e32babc772
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -289,78 +283,34 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reader` (
   `readerId` char(9) NOT NULL,
-  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `sex` varchar(1) NOT NULL,
   `dob` date DEFAULT NULL,
   `phoneNumber` varchar(12) DEFAULT NULL,
-<<<<<<< HEAD
   `email` varchar(50) DEFAULT NULL,
-  `university` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-=======
-  `email` varchar(50) NOT NULL,
   `university` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
->>>>>>> f8850de0e603cf3aa349a60e46da52e32babc772
   `accountId` char(9) NOT NULL,
-  `username` varchar(100) DEFAULT NULL,
+  `username` varchar(100) NOT NULL,
   `password` varchar(256) NOT NULL,
   `openedDay` date DEFAULT NULL,
   `accountType` varchar(2) DEFAULT 'MS',
   PRIMARY KEY (`readerId`),
-<<<<<<< HEAD
   UNIQUE KEY `READER_UNIQUE` (`readerId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-=======
-  UNIQUE KEY `READER_UNIQUE` (`readerId`),
-  UNIQUE KEY `Reader_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> f8850de0e603cf3aa349a60e46da52e32babc772
 /*!40101 SET character_set_client = @saved_cs_client */;
-
+SELECT * FROM reader;
 --
--- Table structure for table `suggested_book`
+-- Dumping data for table `reader`
 --
-DROP TABLE IF EXISTS `suggested_book`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `suggested_book` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `readerName` varchar(100) NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `authorName` varchar(100) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `SuggestBook` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SuggestBook`
-(
-  IN readerName VARCHAR(100),
-  IN email VARCHAR(50), 
-  IN title VARCHAR(100), 
-  IN authorName VARCHAR(45)
-)
-BEGIN
-    INSERT INTO suggested_book (readerName, title, authorName, email) VALUES (readerName, title, authorName, email);
-END ;;
-DELIMITER ;
-
+LOCK TABLES `reader` WRITE;
+/*!40000 ALTER TABLE `reader` DISABLE KEYS */;
+INSERT INTO `reader` VALUES ('ST1000000','Cù Hoàng Nguyễn Sơn','M','2003-04-01','0123456789','soncu@hcmut.edu.vn','Đại học Bách Khoa','ST1000000','soncuvippro','123456','2023-11-01','ST'),('ST1000001','Phạm Bá Hoàng','M','2003-06-21','0123456789','hoangpham@hcmut.edu.vn','Đại học Bách Khoa','ST1000001','hoangphamt1con','123456','2023-11-01','ST');
+/*!40000 ALTER TABLE `reader` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Dumping events for database 'library'
@@ -373,9 +323,9 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -396,9 +346,9 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -421,20 +371,20 @@ BEGIN
     
       -- Insert book information
       INSERT INTO book(ISBN, title, coverlink, `desc`, publisher, publishDate, coverType, noPages, `language`, dateAdded, copyNumber )
-      VALUES(p_ISBN, CONVERT(p_title USING utf8), CONVERT(p_coverlink USING utf8), CONVERT(p_desc USING utf8), CONVERT(p_publisher USING utf8), p_publishDate, CONVERT(p_coverType USING utf8), p_noPages, CONVERT(p_language USING utf8), p_dateAdded,p_copyNumber);
+      VALUES(p_ISBN, CONVERT(p_title USING utf8mb4), CONVERT(p_coverlink USING utf8mb4), CONVERT(p_desc USING utf8mb4), CONVERT(p_publisher USING utf8mb4), p_publishDate, CONVERT(p_coverType USING utf8mb4), p_noPages, CONVERT(p_language USING utf8mb4), p_dateAdded,p_copyNumber);
 
       -- Insert author if not exists
       INSERT IGNORE INTO author(authorName)
-    VALUES(CONVERT(p_authorName USING utf8));
+    VALUES(CONVERT(p_authorName USING utf8mb4));
     
       -- Retrieve or insert author_id
       SELECT authorID INTO author_id
       FROM author
-      WHERE CONVERT(authorName USING utf8) = CONVERT(p_authorName USING utf8);
+      WHERE CONVERT(authorName USING utf8mb4) = CONVERT(p_authorName USING utf8mb4);
       
       -- Insert into author_write_book
       INSERT INTO author_write_book(authorID, ISBN)
-      VALUES(author_id, CONVERT(p_ISBN USING utf8));
+      VALUES(author_id, CONVERT(p_ISBN USING utf8mb4));
 
   END ;;
 DELIMITER ;
@@ -446,9 +396,9 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -466,6 +416,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertManager`(
     IN p_accountType VARCHAR(2)
 )
 BEGIN
+	DECLARE hashedPassword VARCHAR(256);
+	SET hashedPassword = SHA2(p_password, 256);
+    
     INSERT INTO `manager` (
         `managerId`,
         `name`,
@@ -480,7 +433,7 @@ BEGIN
         `accountType`
     ) VALUES (
         p_managerId,
-        CONVERT(p_name USING utf8),
+        CONVERT(p_name USING utf8mb4),
         p_sex,
         p_dob,
         p_phoneNumber,
@@ -501,9 +454,9 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -540,12 +493,12 @@ BEGIN
         `accountType`
     ) VALUES (
         p_readerId,
-        CONVERT(p_name USING utf8),
+        CONVERT(p_name USING utf8mb4),
         p_sex,
         p_dob,
         p_phoneNumber,
         p_email,
-        CONVERT(p_university USING utf8),
+        CONVERT(p_university USING utf8mb4),
         p_accountId,
         p_username,
         p_password,
@@ -562,9 +515,9 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -587,26 +540,26 @@ BEGIN
       -- Update book information
       UPDATE book
       SET
-          title = CONVERT(p_title USING utf8),
-          coverlink = CONVERT(p_coverlink USING utf8),
-          `desc` = CONVERT(p_desc USING utf8),
-          publisher = CONVERT(p_publisher USING utf8),
+          title = CONVERT(p_title USING utf8mb4),
+          coverlink = CONVERT(p_coverlink USING utf8mb4),
+          `desc` = CONVERT(p_desc USING utf8mb4),
+          publisher = CONVERT(p_publisher USING utf8mb4),
           publishDate = p_publishDate,
-          coverType = CONVERT(p_coverType USING utf8),
+          coverType = CONVERT(p_coverType USING utf8mb4),
           noPages = p_noPages,
           copyNumber = p_copyNumber,
-          `language` = CONVERT(p_language USING utf8)
+          `language` = CONVERT(p_language USING utf8mb4)
       WHERE
           ISBN = p_ISBN;
 
       -- Insert author if not exists
       INSERT IGNORE INTO author(authorName)
-      VALUES(CONVERT(p_authorName USING utf8));
+      VALUES(CONVERT(p_authorName USING utf8mb4));
 
       -- Retrieve or insert author_id
       SELECT authorID INTO author_id
       FROM author
-      WHERE CONVERT(authorName USING utf8) = CONVERT(p_authorName USING utf8);
+      WHERE CONVERT(authorName USING utf8mb4) = CONVERT(p_authorName USING utf8mb4);
 
       -- Update author_write_book
       DELETE FROM author_write_book
@@ -614,7 +567,7 @@ BEGIN
 
       -- Insert into author_write_book
       INSERT INTO author_write_book(authorID, ISBN)
-      VALUES(author_id, CONVERT(p_ISBN USING utf8));
+      VALUES(author_id, CONVERT(p_ISBN USING utf8mb4));
 
   END ;;
 DELIMITER ;
@@ -632,9 +585,9 @@ DELIMITER ;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `borrow_details` AS select `borrow`.`readerId` AS `readerId`,`book`.`title` AS `title`,`author`.`authorName` AS `authorName`,date_format(`borrow`.`registerDate`,'%Y-%m-%d %H:%i:%s') AS `registerDate`,date_format(`borrow`.`borrowDate`,'%Y-%m-%d %H:%i:%s') AS `borrowDate`,date_format(`borrow`.`givebackDate`,'%Y-%m-%d %H:%i:%s') AS `givebackDate`,`borrow`.`status` AS `status` from (((`borrow` join `book` on((`borrow`.`ISBN` = `book`.`ISBN`))) join `author_write_book` on((`borrow`.`ISBN` = `author_write_book`.`ISBN`))) join `author` on((`author_write_book`.`authorID` = `author`.`authorID`))) order by date_format(`borrow`.`registerDate`,'%Y-%m-%d %H:%i:%s') desc */;
@@ -650,9 +603,9 @@ DELIMITER ;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `dashboard_book` AS select `book`.`coverLink` AS `coverLink`,`book`.`title` AS `title`,`book`.`copyNumber` AS `copyNumber`,count(0) AS `borrowCount`,count((case when (`borrow`.`status` = 'Hoàn thành') then 1 end)) AS `givebackCount` from (`book` join `borrow` on((`book`.`ISBN` = `borrow`.`ISBN`))) group by `book`.`coverLink`,`book`.`title`,`book`.`copyNumber` order by `borrowCount` desc */;
@@ -668,9 +621,9 @@ DELIMITER ;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `dashboard_info` AS select (select count(0) from `reader`) AS `readerCount`,(select count(0) from `book`) AS `bookCount`,(select count(0) from `borrow`) AS `borrowCount`,(select count(0) from `borrow` where (`borrow`.`status` = 'Hoàn thành')) AS `givebackCount` */;
@@ -686,9 +639,9 @@ DELIMITER ;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `dashboard_reader` AS select `reader`.`readerId` AS `readerId`,`reader`.`name` AS `readerName`,count(0) AS `borrowCount`,count((case when (`borrow`.`status` = 'Hoàn thành') then 1 end)) AS `givebackCount` from (`reader` join `borrow` on((`reader`.`readerId` = `borrow`.`readerId`))) group by `reader`.`readerId`,`reader`.`name` */;
@@ -704,9 +657,9 @@ DELIMITER ;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `general_borrow_info` AS select (select max(`borrow`.`givebackDate`) from `borrow` where (`borrow`.`readerId` = 'ST1000000')) AS `latestDeadline`,(select count(0) from `borrow` where ((`borrow`.`readerId` = 'ST1000000') and (`borrow`.`status` <> 'Hoàn thành') and (`borrow`.`status` <> 'Chờ nhận sách'))) AS `notGiveBack`,(select count(0) from `borrow` where ((`borrow`.`readerId` = 'ST1000000') and (`borrow`.`status` = 'Hoàn thành'))) AS `giveBack`,(select count(0) from `borrow` where (`borrow`.`readerId` = 'ST1000000')) AS `borrowNo` */;
