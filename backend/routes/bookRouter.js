@@ -6,6 +6,7 @@ import {
   DeleteBookByISBN,
   GetBookGenres,
   getOneBook,
+  getFavoriteBookOfReader,
 } from "../controllers/bookController.js";
 // /books
 const router = Router();
@@ -14,6 +15,7 @@ router
   .get(getAllBook) // thông tin tất cả các sách
   .post(createBook) // thêm sách
   .put(updateBookByISBN); // chỉnh sửa thông tin sách
+router.route("/favorite/:readerId").get(getFavoriteBookOfReader); // thông tin sách ưa thích theo reader
 router
   .route("/:isbn")
   .get(getOneBook) // thông tin sách theo ISBN
@@ -21,5 +23,3 @@ router
 router.route("/:isbn/genres").get(GetBookGenres); // thể loại sách theo ISBN
 
 export const bookRouter = router;
-
-

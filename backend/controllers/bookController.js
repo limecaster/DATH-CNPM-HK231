@@ -78,6 +78,18 @@ FROM ((book natural join author_write_book) join author on author_write_book.aut
   }
 };
 
+export const getFavoriteBookOfReader = async (req, res) => {
+  try {
+    const { readerId } = req.params;
+    const favorite_list = await Book.getFavoriteList(readerId);
+    console.log(favorite_list);
+    return res.send(favorite_list);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
 export const getOneBook = async (req, res) => {
   try {
     const { isbn } = req.params;
@@ -86,13 +98,6 @@ export const getOneBook = async (req, res) => {
     const genres = await Book.getGenres(book_details[0].ISBN);
     const genreValues = genres.map((genre) => genre.genre);
     book_details[0].genres = genreValues;
-    // await Promise.all(
-    //   book_details.map(async (obj) => {
-    //     const genres = await Book.getGenres(obj.ISBN);
-    //     const genreValues = genres.map((genre) => genre.genre);
-    //     obj.genres = genreValues;
-    //   })
-    // );
     return res.send(book_details[0]);
   } catch (error) {
     console.log(error.message);
