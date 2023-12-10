@@ -12,9 +12,11 @@ function New(props) {
         boxShadow: "2px 6px 8px 0 rgba(22, 22, 26, 0.18)",
       }}
     >
-      <img className="product--image" src={props.coverLink} alt="img" style={{ width: "100%",
-    height: "260px",
-    objectFit: "cover"}}/>
+      <img className="product--image" src={props.coverLink} alt="img" style={{
+    width: "100%",
+    height: "260px", // Set your desired height
+    objectFit: "cover", // or "contain" based on your preference
+  }}/>
 
       <div
         style={{
