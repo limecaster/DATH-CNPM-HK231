@@ -1,20 +1,11 @@
 import { Manager, getAllManagers, getLastManagerId, findByEmail } from "../models/Manager.js";
+import { verifyToken, hashPassword } from "../middleware/jwtAuthentication.js";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
-// Function to hash password before storing them to the database
-const hashPassword = async (plainPassword) => {
-  try {
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
-    return hashedPassword;
-  } catch (error) {
-    throw error;
-  }
-};
 
 
 export const createManager = async (req, res) => {
-
   console.log('Request Body:', req.body);
   console.log('Request File:', req.file);
   try {
@@ -81,9 +72,11 @@ export const getAllManager = async (req, res) => {
   console.log('Request File:', req.file);
 
   try {
-    // return getAllManager(); 
-    const data = await getAllManagers();
-    return res.json(data);
+    verifyToken(req, res, async () => {
+      // Return all managers
+      const data = await getAllManagers();
+      return res.json(data);
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });

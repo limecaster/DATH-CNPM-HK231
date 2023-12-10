@@ -33,6 +33,7 @@ const Book = () => {
     const [newCoverLink, setNewCoverLink] = useState('');
     const [chooseImage, setChooseImage] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [showRequiredImage, setShowRequiredImage] = useState(false);
 
     const fileInputRef = useRef(null);
 
@@ -44,14 +45,14 @@ const Book = () => {
                 muiEditTextFieldProps: {
                     type: 'text',
                     required: true,
-                    error: !!validationErrors?.phone,
-                    helperText: validationErrors?.phone,
+                    error: !!validationErrors?.ISBN,
+                    helperText: validationErrors?.ISBN,
                     onFocus: () =>
                         setValidationErrors({
                             ...validationErrors,
-                            phone: undefined,
+                            ISBN: undefined,
                         }),
-
+                    // readOnly: true,
 
                 },
             },
@@ -61,12 +62,12 @@ const Book = () => {
                 muiEditTextFieldProps: {
                     type: 'text',
                     required: true,
-                    error: !!validationErrors?.name,
-                    helperText: validationErrors?.name,
+                    error: !!validationErrors?.title,
+                    helperText: validationErrors?.title,
                     onFocus: () =>
                         setValidationErrors({
                             ...validationErrors,
-                            name: undefined,
+                            title: undefined,
                         }),
                 },
             },
@@ -100,12 +101,12 @@ const Book = () => {
                 muiEditTextFieldProps: {
                     type: 'text',
                     required: true,
-                    error: !!validationErrors?.name,
-                    helperText: validationErrors?.name,
+                    error: !!validationErrors?.authorName,
+                    helperText: validationErrors?.authorName,
                     onFocus: () =>
                         setValidationErrors({
                             ...validationErrors,
-                            name: undefined,
+                            authorName: undefined,
                         }),
                 },
             },
@@ -115,12 +116,12 @@ const Book = () => {
                 muiEditTextFieldProps: {
                     type: 'text',
                     required: true,
-                    error: !!validationErrors?.name,
-                    helperText: validationErrors?.name,
+                    error: !!validationErrors?.publisher,
+                    helperText: validationErrors?.publisher,
                     onFocus: () =>
                         setValidationErrors({
                             ...validationErrors,
-                            name: undefined,
+                            publisher: undefined,
                         }),
                 },
             },
@@ -130,12 +131,12 @@ const Book = () => {
                 muiEditTextFieldProps: {
                     type: 'number',
                     required: true,
-                    error: !!validationErrors?.name,
-                    helperText: validationErrors?.name,
+                    error: !!validationErrors?.publishDate,
+                    helperText: validationErrors?.publishDate,
                     onFocus: () =>
                         setValidationErrors({
                             ...validationErrors,
-                            name: undefined,
+                            publishDate: undefined,
                         }),
                 },
             },
@@ -157,8 +158,8 @@ const Book = () => {
                 editSelectOptions: bookLanguage,
                 muiEditTextFieldProps: {
                     select: true,
-                    error: !!validationErrors?.coverType,
-                    helperText: validationErrors?.coverType,
+                    error: !!validationErrors?.language,
+                    helperText: validationErrors?.language,
                 },
             },
             {
@@ -167,12 +168,12 @@ const Book = () => {
                 muiEditTextFieldProps: {
                     type: 'number',
                     required: true,
-                    error: !!validationErrors?.name,
-                    helperText: validationErrors?.name,
+                    error: !!validationErrors?.noPages,
+                    helperText: validationErrors?.noPages,
                     onFocus: () =>
                         setValidationErrors({
                             ...validationErrors,
-                            name: undefined,
+                            noPages: undefined,
                         }),
                 },
             },
@@ -197,12 +198,12 @@ const Book = () => {
                 muiEditTextFieldProps: {
                     type: 'number',
                     required: true,
-                    error: !!validationErrors?.name,
-                    helperText: validationErrors?.name,
+                    error: !!validationErrors?.copyNumber,
+                    helperText: validationErrors?.copyNumber,
                     onFocus: () =>
                         setValidationErrors({
                             ...validationErrors,
-                            name: undefined,
+                            copyNumber: undefined,
                         }),
                 },
             },
@@ -213,12 +214,12 @@ const Book = () => {
                     type: 'text',
                     required: true,
 
-                    error: !!validationErrors?.score,
-                    helperText: validationErrors?.score,
+                    error: !!validationErrors?.desc,
+                    helperText: validationErrors?.desc,
                     onFocus: () =>
                         setValidationErrors({
                             ...validationErrors,
-                            score: undefined,
+                            desc: undefined,
                         }),
                 },
             },
@@ -228,7 +229,27 @@ const Book = () => {
         ],
         [validationErrors]
     );
+    const validateRequired = (value) => {
+        return value !== undefined && value !== null && !!value.length;
+    };
+    const validateBook = (book) => {
+        return {
+            ISBN: !validateRequired(book.ISBN)
+                ? 'Vui lòng nhập ISBN'
+                : '',
+            title: !validateRequired(book.title) ? 'Vui lòng nhập tiêu đề' : '',
+            desc: !validateRequired(book.desc) ? 'Vui lòng nhập mô tả' : '',
+            authorName: !validateRequired(book.authorName) ? 'Vui lòng nhập tên tác giả' : '',
+            publishDate: !validateRequired(book.publishDate) ? 'Vui lòng nhập năm xuất bản' : '',
+            publisher: !validateRequired(book.publisher) ? 'Vui lòng nhập nhà xuất bản' : '',
+            coverType: !validateRequired(book.coverType) ? 'Vui lòng chọn loại bìa' : '',
+            language: !validateRequired(book.language) ? 'Vui lòng chọn loại ngôn ngữ' : '',
+            noPages: !validateRequired(book.noPages) ? 'Vui lòng nhập số trang' : '',
+            genres: !validateRequired(book.genres) ? 'Vui lòng nhập thể loại sách' : '',
+            copyNumber: !validateRequired(book.copyNumber) ? 'Vui lòng nhập số lượng bản sao' : '',
 
+        };
+    }
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -251,21 +272,15 @@ const Book = () => {
     }, []);
 
     const handleCreateUser = async ({ values, table }) => {
-        // if (values.phone.length !== 10) {
-        //     setValidationErrors({
-        //         ...validationErrors,
-        //         phone: 'Nhâp đúng số điện thoại!',
-        //     });
-        //     return;
-        // }
-        // const phoneExists = customer.some((existingCustomer) => existingCustomer.phone === values.phone);
-        // if (phoneExists) {
-        //     setValidationErrors({
-        //         ...validationErrors,
-        //         phone: 'Số điện thoại đã tồn tại.',
-        //     });
-        //     return;
-        // }
+        const newValidationErrors = validateBook(values);
+        if (!selectedImage) {
+            setShowRequiredImage(true);
+        }
+        if (Object.values(newValidationErrors).some((error) => error)) {
+            setValidationErrors(newValidationErrors);
+            return;
+        }
+
         setValidationErrors({});
         try {
             console.log('values:', values);
@@ -286,21 +301,8 @@ const Book = () => {
     };
 
     const handleSaveUser = async ({ values, table }) => {
-        // if (isNaN(values.phone) || values.phone.length !== 10) {
-        //     setValidationErrors({
-        //         ...validationErrors,
-        //         phone: 'Số điện thoại phải là số và có đúng 10 chữ số!',
-        //     });
-        //     return;
-        // }
-        // const phoneExists = customer.some((existingCustomer) => existingCustomer.phone === values.phone);
-        // if (phoneExists) {
-        //     setValidationErrors({
-        //         ...validationErrors,
-        //         phone: 'Số điện thoại đã tồn tại.',
-        //     });
-        //     return;
-        // }
+
+
 
 
         setValidationErrors({});
@@ -345,6 +347,7 @@ const Book = () => {
         if (file instanceof File) {
             setSelectedImage(file);
             setChooseImage(true);
+            setShowRequiredImage(false);
             setNewCoverLink(URL.createObjectURL(file));
         } else {
             console.error('Invalid file format or no file selected.');
@@ -360,11 +363,13 @@ const Book = () => {
         onCreatingRowCancel: () => {
             setValidationErrors({});
             setChooseImage(false);
+            setShowRequiredImage(false);
         },
         onCreatingRowSave: handleCreateUser,
         onEditingRowCancel: () => {
             setValidationErrors({});
             setChooseImage(false);
+            setShowRequiredImage(false);
         },
         onEditingRowSave: handleSaveUser,
         columns,
@@ -414,7 +419,7 @@ const Book = () => {
                 <DialogTitle variant="h5" style={{ textAlign: 'center' }}>Thêm sách vào thư viện</DialogTitle>
                 <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {internalEditComponents.slice(0, 2)}
-                    <div className='coverlink'>Bìa sách</div>
+                    <div className={`coverlink ${showRequiredImage ? 'required' : ''}`} >Bìa sách</div>
                     <div
                         style={{
                             width: '150px',
@@ -439,6 +444,7 @@ const Book = () => {
                                 opacity: 0,
                                 cursor: 'pointer',
                             }}
+
                         />
                         {chooseImage ? (
                             <img
@@ -452,7 +458,9 @@ const Book = () => {
                                 Choose File
                             </Button>
                         )}
+
                     </div>
+                    {showRequiredImage && <div style={{ color: '#d32f2f' }}> Vui lòng chọn bìa sách </div>}
                     {internalEditComponents.slice(3)}
                 </DialogContent>
                 <DialogActions>
