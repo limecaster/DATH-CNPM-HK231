@@ -1,22 +1,12 @@
-import { 
-  Reader, 
-  getAllReaders, 
-  getLastReaderId, 
+import {
+  Reader,
+  getAllReaders,
+  getLastReaderId,
   findByEmail,
   suggestBook
-  } from "../models/Reader.js";
-import bcrypt from 'bcrypt';
+} from "../models/Reader.js";
 
-// Function to hash password before storing them to the database
-const hashPassword = async (plainPassword) => {
-  try {
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
-    return hashedPassword;
-  } catch (error) {
-    throw error;
-  }
-};
+import { verifyToken, hashPassword } from "../middleware/jwtAuthentication.js";
 
 
 export const createReader = async (req, res) => {
@@ -89,9 +79,11 @@ export const getAllReader = async (req, res) => {
   console.log('Request File:', req.file);
 
   try {
-    // return getAllreader(); 
-    const data = await getAllReaders();
-    return res.json(data);
+    // Use the verifyToken middleware
+    verifyToken(req, res, async () => {
+      const data = await getAllReaders();
+      return res.json(data);
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
@@ -100,13 +92,16 @@ export const getAllReader = async (req, res) => {
 
 export const suggestBookWithEmail = async (req, res) => {
   try {
-    const { readerName, email, bookTitle, authorName } = req.body;
-    try {
-      await suggestBook(readerName, email, bookTitle, authorName);
-      return res.status(200).send({ message: 'Suggest book successfully!' });
-    } catch (error) {
-      return res.status(400).send({ message: error.message });
-    } 
+    // Use the verifyToken middleware
+    verifyToken(req, res, async () => {
+      const { readerName, email, bookTitle, authorName } = req.body;
+      try {
+        await suggestBook(readerName, email, bookTitle, authorName);
+        return res.status(200).send({ message: 'Suggest book successfully!' });
+      } catch (error) {
+        return res.status(400).send({ message: error.message });
+      }
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
