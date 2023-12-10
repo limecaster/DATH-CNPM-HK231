@@ -8,19 +8,6 @@ import ReaderList from './ReaderList';
 import GeneralInfo from './GeneralInfo';
 import BookList from './BookList';
 function ShowDashboard() {
-
-    const [books, setBooks] = useState([]);
-    const displayedBooks = books.slice(53, 60);
-
-    useEffect(() => {
-        axios.get('http://localhost:3001/books')
-            .then(res => {
-                console.log(res.data);
-                setBooks(res.data)
-            })
-            .catch(err => {
-            });
-    }, []);
     
     const dataUser = [
         {

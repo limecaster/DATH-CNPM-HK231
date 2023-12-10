@@ -22,7 +22,7 @@ export default function GeneralInfo() {
         <div className='col'>
             <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
                 <div style={{width:'fit-content'}}>
-                    <img src={userIcon} class="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
+                    <img src={userIcon} className="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
 
                 </div>
                 <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
@@ -35,7 +35,7 @@ export default function GeneralInfo() {
         <div className='col'>
             <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
                 <div style={{width:'fit-content'}}>
-                    <img src={bookIcon} class="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
+                    <img src={bookIcon} className="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
 
                 </div>
                 <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
@@ -48,7 +48,7 @@ export default function GeneralInfo() {
         <div className='col'>
             <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
                 <div style={{width:'fit-content'}}>
-                    <img src={borrowIcon} class="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
+                    <img src={borrowIcon} className="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
 
                 </div>
                 <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
