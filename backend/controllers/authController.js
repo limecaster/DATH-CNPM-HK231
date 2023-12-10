@@ -1,57 +1,36 @@
 import jwt from 'jsonwebtoken';
-import bcrypt, { genSalt } from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { db } from "../config/dbConfig.js";
 
-export const loginManager = async (req, res) => {
-
+const loginUser = async (req, res, tableName) => {
   const { email, password } = req.body;
 
-  let sql = `
-      SELECT \`email\`, \`password\`
-      FROM manager
-      WHERE \`email\` = '${email}';  
-  `;
-
   try {
-    var manager = await db.execute(sql);
-  }
-  catch (error) {
-      console.log(error.message);
-      res.status(500).send({ message: error.message });
-  }
-  if (!manager[0][0] || !await bcrypt.compare(password, manager[0][0].password)) {
-    return res.status(401).json({ message: 'Invalid email or password' });
-  }
+    const result = await db.execute(`
+      SELECT \`email\`, \`password\`
+      FROM ${tableName}
+      WHERE \`email\` = ?;
+    `, [email]);
 
-  // Generate JWT token
-  const token = jwt.sign({ email: manager.email }, 'T1VoDich', { expiresIn: '1h' });
+    const user = result[0][0];
 
-  res.json({ token });
+    if (!user || !await bcrypt.compare(password, user.password)) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const token = jwt.sign({ email: user.email }, "T1VoDich", { expiresIn: '1h' });
+
+    res.json({ token });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: 'Internal Server Error' });
+  }
+};
+
+export const loginManager = async (req, res) => {
+  await loginUser(req, res, 'manager');
 };
 
 export const loginReader = async (req, res) => {
-
-  const { email, password } = req.body;
-
-  let sql = `
-      SELECT \`email\`, \`password\`
-      FROM reader
-      WHERE \`email\` = '${email}';  
-  `;
-
-  try {
-    var reader = await db.execute(sql);
-  }
-  catch (error) {
-      console.log(error.message);
-      res.status(500).send({ message: error.message });
-  }
-  if (!reader[0][0] || !await bcrypt.compare(password, reader[0][0].password)) {
-    return res.status(401).json({ message: 'Invalid email or password' });
-  }
-
-  // Generate JWT token
-  const token = jwt.sign({ email: reader.email }, 'T1VoDich', { expiresIn: '1h' });
-
-  res.json({ token });
+  await loginUser(req, res, 'reader');
 };

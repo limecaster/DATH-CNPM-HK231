@@ -1,4 +1,4 @@
-import { Manager, getAllManagers, getLastManagerId } from "../models/Manager.js";
+import { Manager, getAllManagers, getLastManagerId, findByEmail } from "../models/Manager.js";
 import bcrypt from 'bcrypt';
 
 // Function to hash password before storing them to the database
@@ -29,6 +29,12 @@ export const createManager = async (req, res) => {
       !email ||
       !password) {
       return res.status(400).send({ message: "Pls send all required fields!" });
+    }
+
+    // Search email in database
+    const managerFound = await findByEmail(email);
+    if (managerFound) {
+      return res.status(400).send({ message: "Email is already in use!" });
     }
 
     let identityPart = await getLastManagerId()

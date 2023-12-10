@@ -1,9 +1,8 @@
 import { db } from '../config/dbConfig.js'
 
 export class Manager {
-  constructor(managerId, name, sex, dob, phoneNumber, email, accountId, 
-              username, password, openedDay, accountType) 
-  {
+  constructor(managerId, name, sex, dob, phoneNumber, email, accountId,
+    username, password, openedDay, accountType) {
     this.managerId = managerId;
     this.name = name;
     this.sex = sex;
@@ -79,7 +78,7 @@ export const getAllManagers = async () => {
   }
 }
 
-export const getLastManagerId = async() => {
+export const getLastManagerId = async () => {
   let connection;
   try {
     connection = await db.getConnection();
@@ -92,8 +91,38 @@ export const getLastManagerId = async() => {
     `;
 
     const [lastManagerId] = await db.execute(sql);
-
+    if (lastManagerId.length == 0) {
+      return [{
+        "managerId": "MS0000000"
+      }];
+    }
     return lastManagerId;
+  } catch (error) {
+    if (connection) {
+      await connection.rollback();
+    }
+    throw error;
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+}
+
+export const findByEmail = async (email) => {
+  let connection;
+  try {
+    connection = await db.getConnection();
+    await connection.beginTransaction();
+    let sql = `
+      SELECT * 
+      FROM manager 
+      WHERE email = '${email}';
+    `;
+
+    const [manager] = await db.execute(sql);
+
+    return manager[0];
   } catch (error) {
     if (connection) {
       await connection.rollback();
