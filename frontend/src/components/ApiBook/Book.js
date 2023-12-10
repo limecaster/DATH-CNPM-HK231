@@ -19,7 +19,7 @@ const apiEndpoints = {
     }
   },
 
-  insertBook: async (newBook, image) => {
+  insertBook: async (newBook, image, genre) => {
     try {
       const formData = new FormData();
 
@@ -35,7 +35,7 @@ const apiEndpoints = {
       formData.append("noPages", newBook.noPages);
 
       formData.append("copyNumber", newBook.copyNumber);
-      formData.append("genres", newBook.genres);
+      formData.append("genres", genre);
 
       console.log("Form Data:", [...formData]);
       const response = await api.post("/", formData);
@@ -46,7 +46,7 @@ const apiEndpoints = {
     }
   },
 
-  updateBook: async (newBook, image) => {
+  updateBook: async (newBook, image, genre) => {
     try {
       const formData = new FormData();
       if (image) {
@@ -54,7 +54,9 @@ const apiEndpoints = {
       } else {
         formData.append("coverlink", newBook.coverLink);
       }
+      if (genre) {
 
+      }
       formData.append("ISBN", newBook.ISBN);
       formData.append("title", newBook.title);
       formData.append("desc", newBook.desc);
@@ -65,7 +67,8 @@ const apiEndpoints = {
       formData.append("language", newBook.language);
       formData.append("noPages", newBook.noPages);
       formData.append("copyNumber", newBook.copyNumber);
-      formData.append("genres", newBook.genres);
+      // formData.append("genres", newBook.genres);
+      formData.append("genres", genre);
       console.log("Form Data:", [...formData]);
 
       const response = await api.put("/", formData);
