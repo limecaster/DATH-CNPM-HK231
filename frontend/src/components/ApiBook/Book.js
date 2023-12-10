@@ -54,7 +54,9 @@ const apiEndpoints = {
       } else {
         formData.append("coverlink", newBook.coverLink);
       }
+      if (genre) {
 
+      }
       formData.append("ISBN", newBook.ISBN);
       formData.append("title", newBook.title);
       formData.append("desc", newBook.desc);

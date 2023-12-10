@@ -153,7 +153,7 @@ const Book = () => {
                 accessorKey: 'publishDate',
                 header: 'Năm xuất bản',
                 muiEditTextFieldProps: {
-                    type: 'text',
+                    type: 'number',
                     required: true,
                     error: !!validationErrors?.publishDate,
                     helperText: validationErrors?.publishDate,
@@ -190,7 +190,7 @@ const Book = () => {
                 accessorKey: 'noPages',
                 header: 'Số trang',
                 muiEditTextFieldProps: {
-                    type: 'text',
+                    type: 'number',
                     required: true,
                     error: !!validationErrors?.noPages,
                     helperText: validationErrors?.noPages,
@@ -220,7 +220,7 @@ const Book = () => {
                 accessorKey: 'copyNumber',
                 header: 'Số bản sao',
                 muiEditTextFieldProps: {
-                    type: 'text',
+                    type: 'number',
                     required: true,
                     error: !!validationErrors?.copyNumber,
                     helperText: validationErrors?.copyNumber,
