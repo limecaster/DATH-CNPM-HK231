@@ -249,13 +249,13 @@ DROP TABLE IF EXISTS `manager`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `manager` (
   `managerId` char(9) NOT NULL,
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `sex` varchar(1) NOT NULL,
   `dob` date DEFAULT NULL,
   `phoneNumber` varchar(12) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `accountId` char(9) NOT NULL,
-  `username` varchar(20) NOT NULL,
+  `username` varchar(100) NOT NULL,
   `password` varchar(256) NOT NULL,
   `openedDay` date DEFAULT NULL,
   `accountType` varchar(2) DEFAULT 'MS',
@@ -286,14 +286,14 @@ SET FOREIGN_KEY_CHECKS = 1;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reader` (
   `readerId` char(9) NOT NULL,
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `sex` varchar(1) NOT NULL,
   `dob` date DEFAULT NULL,
   `phoneNumber` varchar(12) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `university` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `accountId` char(9) NOT NULL,
-  `username` varchar(20) NOT NULL,
+  `username` varchar(100) NOT NULL,
   `password` varchar(256) NOT NULL,
   `openedDay` date DEFAULT NULL,
   `accountType` varchar(2) DEFAULT 'MS',
@@ -404,13 +404,13 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertManager`(
     IN p_managerId CHAR(9),
-    IN p_name VARCHAR(30),
+    IN p_name VARCHAR(100),
     IN p_sex VARCHAR(1),
     IN p_dob DATE,
     IN p_phoneNumber VARCHAR(12),
     IN p_email VARCHAR(50),
     IN p_accountId CHAR(9),
-    IN p_username VARCHAR(20),
+    IN p_username VARCHAR(100),
     IN p_password VARCHAR(256),
     IN p_openedDay DATE,
     IN p_accountType VARCHAR(2)
@@ -462,14 +462,14 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertReader`(
     IN p_readerId CHAR(9),
-    IN p_name VARCHAR(30),
+    IN p_name VARCHAR(100),
     IN p_sex VARCHAR(1),
     IN p_dob DATE,
     IN p_phoneNumber VARCHAR(12),
     IN p_email VARCHAR(50),
     IN p_university VARCHAR(100),
     IN p_accountId CHAR(9),
-    IN p_username VARCHAR(20),
+    IN p_username VARCHAR(100),
     IN p_password VARCHAR(256),
     IN p_openedDay DATE,
     IN p_accountType VARCHAR(2)

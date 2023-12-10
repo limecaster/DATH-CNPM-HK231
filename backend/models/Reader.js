@@ -53,6 +53,10 @@ export class Reader {
       }
     }
   }
+
+  update = async () => {
+    
+  }
 }
 
 
