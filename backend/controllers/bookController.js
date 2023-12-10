@@ -2,9 +2,9 @@ import { Book } from "../models/Book.js";
 import { db } from "../config/dbConfig.js";
 import { unlink } from "fs";
 import { log } from "console";
+
 export const createBook = async (req, res) => {
   console.log("Request Body:", req.body);
-  console.log("Type of:", typeof req.body.genres);
   console.log("Request File:", req.file);
   try {
     const {
@@ -17,13 +17,14 @@ export const createBook = async (req, res) => {
       coverType,
       noPages,
       language,
+      copyNumber,
       genres,
     } = req.body;
     if (!ISBN || !title || !desc) {
       return res.status(400).send({ message: "Pls send all required fields!" });
     }
 
-    const genresArray = Array.isArray(genres) ? genres : [genres];
+    const genresArray = typeof genres === 'string' ? genres.split(', ').map(genre => genre.trim()) : genres;
     console.log("Genres:", genresArray);
 
     const coverlink = "http://localhost:3001/books/covers/" + req.file.filename;
@@ -39,9 +40,11 @@ export const createBook = async (req, res) => {
       coverType,
       noPages,
       language,
+      copyNumber,
       genresArray
-    );
 
+
+    );
     book = await book.save();
 
     console.log("Create new book");
@@ -55,7 +58,7 @@ export const createBook = async (req, res) => {
 export const getAllBook = async (req, res) => {
   try {
     let sql = `
-    SELECT ISBN, title, coverLink, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\` , DATE_FORMAT(dateAdded, "%Y-%m-%d %H:%i:%s") AS dateAdded, copyNumber 
+  SELECT ISBN, title, coverLink, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\`, copyNumber , DATE_FORMAT(dateAdded, "%Y-%m-%d %H:%i:%s") AS dateAdded 
 FROM ((book natural join author_write_book) join author on author_write_book.authorID=author.authorID) ORDER BY dateAdded DESC;`;
     let data = await db.execute(sql);
 
@@ -63,7 +66,8 @@ FROM ((book natural join author_write_book) join author on author_write_book.aut
       data[0].map(async (obj) => {
         const genres = await Book.getGenres(obj.ISBN);
         const genreValues = genres.map((genre) => genre.genre);
-        obj.genres = genreValues;
+        // obj.genres = genreValues;
+        obj.genres = genreValues.join(', ');
       })
     );
     return res.json(data[0]);
@@ -72,6 +76,8 @@ FROM ((book natural join author_write_book) join author on author_write_book.aut
     res.status(500).send({ message: error.message });
   }
 };
+
+
 
 export const getOneBook = async (req, res) => {
   try {
@@ -96,18 +102,38 @@ export const getOneBook = async (req, res) => {
 };
 
 const deleteOldCoverFile = async (isbn) => {
-  const [oldLink, _] = await db.execute(
-    `SELECT coverLink FROM book WHERE ISBN=?`,
-    [isbn]
-  );
-  const fileName = oldLink[0]["coverLink"].slice(35);
-  const filePath = "./public/uploads/" + fileName;
-  unlink(filePath, (err) => {
-    if (err) {
-      console.error(`Error deleting file ${filePath}:`, err);
+  console.log("delete:", isbn);
+  const ISBN = isbn.split("'")[1];
+  console.log("delete:", ISBN);
+  try {
+    const [result, _] = await db.execute(
+      `SELECT coverLink FROM book WHERE ISBN=?`,
+      [ISBN]
+    );
+
+    // Check if there is data returned from the query
+    if (result.length === 0 || !result[0].coverLink) {
+      console.log("No coverLink found for ISBN:", isbn);
+      return false;
     }
-  });
-  return true;
+
+    const oldLink = result[0].coverLink;
+    console.log("delete:", isbn);
+
+    const fileName = oldLink.slice(35);
+    const filePath = "./public/uploads/" + fileName;
+
+    unlink(filePath, (err) => {
+      if (err) {
+        console.error(`Error deleting file ${filePath}:`, err);
+      }
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Error querying database:", error);
+    return false;
+  }
 };
 
 export const updateBookByISBN = async (req, res) => {
@@ -122,23 +148,23 @@ export const updateBookByISBN = async (req, res) => {
       coverType,
       noPages,
       language,
+      copyNumber,
       genres,
-    } = req.body;
 
+    } = req.body;
+    let coverlink = req.body.coverlink
+    // console.log("Request File:", req.file);
+    console.log(`Updating book:`, coverlink);
     if (!ISBN || !title || !desc) {
       return res.status(400).send({ message: "Pls send all required fields!" });
     }
-    let coverlink;
-    if (!req.file) {
-      const [oldLink, _] = await db.execute(
-        `SELECT coverLink FROM book WHERE ISBN=?`,
-        [ISBN]
-      );
-      coverlink = oldLink[0]["coverLink"];
-    } else {
+    if (coverlink === undefined) {
+      console.log("cololo:", coverlink)
       coverlink = "http://localhost:3001/books/covers/" + req.file.filename;
       await deleteOldCoverFile(ISBN);
     }
+    const genresArray = typeof genres === 'string' ? genres.split(', ').map(genre => genre.trim()) : genres;
+    console.log("Genres:", genresArray);
 
     let book = new Book(
       ISBN,
@@ -151,8 +177,10 @@ export const updateBookByISBN = async (req, res) => {
       coverType,
       noPages,
       language,
-      genres
+      copyNumber,
+      genresArray,
     );
+    console.log(book);
     book = await book.update();
 
     console.log("Update book");
@@ -172,15 +200,18 @@ export const DeleteBookByISBN = async (req, res) => {
         .status(400)
         .send({ message: "ISBN is required for deleting a book." });
     }
-    await Book.deleteOne(isbn);
-    console.log("Delete book");
     await deleteOldCoverFile(isbn);
+    console.log("Delete book");
+    await Book.deleteOne(isbn);
+
+
     return res.status(200).send({ message: "Delete success" });
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
   }
 };
+
 
 export const GetBookGenres = async (req, res) => {
   try {

@@ -363,14 +363,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertBook`(
       IN p_coverType VARCHAR(45),
       IN p_noPages INT,
       IN p_language VARCHAR(45),
-      IN p_dateAdded DATETIME
+      IN p_dateAdded DATETIME,
+      IN p_copyNumber INT
   )
 BEGIN
       DECLARE author_id INT;
     
       -- Insert book information
-      INSERT INTO book(ISBN, title, coverlink, `desc`, publisher, publishDate, coverType, noPages, `language`, dateAdded)
-      VALUES(p_ISBN, CONVERT(p_title USING utf8mb4), CONVERT(p_coverlink USING utf8mb4), CONVERT(p_desc USING utf8mb4), CONVERT(p_publisher USING utf8mb4), p_publishDate, CONVERT(p_coverType USING utf8mb4), p_noPages, CONVERT(p_language USING utf8mb4), p_dateAdded);
+      INSERT INTO book(ISBN, title, coverlink, `desc`, publisher, publishDate, coverType, noPages, `language`, dateAdded, copyNumber )
+      VALUES(p_ISBN, CONVERT(p_title USING utf8mb4), CONVERT(p_coverlink USING utf8mb4), CONVERT(p_desc USING utf8mb4), CONVERT(p_publisher USING utf8mb4), p_publishDate, CONVERT(p_coverType USING utf8mb4), p_noPages, CONVERT(p_language USING utf8mb4), p_dateAdded,p_copyNumber);
 
       -- Insert author if not exists
       INSERT IGNORE INTO author(authorName)
@@ -530,7 +531,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateBook`(
       IN p_publishDate YEAR(4),
       IN p_coverType VARCHAR(45),
       IN p_noPages INT,
-      IN p_language VARCHAR(45)
+      IN p_language VARCHAR(45),
+       IN p_copyNumber INT
   )
 BEGIN
       DECLARE author_id INT;
@@ -545,6 +547,7 @@ BEGIN
           publishDate = p_publishDate,
           coverType = CONVERT(p_coverType USING utf8mb4),
           noPages = p_noPages,
+          copyNumber = p_copyNumber,
           `language` = CONVERT(p_language USING utf8mb4)
       WHERE
           ISBN = p_ISBN;

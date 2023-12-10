@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col"
 import ShowList from './ShowList';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from "react-bootstrap/Container";
-
+import Book from "./Book"
 
 // import Forms from '../../../components/AddBooks/Addbooks';
 
@@ -15,15 +15,15 @@ const ListPage = () => {
         <Container fluid className='p-0'>
             <div className='d-flex'>
 
-                <div className='h-auto' style={{position:'static'}}>
+                <div className='h-auto' style={{ position: 'static' }}>
                     <Sidebar />
                 </div>
-                <div style={{flex:'1'}}>
+                <div style={{ flex: '1' }}>
                     <Container className='m-2'>
                         <Row >
                             <Col xs={12} sm={12} >
-              
-                                <ShowList />
+
+                                <Book />
                             </Col>
                         </Row>
                     </Container>
