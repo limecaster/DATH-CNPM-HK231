@@ -14,7 +14,6 @@ export class Book {
     language,
     copyNumber,
     genres //list
-
   ) {
     this.ISBN = ISBN;
     this.title = title;
@@ -33,7 +32,7 @@ export class Book {
       .toISOString()
       .slice(0, 19)
       .replace("T", " ");
-  };
+  }
 
   save = async () => {
     let connection;
@@ -100,11 +99,11 @@ export class Book {
     try {
       connection = await db.getConnection();
       await connection.beginTransaction();
-      const ISBN = isbn.split("'")[1];
-      console.log("delete:", ISBN);
+
+      console.log("delete:", isbn);
       const [result] = await connection.execute(
         `DELETE FROM book WHERE ISBN = ?;`,
-        [ISBN]
+        [isbn]
       );
 
       await connection.commit();
@@ -121,7 +120,6 @@ export class Book {
       }
     }
   };
-
 
   static getOne = async (isbn) => {
     let connection;
