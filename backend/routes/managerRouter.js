@@ -5,7 +5,7 @@ import { loginManager } from "../controllers/authController.js";
 const router = Router()
 
 router.get("/gets", getAllManager);
-router.post("/create", createManager);
+router.post("/signup", createManager);
 router.post("/login", loginManager);
 
 export const managerRouter = router;
