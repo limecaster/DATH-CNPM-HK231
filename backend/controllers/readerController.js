@@ -1,4 +1,10 @@
-import { Reader, getAllReaders, getLastReaderId } from "../models/Reader.js";
+import { 
+  Reader, 
+  getAllReaders, 
+  getLastReaderId, 
+  findByEmail,
+  suggestBook
+  } from "../models/Reader.js";
 import bcrypt from 'bcrypt';
 
 // Function to hash password before storing them to the database
@@ -31,7 +37,13 @@ export const createReader = async (req, res) => {
       return res.status(400).send({ message: "Pls send all required fields!" });
     }
 
-    let identityPart = await getLastReaderId()
+    // Search email in database
+    const readerFound = await findByEmail(email);
+    if (readerFound) {
+      return res.status(400).send({ message: "Email is already in use!" });
+    }
+
+    let identityPart = await getLastReaderId();
     identityPart = identityPart[0].readerId.slice(2); // Get last readerId, then temporary remove 2 first characters
     const readerId = "ST" + (parseInt(identityPart) + 1).toString(); // Parse to int and add 1. finally, parse to string and add 2 first characters    const sex = "M"; // Default value
 
@@ -85,5 +97,21 @@ export const getAllReader = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+
+export const suggestBookWithEmail = async (req, res) => {
+  try {
+    const { readerName, email, bookTitle, authorName } = req.body;
+    try {
+      await suggestBook(readerName, email, bookTitle, authorName);
+      return res.status(200).send({ message: 'Suggest book successfully!' });
+    } catch (error) {
+      return res.status(400).send({ message: error.message });
+    } 
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+
+}
 
 
