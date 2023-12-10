@@ -15,14 +15,21 @@ import {
     DialogTitle,
     IconButton,
     Tooltip,
+    FormControlLabel,
+    FormGroup,
+    Checkbox,
+    Grid
 
 } from '@mui/material';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { mkConfig, generateCsv, download } from 'export-to-csv';
+
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
 
 import apiEndpoints from './../../../components/ApiBook/Book'; // Assuming you store your hooks in an 'api.js' file
-import { bookCoverType, bookLanguage } from './MakeData';
+import { bookCoverType, bookLanguage, bookGenres } from './MakeData';
 import Row from 'react-bootstrap/Row';
 
 const Book = () => {
@@ -34,6 +41,23 @@ const Book = () => {
     const [chooseImage, setChooseImage] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [showRequiredImage, setShowRequiredImage] = useState(false);
+    const [showRequiredGenres, setShowRequiredGenres] = useState(false);
+
+
+    const [selectedGenres, setSelectedGenres] = useState([]);
+
+    const handleGenreChange = (selectedGenre) => {
+        setShowRequiredGenres(false);
+        setSelectedGenres((prevGenres) => {
+            const genreName = selectedGenre.name;
+
+            if (prevGenres.includes(genreName)) {
+                return prevGenres.filter((name) => name !== genreName);
+            } else {
+                return [...prevGenres, genreName];
+            }
+        });
+    };
 
     const fileInputRef = useRef(null);
 
@@ -129,7 +153,7 @@ const Book = () => {
                 accessorKey: 'publishDate',
                 header: 'Năm xuất bản',
                 muiEditTextFieldProps: {
-                    type: 'number',
+                    type: 'text',
                     required: true,
                     error: !!validationErrors?.publishDate,
                     helperText: validationErrors?.publishDate,
@@ -166,7 +190,7 @@ const Book = () => {
                 accessorKey: 'noPages',
                 header: 'Số trang',
                 muiEditTextFieldProps: {
-                    type: 'number',
+                    type: 'text',
                     required: true,
                     error: !!validationErrors?.noPages,
                     helperText: validationErrors?.noPages,
@@ -196,7 +220,7 @@ const Book = () => {
                 accessorKey: 'copyNumber',
                 header: 'Số bản sao',
                 muiEditTextFieldProps: {
-                    type: 'number',
+                    type: 'text',
                     required: true,
                     error: !!validationErrors?.copyNumber,
                     helperText: validationErrors?.copyNumber,
@@ -223,12 +247,16 @@ const Book = () => {
                         }),
                 },
             },
-
-
-
         ],
         [validationErrors]
     );
+
+    const csvConfig = mkConfig({
+        fieldSeparator: ',',
+        decimalSeparator: '.',
+        useKeysAsHeaders: true,
+    });
+
     const validateRequired = (value) => {
         return value !== undefined && value !== null && !!value.length;
     };
@@ -245,7 +273,7 @@ const Book = () => {
             coverType: !validateRequired(book.coverType) ? 'Vui lòng chọn loại bìa' : '',
             language: !validateRequired(book.language) ? 'Vui lòng chọn loại ngôn ngữ' : '',
             noPages: !validateRequired(book.noPages) ? 'Vui lòng nhập số trang' : '',
-            genres: !validateRequired(book.genres) ? 'Vui lòng nhập thể loại sách' : '',
+            // genres: !validateRequired(book.genres) ? 'Vui lòng nhập thể loại sách' : '',
             copyNumber: !validateRequired(book.copyNumber) ? 'Vui lòng nhập số lượng bản sao' : '',
 
         };
@@ -276,6 +304,11 @@ const Book = () => {
         if (!selectedImage) {
             setShowRequiredImage(true);
         }
+        if (!selectedGenres || selectedGenres.length === 0) {
+            setShowRequiredGenres(true);
+        } else {
+            setShowRequiredGenres(false);
+        }
         if (Object.values(newValidationErrors).some((error) => error)) {
             setValidationErrors(newValidationErrors);
             return;
@@ -284,9 +317,14 @@ const Book = () => {
         setValidationErrors({});
         try {
             console.log('values:', values);
-            await apiEndpoints.insertBook(values, selectedImage);
+            console.log("Genres:", selectedGenres);
+            await apiEndpoints.insertBook(values, selectedImage, selectedGenres);
+
             table.setCreatingRow(null);
+            setChooseImage(false);
             setSelectedImage(null);
+            setSelectedGenres([]);
+            // setNewCoverLink('');
             const updatedData = await apiEndpoints.getAllBook();
 
             // const activeCustomers = updatedData.filter(customer => customer.deleted !== 1);
@@ -300,16 +338,31 @@ const Book = () => {
         }
     };
 
+    const handleEditUser = ({ table, row }) => {
+        // Split the genres string into an array
+        const existingGenres = row.original.genres ? row.original.genres.split(',') : [];
+
+        // Set the initial state of selectedGenres
+        setSelectedGenres(existingGenres);
+
+        // Open the edit dialog
+
+        table.setEditingRow(row);
+    };
     const handleSaveUser = async ({ values, table }) => {
-
-
-
 
         setValidationErrors({});
         try {
-            await apiEndpoints.updateBook(values, selectedImage);
+
+
+            console.log('values:', values);
+            console.log("Genres:", selectedGenres);
+
+            await apiEndpoints.updateBook(values, selectedImage, selectedGenres);
             table.setCreatingRow(null);
             setSelectedImage(null);
+            setChooseImage(false);
+            setSelectedGenres([]);
             const updatedData = await apiEndpoints.getAllBook();
 
 
@@ -317,6 +370,8 @@ const Book = () => {
             setBooks(updatedData);
             window.alert('Cập nhật thông tin sách thành công');
             table.setEditingRow(null);
+            setSelectedImage(null);
+            setChooseImage(false);
         } catch (error) {
             console.error('Error creating customer:', error);
             if (error.response && error.response.data) {
@@ -328,7 +383,6 @@ const Book = () => {
     const openDeleteConfirmModal = async (row) => {
         try {
             if (window.confirm('Bạn có chắc chắn xóa sách này ?')) {
-                console.log('row.phone:', row.id);
                 await apiEndpoints.deleteBook(row.id);
                 const updatedData = await apiEndpoints.getAllBook();
                 setBooks(updatedData);
@@ -359,17 +413,26 @@ const Book = () => {
         fileInputRef.current?.click();
     };
 
+    const handleExportData = () => {
+        const csv = generateCsv(csvConfig)(books);
+        download(csvConfig)(csv);
+    };
+
     const table = useMaterialReactTable({
         onCreatingRowCancel: () => {
             setValidationErrors({});
             setChooseImage(false);
+            setSelectedGenres([]);
             setShowRequiredImage(false);
+            setShowRequiredGenres(false);
         },
         onCreatingRowSave: handleCreateUser,
         onEditingRowCancel: () => {
             setValidationErrors({});
             setChooseImage(false);
+            setSelectedGenres([]);
             setShowRequiredImage(false);
+            setShowRequiredGenres(false);
         },
         onEditingRowSave: handleSaveUser,
         columns,
@@ -385,11 +448,15 @@ const Book = () => {
                 width: '100%',
             },
         },
+
         renderRowActions: ({ row, table }) => (
             <Box sx={{ display: 'flex', gap: '1rem' }}>
                 <Tooltip title="Edit">
                     {/* <IconButton > */}
-                    <IconButton onClick={() => table.setEditingRow(row)}>
+                    {/* <IconButton onClick={() => table.setEditingRow(row)}>
+                        <EditIcon />
+                    </IconButton> */}
+                    <IconButton onClick={() => handleEditUser({ row, table })}>
                         <EditIcon />
                     </IconButton>
                 </Tooltip>
@@ -403,15 +470,36 @@ const Book = () => {
             </Box>
         ),
         renderTopToolbarCustomActions: ({ table }) => (
-            <Button
-                variant="contained"
-                onClick={() => {
-                    table.setCreatingRow(true);
+            <Box
+                sx={{
+                    display: 'flex',
+                    gap: '16px',
+                    padding: '8px',
+                    flexWrap: 'wrap',
                 }}
-                sx={{ marginBottom: '16px' }}
             >
-                Thêm sách mới vào thư viện
-            </Button>
+                <Button
+                    variant="contained"
+                    onClick={() => {
+                        table.setCreatingRow(true);
+                    }}
+                    sx={{ marginBottom: '16px' }}
+                >
+                    Thêm sách mới vào thư viện
+                </Button>
+
+                <Button
+                    variant="contained"
+                    sx={{ marginBottom: '16px' }}
+                    //export all data that is currently in the table (ignore pagination, sorting, filtering, etc.)
+                    onClick={handleExportData}
+                    startIcon={<FileDownloadIcon />}
+                >
+                    Export All Data
+                </Button>
+            </Box>
+
+
 
         ),
         renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
@@ -420,6 +508,7 @@ const Book = () => {
                 <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {internalEditComponents.slice(0, 2)}
                     <div className={`coverlink ${showRequiredImage ? 'required' : ''}`} >Bìa sách</div>
+
                     <div
                         style={{
                             width: '150px',
@@ -460,8 +549,28 @@ const Book = () => {
                         )}
 
                     </div>
+
                     {showRequiredImage && <div style={{ color: '#d32f2f' }}> Vui lòng chọn bìa sách </div>}
-                    {internalEditComponents.slice(3)}
+                    {internalEditComponents.slice(3, 9)}
+                    <div className={`coverlink ${showRequiredGenres ? 'required' : ''}`} >Thể loại sách</div>
+                    <Grid container>
+                        {bookGenres.map((genre, index) => (
+                            <Grid item xs={4} key={genre.id}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={selectedGenres.includes(genre.name)}
+                                            onChange={() => handleGenreChange(genre)}
+                                        />
+                                    }
+                                    label={genre.name}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid>
+                    {showRequiredGenres && <div style={{ color: '#d32f2f' }}> Vui lòng thể loại sách </div>}
+                    {internalEditComponents.slice(10)}
+
                 </DialogContent>
                 <DialogActions>
                     <MRT_EditActionButtons variant="text" table={table} row={row}
@@ -517,7 +626,26 @@ const Book = () => {
                         )}
 
                     </div>
-                    {internalEditComponents.slice(3)}
+
+                    {internalEditComponents.slice(3, 9)}
+                    <div className={`coverlink ${showRequiredGenres ? 'required' : ''}`} >Thể loại sách</div>
+                    <Grid container>
+                        {bookGenres.map((genre, index) => (
+                            <Grid item xs={4} key={genre.id}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={selectedGenres.includes(genre.name)}
+                                            onChange={() => handleGenreChange(genre)}
+                                        />
+                                    }
+                                    label={genre.name}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid>
+                    {showRequiredGenres && <div style={{ color: '#d32f2f' }}> Vui lòng thể loại sách </div>}
+                    {internalEditComponents.slice(10)}
                 </DialogContent>
                 <DialogActions>
                     <MRT_EditActionButtons variant="text" table={table} row={row} />
