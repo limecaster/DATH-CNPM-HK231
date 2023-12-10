@@ -39,7 +39,7 @@ function Homepage() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/genre_of_book")
+      .get("http://localhost:3001/books/9781668016138/genres")
       .then((res) => {
         console.log(res.data);
         setgenreBooks(res.data);
