@@ -21,7 +21,8 @@ import React, { useEffect, useState } from "react";
 
 function Homepage() {
   const [books, setBooks] = useState([]);
-  const displayedBooks = books.slice(1, 22);
+
+  const displayedBooks = books.slice(0, 22);
 
   useEffect(() => {
     axios
