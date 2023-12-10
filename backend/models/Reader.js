@@ -98,8 +98,68 @@ export const getLastReaderId = async() => {
     `;
 
     const [lastReaderId] = await db.execute(sql);
-
+    if (lastReaderId.length == 0) {
+      return [{
+        "readerId": "ST0000000"
+      }];
+    }
     return lastReaderId;
+  } catch (error) {
+    if (connection) {
+      await connection.rollback();
+    }
+    throw error;
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+}
+
+export const findByEmail = async (email) => {
+  let connection;
+  try {
+    connection = await db.getConnection();
+    await connection.beginTransaction();
+    let sql = `
+      SELECT * 
+      FROM reader 
+      WHERE email = '${email}';
+    `;
+
+    const [readerFound] = await db.execute(sql);
+
+    return readerFound[0];
+  } catch (error) {
+    if (connection) {
+      await connection.rollback();
+    }
+    throw error;
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+}
+
+export const suggestBook = async (readerName, email, bookTitle, authorName) => {
+  let connection;
+  try {
+    connection = await db.getConnection();
+    await connection.beginTransaction();
+    let sql = `
+      CALL SuggestBook(
+        '${readerName}',
+        '${email}',
+        '${bookTitle}',
+        '${authorName}'
+      );
+    `;
+
+    const [result, _] = await connection.execute(sql);
+    await connection.commit();
+
+    return result;
   } catch (error) {
     if (connection) {
       await connection.rollback();
