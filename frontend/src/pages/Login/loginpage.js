@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import login1 from "../../assets/image/login1.png";
 import login2 from "../../assets/image/login2.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function LoginPage(props) {
   const [errorMessage, setErrorMessage] = useState("");
@@ -118,7 +118,10 @@ function LoginPage(props) {
         {props.title === "user" && (
           <div className="d-flex align-items-center justify-content-center mt-3">
             <span style={{ opacity: "0.5" }}>Bạn chưa có tài khoản?</span> &nbsp;
-            <span onClick={() => props.handleTabChange("login")} style={{ color: "#31AAB7", textDecoration: "underline", cursor: "pointer" }}> Đăng ký</span>
+            <Link to='/register'>
+                <span onClick={() => props.handleTabChange("login")} style={{ color: "#31AAB7", textDecoration: "underline", cursor: "pointer" }}> Đăng ký</span>
+            </Link>
+            
           </div>
         )}
       </Form>

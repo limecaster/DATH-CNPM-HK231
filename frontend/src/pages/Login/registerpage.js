@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
+import {BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function RegisterPage({ handleTabChange }) {
   const [passwordMatch, setPasswordMatch] = useState(true);
@@ -109,7 +110,9 @@ const handleRegisterSubmit = async (event) => {
         </div>
         <div className="d-flex align-items-center justify-content-center mt-3">
                 <span style={{ opacity: '0.5' }}>Bạn đã có tài khoản?</span> &nbsp;
-                <span onClick={() => handleTabChange("login")} style={{ color: '#31AAB7', textDecoration: 'underline', cursor: 'pointer' }}> Đăng nhập</span>
+                <Link to='/user/login'>
+                  <span onClick={() => handleTabChange("login")} style={{ color: '#31AAB7', textDecoration: 'underline', cursor: 'pointer' }}> Đăng nhập</span>
+                </Link>
             </div>
     </Form>
     </>
