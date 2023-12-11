@@ -26,10 +26,9 @@ function App() {
             <Route path="/register" element={<Login func='register' title='user' />} />
             <Route path="/admin/">
             <Route path='books/*' element={<ListPage />} />
+            <Route path="dashboard/*" element={<Dashboard />} />
             </Route>
             {/* <Route path='/books/*' element={<Book />} /> */}
-            <Route path='/adminlist/*' element={<ListPage />} />
-            <Route path="dashboard/*" element={<Dashboard />} />
           </Routes>
         </section>
       </Router>
