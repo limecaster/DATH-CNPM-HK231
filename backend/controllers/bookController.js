@@ -7,49 +7,54 @@ export const createBook = async (req, res) => {
   console.log("Request Body:", req.body);
   console.log("Request File:", req.file);
   try {
-    const {
-      ISBN,
-      title,
-      desc,
-      authorName,
-      publisher,
-      publishDate,
-      coverType,
-      noPages,
-      language,
-      copyNumber,
-      genres,
-    } = req.body;
-    if (!ISBN || !title || !desc) {
-      return res.status(400).send({ message: "Pls send all required fields!" });
-    }
+    verifyToken(req, res, async () => {
+      const {
+        ISBN,
+        title,
+        desc,
+        authorName,
+        publisher,
+        publishDate,
+        coverType,
+        noPages,
+        language,
+        copyNumber,
+        genres,
+      } = req.body;
+      if (!ISBN || !title || !desc) {
+        return res
+          .status(400)
+          .send({ message: "Pls send all required fields!" });
+      }
 
-    const genresArray =
-      typeof genres === "string"
-        ? genres.split(", ").map((genre) => genre.trim())
-        : genres;
-    console.log("Genres:", genresArray);
+      const genresArray =
+        typeof genres === "string"
+          ? genres.split(", ").map((genre) => genre.trim())
+          : genres;
+      console.log("Genres:", genresArray);
 
-    const coverlink = "http://localhost:3001/books/covers/" + req.file.filename;
+      const coverlink =
+        "http://localhost:3001/books/covers/" + req.file.filename;
 
-    let book = new Book(
-      ISBN,
-      title,
-      coverlink,
-      desc,
-      authorName,
-      publisher,
-      publishDate,
-      coverType,
-      noPages,
-      language,
-      copyNumber,
-      genresArray
-    );
-    book = await book.save();
+      let book = new Book(
+        ISBN,
+        title,
+        coverlink,
+        desc,
+        authorName,
+        publisher,
+        publishDate,
+        coverType,
+        noPages,
+        language,
+        copyNumber,
+        genresArray
+      );
+      book = await book.save();
 
-    console.log("Create new book");
-    return res.status(201).send(book);
+      console.log("Create new book");
+      return res.status(201).send(book);
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
@@ -80,10 +85,12 @@ FROM ((book natural join author_write_book) join author on author_write_book.aut
 
 export const getFavoriteBookOfReader = async (req, res) => {
   try {
-    const { readerId } = req.params;
-    const favorite_list = await Book.getFavoriteList(readerId);
-    console.log(favorite_list);
-    return res.send(favorite_list);
+    verifyToken(req, res, async () => {
+      const { readerId } = req.params;
+      const favorite_list = await Book.getFavoriteList(readerId);
+      console.log(favorite_list);
+      return res.send(favorite_list);
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
@@ -142,56 +149,60 @@ const deleteOldCoverFile = async (isbn) => {
 
 export const updateBookByISBN = async (req, res) => {
   try {
-    const {
-      ISBN,
-      title,
-      desc,
-      authorName,
-      publisher,
-      publishDate,
-      coverType,
-      noPages,
-      language,
-      copyNumber,
-      genres,
-    } = req.body;
-    let coverlink = req.body.coverlink;
-    // console.log("Request File:", req.file);
-    console.log(`Updating book:`, coverlink);
-    if (!ISBN || !title || !desc) {
-      return res.status(400).send({ message: "Pls send all required fields!" });
-    }
-    if (coverlink === undefined) {
-      console.log("cololo:", coverlink);
-      coverlink = "http://localhost:3001/books/covers/" + req.file.filename;
-      await deleteOldCoverFile(ISBN);
-    }
-    const genresArray =
-      typeof genres === "string"
-        ? genres.split(", ").map((genre) => genre.trim())
-        : genres;
-    console.log("Genres:", genresArray);
+    verifyToken(req, res, async () => {
+      const {
+        ISBN,
+        title,
+        desc,
+        authorName,
+        publisher,
+        publishDate,
+        coverType,
+        noPages,
+        language,
+        copyNumber,
+        genres,
+      } = req.body;
+      let coverlink = req.body.coverlink;
+      // console.log("Request File:", req.file);
+      console.log(`Updating book:`, coverlink);
+      if (!ISBN || !title || !desc) {
+        return res
+          .status(400)
+          .send({ message: "Pls send all required fields!" });
+      }
+      if (coverlink === undefined) {
+        console.log("cololo:", coverlink);
+        coverlink = "http://localhost:3001/books/covers/" + req.file.filename;
+        await deleteOldCoverFile(ISBN);
+      }
+      const genresArray =
+        typeof genres === "string"
+          ? genres.split(", ").map((genre) => genre.trim())
+          : genres;
+      console.log("Genres:", genresArray);
 
-    let book = new Book(
-      ISBN,
-      title,
-      coverlink,
-      desc,
-      authorName,
-      publisher,
-      publishDate,
-      coverType,
-      noPages,
-      language,
-      copyNumber,
-      genresArray
-    );
-    console.log(book);
-    book = await book.update();
+      let book = new Book(
+        ISBN,
+        title,
+        coverlink,
+        desc,
+        authorName,
+        publisher,
+        publishDate,
+        coverType,
+        noPages,
+        language,
+        copyNumber,
+        genresArray
+      );
+      console.log(book);
+      book = await book.update();
 
-    console.log("Update book");
+      console.log("Update book");
 
-    return res.status(201).send(book);
+      return res.status(201).send(book);
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
@@ -200,18 +211,20 @@ export const updateBookByISBN = async (req, res) => {
 
 export const DeleteBookByISBN = async (req, res) => {
   try {
-    const { isbn } = req.params;
-    if (!isbn) {
-      return res
-        .status(400)
-        .send({ message: "ISBN is required for deleting a book." });
-    }
-    console.log(isbn);
-    await deleteOldCoverFile(isbn);
-    console.log("Delete book");
-    await Book.deleteOne(isbn);
+    verifyToken(req, res, async () => {
+      const { isbn } = req.params;
+      if (!isbn) {
+        return res
+          .status(400)
+          .send({ message: "ISBN is required for deleting a book." });
+      }
+      console.log(isbn);
+      await deleteOldCoverFile(isbn);
+      console.log("Delete book");
+      await Book.deleteOne(isbn);
 
-    return res.status(200).send({ message: "Delete success" });
+      return res.status(200).send({ message: "Delete success" });
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
