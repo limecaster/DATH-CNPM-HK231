@@ -260,14 +260,11 @@ CREATE TABLE `manager` (
   `openedDay` date DEFAULT NULL,
   `accountType` varchar(2) DEFAULT 'MS',
   PRIMARY KEY (`managerId`),
-<<<<<<< HEAD
-  UNIQUE KEY `MANAGER_UNIQUE` (`managerId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-=======
+
   UNIQUE KEY `MANAGER_UNIQUE` (`managerId`),
   UNIQUE KEY `Manager_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> f8850de0e603cf3aa349a60e46da52e32babc772
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -296,27 +293,20 @@ CREATE TABLE `reader` (
   `sex` varchar(1) NOT NULL,
   `dob` date DEFAULT NULL,
   `phoneNumber` varchar(12) DEFAULT NULL,
-<<<<<<< HEAD
-  `email` varchar(50) DEFAULT NULL,
-  `university` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-=======
+
   `email` varchar(50) NOT NULL,
   `university` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
->>>>>>> f8850de0e603cf3aa349a60e46da52e32babc772
+
   `accountId` char(9) NOT NULL,
   `username` varchar(100) DEFAULT NULL,
   `password` varchar(256) NOT NULL,
   `openedDay` date DEFAULT NULL,
   `accountType` varchar(2) DEFAULT 'MS',
   PRIMARY KEY (`readerId`),
-<<<<<<< HEAD
-  UNIQUE KEY `READER_UNIQUE` (`readerId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-=======
   UNIQUE KEY `READER_UNIQUE` (`readerId`),
   UNIQUE KEY `Reader_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> f8850de0e603cf3aa349a60e46da52e32babc772
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
