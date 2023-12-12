@@ -1,8 +1,5 @@
 import { Manager, getAllManagers, getLastManagerId, findByEmail } from "../models/Manager.js";
 import { verifyToken, hashPassword } from "../middleware/jwtAuthentication.js";
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-
 
 
 export const createManager = async (req, res) => {
@@ -70,7 +67,7 @@ export const createManager = async (req, res) => {
 export const getAllManager = async (req, res) => {
   console.log('Request Body:', req.body);
   console.log('Request File:', req.file);
-
+  console.log('Hash password', await hashPassword("123456"));
   try {
     verifyToken(req, res, async () => {
       // Return all managers
