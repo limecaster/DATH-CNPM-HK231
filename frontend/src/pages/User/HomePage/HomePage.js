@@ -68,7 +68,6 @@ function Homepage() {
   // const categData = categoryData.map((item) => <Category name={item.name} url={item.imageurl}/>);
   return (
     <>
-      <Header />
       <div className="container">
         <Welcome />
         <div
@@ -136,7 +135,6 @@ function Homepage() {
         </div>
         <Carousel responsive={responsive}>{categData}</Carousel>
       </div>
-      <Footer />
     </>
   );
 }

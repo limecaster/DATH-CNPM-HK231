@@ -19,45 +19,42 @@ export default function GeneralInfo() {
     console.log('GENERAL INFO', generalInfo);
     return (
         <>
-        <div className='col'>
-            <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
-                <div style={{width:'fit-content'}}>
-                    <img src={userIcon} className="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
+            <div className='col'>
+                <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
+                    <div style={{width:'fit-content'}}>
+                        <img src={userIcon} className="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
 
-                </div>
-                <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
-                    <h5 className="text-secondary">Tổng số người dùng</h5>
-                    <p className="mt-4 fw-bold">{generalInfo[0].readerCount}</p>
-                    {/* <p className="mt-4 fw-bold">1</p> */}
+                    </div>
+                    <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
+                        <h5 className="text-secondary">Tổng số người dùng</h5>
+                        <p className="mt-4 fw-bold">{generalInfo[0].readerCount}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div className='col'>
-            <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
-                <div style={{width:'fit-content'}}>
-                    <img src={bookIcon} className="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
+            <div className='col'>
+                <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
+                    <div style={{width:'fit-content'}}>
+                        <img src={bookIcon} className="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
 
-                </div>
-                <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
-                    <h5 className="text-secondary">Tổng số sách</h5>
-                    <p className="mt-4 fw-bold">{generalInfo[0].bookCount}</p>
-                    {/* <p className="mt-4 fw-bold">1</p> */}
+                    </div>
+                    <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
+                        <h5 className="text-secondary">Tổng số sách</h5>
+                        <p className="mt-4 fw-bold">{generalInfo[0].bookCount}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div className='col'>
-            <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
-                <div style={{width:'fit-content'}}>
-                    <img src={borrowIcon} className="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
+            <div className='col'>
+                <div className='d-flex flex-nowrap p-3 shadow rounded border border-secondary'>
+                    <div style={{width:'fit-content'}}>
+                        <img src={borrowIcon} className="img-fluid" style={{width:'75px',height:'75px'}} alt='icon'/>
 
-                </div>
-                <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
-                    <h5 className="text-secondary">Số lượt mượn / trả</h5>
-                    <p className="mt-4 fw-bold">{generalInfo[0].borrowCount}/{generalInfo[0].givebackCount}</p>
-                    {/* <p className="mt-4 fw-bold">1</p> */}
+                    </div>
+                    <div className="card-body" style={{width:'calc(100% - 90px)', textAlign:'end'}}>
+                        <h5 className="text-secondary">Số lượt mượn / trả</h5>
+                        <p className="mt-4 fw-bold">{generalInfo[0].borrowCount}/{generalInfo[0].givebackCount}</p>
+                    </div>
                 </div>
             </div>
-        </div>
         </>
     )
 }
