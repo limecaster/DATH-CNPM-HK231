@@ -1,6 +1,6 @@
 import { Favorite } from "../models/Favorite.js";
 import { db } from "../config/dbConfig.js";
-
+import { verifyToken } from "../middleware/jwtAuthentication.js";
 export const isFavorite = async (req, res) => {
   try {
     verifyToken(req, res, async () => {

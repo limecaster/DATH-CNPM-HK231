@@ -2,7 +2,7 @@ import { Book } from "../models/Book.js";
 import { db } from "../config/dbConfig.js";
 import { unlink } from "fs";
 import { log } from "console";
-
+import { verifyToken } from "../middleware/jwtAuthentication.js";
 export const createBook = async (req, res) => {
   console.log("Request Body:", req.body);
   console.log("Request File:", req.file);
@@ -63,20 +63,22 @@ export const createBook = async (req, res) => {
 
 export const getAllBook = async (req, res) => {
   try {
-    let sql = `
+    verifyToken(req, res, async () => {
+      let sql = `
   SELECT ISBN, title, coverLink, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\`, copyNumber , DATE_FORMAT(dateAdded, "%Y-%m-%d %H:%i:%s") AS dateAdded 
 FROM ((book natural join author_write_book) join author on author_write_book.authorID=author.authorID) ORDER BY dateAdded DESC;`;
-    let data = await db.execute(sql);
+      let data = await db.execute(sql);
 
-    await Promise.all(
-      data[0].map(async (obj) => {
-        const genres = await Book.getGenres(obj.ISBN);
-        const genreValues = genres.map((genre) => genre.genre);
-        // obj.genres = genreValues;
-        obj.genres = genreValues.join(", ");
-      })
-    );
-    return res.json(data[0]);
+      await Promise.all(
+        data[0].map(async (obj) => {
+          const genres = await Book.getGenres(obj.ISBN);
+          const genreValues = genres.map((genre) => genre.genre);
+          // obj.genres = genreValues;
+          obj.genres = genreValues.join(", ");
+        })
+      );
+      return res.json(data[0]);
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
