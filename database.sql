@@ -310,17 +310,6 @@ CREATE TABLE `manager` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `manager`
---
-
-LOCK TABLES `manager` WRITE;
-/*!40000 ALTER TABLE `manager` DISABLE KEYS */;
-INSERT INTO `manager` VALUES ('MS1000000','Đỗ Văn Bâng','M','2003-09-29','0123456789','bang.do38@hcmut.edu.vn','MS1000000','bangdo','123456','2023-11-01','MS'),('MS1000001','Trương Thị Dũng','F','2003-01-22','0123456789','example@hcmut.edu.vn','MS1000001','dungtruongthi','123456','2023-11-01','MS'),('MS1234567','John Doe Sáng','M','1990-01-01','1234567890','john@example.com','ACC123456','john_doe','6481f8e1a060d56eeb7c10ac7809d316800dce013713c412e1d22076505b11a8','2023-01-01','MS');
-/*!40000 ALTER TABLE `manager` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reader`
 --
 -- SET FOREIGN_KEY_CHECKS = 0;
@@ -330,7 +319,7 @@ DROP TABLE IF EXISTS `reader`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reader` (
-    `readerId` char(9) NOT NULL,
+  `readerId` char(9) NOT NULL,
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `sex` varchar(1) NOT NULL,
   `dob` date DEFAULT NULL,
@@ -529,6 +518,37 @@ BEGIN
 	);
 END ;;
 DELIMITER ;
+
+CALL InsertManager(
+	'MS1000000', 
+	'Đỗ Văn Bâng', 
+    'M', 
+    '2003-09-29',
+    '0123456789', 
+    'example1@gmail.com',
+    'MS1000000', 
+    'example1@gmail.com',
+    '$2b$10$boMWeggqt7pKp8eNtx89ju58GqNANGIIIkMgjKh5uRw6RbsDqTEqe',
+    '2023-12-01', 
+    'MS');
+
+CALL InsertManager(
+	'MS1000001', 
+	'Trương Đức Dũng', 
+    'M', 
+    '2003-01-01',
+    '0123456789', 
+    'example2@gmail.com',
+    'MS1000001', 
+    'example2@gmail.com',
+    '$2b$10$boMWeggqt7pKp8eNtx89ju58GqNANGIIIkMgjKh5uRw6RbsDqTEqe',
+    '2023-12-01', 
+    'MS');
+
+
+
+
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
