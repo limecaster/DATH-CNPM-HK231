@@ -462,6 +462,8 @@ BEGIN
 
   END ;;
 DELIMITER ;
+
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -546,6 +548,39 @@ CALL InsertManager(
     'MS');
 
 
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `UpdateManager` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateManager`(
+    IN p_name VARCHAR(100),
+    IN p_sex VARCHAR(1),
+    IN p_dob DATE,
+    IN p_phoneNumber VARCHAR(12),
+    IN p_email VARCHAR(50),
+    IN p_password VARCHAR(256)
+)
+BEGIN
+  UPDATE `manager` 
+    SET
+        `name` = CONVERT(p_name USING utf8mb4),
+        `sex` = p_sex,
+        `dob` = p_dob,
+        `phoneNumber` = p_phoneNumber,
+        `password` = p_password
+    WHERE `email` = p_email;
+END ;;
+DELIMITER ;
 
 
 
@@ -578,9 +613,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertReader`(
     IN p_accountType VARCHAR(2)
 )
 BEGIN
-	DECLARE hashedPassword VARCHAR(256);
-    SET hashedPassword = SHA2(p_password, 256);
-    
     INSERT INTO `reader` (
         `readerId`,
         `name`,
@@ -610,6 +642,46 @@ BEGIN
 	);
 END ;;
 DELIMITER ;
+
+
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `UpdateReader` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateReader`(
+    IN p_name VARCHAR(100),
+    IN p_sex VARCHAR(1),
+    IN p_dob DATE,
+    IN p_phoneNumber VARCHAR(12),
+    IN p_university VARCHAR(100),
+    IN p_email VARCHAR(50),
+    IN p_password VARCHAR(256)
+)
+BEGIN
+    UPDATE `reader` 
+    SET
+        `name` = CONVERT(p_name USING utf8mb4),
+        `sex` = p_sex,
+        `dob` = p_dob,
+        `phoneNumber` = p_phoneNumber,
+        `university` = CONVERT(p_university USING utf8mb4),
+        `password` = p_password
+    WHERE `email` = p_email;
+END ;;
+DELIMITER ;
+
+
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;

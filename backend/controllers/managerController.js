@@ -1,4 +1,8 @@
-import { Manager, getAllManagers, getLastManagerId, findByEmail } from "../models/Manager.js";
+import { Manager, 
+        getAllManagers, 
+        getLastManagerId, 
+        findByEmail,
+        updateManager } from "../models/Manager.js";
 import { verifyToken, hashPassword } from "../middleware/jwtAuthentication.js";
 
 
@@ -67,7 +71,6 @@ export const createManager = async (req, res) => {
 export const getAllManager = async (req, res) => {
   console.log('Request Body:', req.body);
   console.log('Request File:', req.file);
-  console.log('Hash password', await hashPassword("123456"));
   try {
     verifyToken(req, res, async () => {
       // Return all managers
@@ -80,4 +83,36 @@ export const getAllManager = async (req, res) => {
   }
 };
 
+export const updatingManager = async (req, res) => {
+  console.log('Request Body:', req.body);
+  console.log('Request File:', req.file);
+  try {
+    verifyToken(req, res, async () => {
+      const {
+        name,
+        sex,
+        dob,
+        phoneNumber,
+        email,
+        password
+      } = req.body;
+
+      if (!name || !sex || !dob || !phoneNumber || !email || !password) {
+        return res.status(400).send({ message: "Pls send all required fields!" });
+      }
+      
+      const managerFound = await findByEmail(email);
+      if (!managerFound) {
+        return res.status(400).send({ message: "Email is not in use!" });
+      }
+
+      const response = await updateManager(name, sex, dob, phoneNumber, email, await hashPassword(password));
+      console.log("Update manager successfully");
+      return res.status(200).send(response);
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+}
 

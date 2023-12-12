@@ -171,3 +171,27 @@ export const suggestBook = async (readerName, email, bookTitle, authorName) => {
     }
   }
 }
+
+export const updateReader = async (name, sex, dob, phoneNumber, university , email, password) => {
+  let connection;
+  try {
+    connection = await db.getConnection();
+    await connection.beginTransaction();
+    let sql = `
+      CALL UpdateReader('${name}', '${sex}', '${dob}', '${phoneNumber}', '${university}', '${email}', '${password}');
+    `;
+    const [reader] = await db.execute(sql);
+    await connection.commit();
+
+    return reader;
+  } catch (error) {
+    if (connection) {
+      await connection.rollback();
+    }
+    throw error;
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+}

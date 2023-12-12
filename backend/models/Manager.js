@@ -134,3 +134,27 @@ export const findByEmail = async (email) => {
     }
   }
 }
+
+export const updateManager = async (name, sex, dob, phoneNumber, email, password) => {
+  let connection;
+  try {
+    connection = await db.getConnection();
+    await connection.beginTransaction();
+    let sql = `
+      CALL UpdateManager('${name}', '${sex}', '${dob}', '${phoneNumber}','${email}', '${password}');
+    `;
+    const [manager] = await db.execute(sql);
+    await connection.commit();
+
+    return manager;
+  } catch (error) {
+    if (connection) {
+      await connection.rollback();
+    }
+    throw error;
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+}
