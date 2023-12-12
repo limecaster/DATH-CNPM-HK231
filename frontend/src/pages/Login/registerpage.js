@@ -1,25 +1,71 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import axios from "axios";
+import {BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function RegisterPage({ handleTabChange }) {
   const [passwordMatch, setPasswordMatch] = useState(true);
 
-  const handleRegisterSubmit = (event) => {
-    event.preventDefault();
-    // Your registration logic here
-    // Check if passwords match
-    const password = event.target.elements.password.value;
-    const confirmPassword = event.target.elements.confirmPassword.value;
-    if (password !== confirmPassword) {
-      setPasswordMatch(false);
-      return;
-    }
 
-    // Passwords match, proceed with registration
-    setPasswordMatch(true);
-    // Navigate to login page after successful registration
-    handleTabChange("login");
+// ... (your existing imports and code)
+
+const handleRegisterSubmit = async (event) => {
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const password = formData.get("password");
+  const confirmPassword = formData.get("confirmPassword");
+
+  // Check if passwords match on the client side
+  if (password !== confirmPassword) {
+    setPasswordMatch(false);
+    return;
+  }
+
+  const userData = {
+    name,
+    email,
+    password,
   };
+
+  try {
+    // Make the API request
+    const response = await axios.post("http://localhost:3001/reader/signup", userData);
+
+    // Check the response status or data for success
+    if (response.status === 201) {
+      // Assuming 201 Created is the appropriate status for successful registration
+      // Registration successful
+      setPasswordMatch(true);
+      // Navigate to login page after successful registration
+      handleTabChange("login");
+    }
+  } catch (error) {
+    // Handle error (e.g., display an error message)
+    console.error("Registration failed:", error.response.data);
+  }
+};
+
+// ... (rest of your component code)
+
+  // const handleRegisterSubmit = (event) => {
+  //   event.preventDefault();
+  //   // Your registration logic here
+  //   // Check if passwords match
+  //   const password = event.target.elements.password.value;
+  //   const confirmPassword = event.target.elements.confirmPassword.value;
+  //   if (password !== confirmPassword) {
+  //     setPasswordMatch(false);
+  //     return;
+  //   }
+
+  //   // Passwords match, proceed with registration
+  //   setPasswordMatch(true);
+  //   // Navigate to login page after successful registration
+  //   handleTabChange("login");
+  // };
 
   return (
     <>
@@ -29,12 +75,12 @@ function RegisterPage({ handleTabChange }) {
     <Form onSubmit={handleRegisterSubmit}>
       <Form.Group className="mb-2">
         <Form.Label style={{fontFamily: 'Work Sans'}}>Họ và tên</Form.Label>
-        <Form.Control type="text" placeholder="Nhập họ và tên" style={{fontFamily: 'Work Sans'}} required />
+        <Form.Control type="text" placeholder="Nhập họ và tên" name="name" style={{fontFamily: 'Work Sans'}} required />
         </Form.Group>
 
         <Form.Group className="mb-2">
         <Form.Label style={{fontFamily: 'Work Sans'}}>Email</Form.Label>
-        <Form.Control type="email" placeholder="Nhập email" style={{fontFamily: 'Work Sans'}} required />
+        <Form.Control type="email" placeholder="Nhập email" name="email" style={{fontFamily: 'Work Sans'}} required />
         </Form.Group>
 
         <Form.Group className="mb-2">
@@ -64,7 +110,9 @@ function RegisterPage({ handleTabChange }) {
         </div>
         <div className="d-flex align-items-center justify-content-center mt-3">
                 <span style={{ opacity: '0.5' }}>Bạn đã có tài khoản?</span> &nbsp;
-                <span onClick={() => handleTabChange("login")} style={{ color: '#31AAB7', textDecoration: 'underline', cursor: 'pointer' }}> Đăng nhập</span>
+                <Link to='/user/login'>
+                  <span onClick={() => handleTabChange("login")} style={{ color: '#31AAB7', textDecoration: 'underline', cursor: 'pointer' }}> Đăng nhập</span>
+                </Link>
             </div>
     </Form>
     </>

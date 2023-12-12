@@ -253,15 +253,14 @@ CREATE TABLE `manager` (
   `sex` varchar(1) NOT NULL,
   `dob` date DEFAULT NULL,
   `phoneNumber` varchar(12) DEFAULT NULL,
-  `email` varchar(50) NOT NULL,
+  `email` varchar(50) DEFAULT NULL,
   `accountId` char(9) NOT NULL,
-  `username` varchar(100) DEFAULT NULL,
+  `username` varchar(100) NOT NULL,
   `password` varchar(256) NOT NULL,
   `openedDay` date DEFAULT NULL,
   `accountType` varchar(2) DEFAULT 'MS',
   PRIMARY KEY (`managerId`),
-  UNIQUE KEY `MANAGER_UNIQUE` (`managerId`),
-  UNIQUE KEY `Manager_email_unique` (`email`)
+  UNIQUE KEY `MANAGER_UNIQUE` (`managerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -291,61 +290,27 @@ CREATE TABLE `reader` (
   `sex` varchar(1) NOT NULL,
   `dob` date DEFAULT NULL,
   `phoneNumber` varchar(12) DEFAULT NULL,
-  `email` varchar(50) NOT NULL,
+  `email` varchar(50) DEFAULT NULL,
   `university` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `accountId` char(9) NOT NULL,
-  `username` varchar(100) DEFAULT NULL,
+  `username` varchar(100) NOT NULL,
   `password` varchar(256) NOT NULL,
   `openedDay` date DEFAULT NULL,
   `accountType` varchar(2) DEFAULT 'MS',
   PRIMARY KEY (`readerId`),
-  UNIQUE KEY `READER_UNIQUE` (`readerId`),
-  UNIQUE KEY `Reader_email_unique` (`email`)
+  UNIQUE KEY `READER_UNIQUE` (`readerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
+SELECT * FROM reader;
 --
--- Table structure for table `suggested_book`
+-- Dumping data for table `reader`
 --
-DROP TABLE IF EXISTS `suggested_book`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `suggested_book` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `readerName` varchar(100) NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `authorName` varchar(100) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `SuggestBook` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SuggestBook`
-(
-  IN readerName VARCHAR(100),
-  IN email VARCHAR(50), 
-  IN title VARCHAR(100), 
-  IN authorName VARCHAR(45)
-)
-BEGIN
-    INSERT INTO suggested_book (readerName, title, authorName, email) VALUES (readerName, title, authorName, email);
-END ;;
-DELIMITER ;
-
+LOCK TABLES `reader` WRITE;
+/*!40000 ALTER TABLE `reader` DISABLE KEYS */;
+INSERT INTO `reader` VALUES ('ST1000000','Cù Hoàng Nguyễn Sơn','M','2003-04-01','0123456789','soncu@hcmut.edu.vn','Đại học Bách Khoa','ST1000000','soncuvippro','123456','2023-11-01','ST'),('ST1000001','Phạm Bá Hoàng','M','2003-06-21','0123456789','hoangpham@hcmut.edu.vn','Đại học Bách Khoa','ST1000001','hoangphamt1con','123456','2023-11-01','ST');
+/*!40000 ALTER TABLE `reader` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Dumping events for database 'library'
@@ -451,6 +416,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertManager`(
     IN p_accountType VARCHAR(2)
 )
 BEGIN
+	DECLARE hashedPassword VARCHAR(256);
+	SET hashedPassword = SHA2(p_password, 256);
+    
     INSERT INTO `manager` (
         `managerId`,
         `name`,

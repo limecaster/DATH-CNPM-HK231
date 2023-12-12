@@ -39,12 +39,12 @@ function SelectMember() {
             </button>
         </div>
         </Container>
-          <section>
+          {/* <section>
                 <Routes>
                   <Route path="/user/login" element={<Login func='login' title='user'/>} />
                   <Route path="/admin/login" element={<Login func='login' title='admin'/>} />
                 </Routes>
-          </section>
+          </section> */}
       </div>
     </>
   );

@@ -21,7 +21,8 @@ import React, { useEffect, useState } from "react";
 
 function Homepage() {
   const [books, setBooks] = useState([]);
-  const displayedBooks = books.slice(1, 22);
+
+  const displayedBooks = books.slice(0, 22);
 
   useEffect(() => {
     axios
@@ -67,7 +68,6 @@ function Homepage() {
   // const categData = categoryData.map((item) => <Category name={item.name} url={item.imageurl}/>);
   return (
     <>
-      <Header />
       <div className="container">
         <Welcome />
         <div
@@ -135,7 +135,6 @@ function Homepage() {
         </div>
         <Carousel responsive={responsive}>{categData}</Carousel>
       </div>
-      <Footer />
     </>
   );
 }
