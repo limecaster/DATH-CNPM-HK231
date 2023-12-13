@@ -8,9 +8,12 @@ import { bookRouter } from "./routes/bookRouter.js";
 import { managerRouter } from "./routes/managerRouter.js";
 import { borrowRouter } from "./routes/borrowRouter.js";
 import { readerRouter } from "./routes/readerRouter.js";
+import { favoriteRouter } from "./routes/favoriteRouter.js";
+
 import multer from "multer";
 import fs from "fs";
 import path from "path";
+
 const app = express();
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
@@ -44,6 +47,7 @@ app.use("/books", bookRouter);
 app.use("/borrow", borrowRouter);
 app.use("/manager", managerRouter);
 app.use("/reader", readerRouter);
+app.use("/favorite", favoriteRouter);
 
 app.listen(PORT, () => {
   console.log(`App is running in PORT ${PORT}`);

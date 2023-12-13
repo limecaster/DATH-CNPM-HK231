@@ -14,7 +14,7 @@ import SearchBox from "../../../components/Search/Search";
 const ShowList = () => {
 
 
-
+    
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;

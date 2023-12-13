@@ -144,6 +144,27 @@ FROM ((book natural join author_write_book) join author on author_write_book.aut
     }
   };
 
+  static getFavoriteList = async (readerId) => {
+    let connection;
+    try {
+      connection = await db.getConnection();
+      await connection.beginTransaction();
+      let sql = `SELECT * FROM favorite_book WHERE readerId = ?`;
+      const [favorite_list, _] = await db.execute(sql, [readerId]);
+      await connection.commit();
+      return favorite_list;
+    } catch (error) {
+      if (connection) {
+        await connection.rollback();
+      }
+      throw error;
+    } finally {
+      if (connection) {
+        connection.release();
+      }
+    }
+  };
+
   static getGenres = async (isbn) => {
     let connection;
     try {

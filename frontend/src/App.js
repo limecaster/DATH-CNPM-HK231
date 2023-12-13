@@ -60,18 +60,10 @@ function App() {
               <Route path="books/*" element={<ListPage />} />
               <Route path="dashboard/*" element={<Dashboard />} />
             </Route>
-            {/* <Route path='/books/*' element={<Book />} /> */}
           </Routes>
         </section>
         <Footer />
       </Router>
-      {/* <Router>
-        <Routes>
-          <Route path='/' element={<Homepage />} />
-          <Route path='/adminlist/*' element={<ListPage />} />
-          <Route path="/dashboard/*" element={<Dashboard />} />
-        </Routes>
-      </Router> */}
     </div>
   );
 }
