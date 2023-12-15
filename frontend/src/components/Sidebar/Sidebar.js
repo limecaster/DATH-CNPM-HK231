@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import {
   ProSidebar,
   Menu,
@@ -27,13 +28,19 @@ const Sidebar = () => {
     //condition checking to change state from true to false and vice versa
     menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
   }
-
+  const navigate = useNavigate();
   const [active, setActive] = useState(true)
   const [active1, setActive1] = useState(false)
   const handleOnClick = () => {
     setActive(!active);
     setActive1(!active1);
   }
+
+  const handleLogout = () => {
+
+    localStorage.setItem('token', '');
+    navigate("/");
+  };
 
   return (
     <>
@@ -69,16 +76,11 @@ const Sidebar = () => {
           </SidebarContent>
           <SidebarFooter>
             <Menu iconShape="square">
-              <MenuItem icon={<FiLogOut />}>Đăng xuất</MenuItem>
+              <MenuItem icon={<FiLogOut />} onClick={handleLogout} >Đăng xuất
+              </MenuItem>
             </Menu>
           </SidebarFooter>
         </ProSidebar>
-        <section>
-          <Routes>
-            <Route path="adminlist" element={<ListPage />} />
-            <Route path="dashboard" element={<Dashboard />} />
-          </Routes>
-        </section>
       </div>
     </>
   );
