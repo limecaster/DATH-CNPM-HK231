@@ -104,7 +104,3 @@ body {
     --bs-list-group-item-padding-x: 1rem;
     --bs-list-group-item-padding-y: 0.5rem;
 }
-
-.list-group-item-action {
-    color: var(--bs-list-group-action-color);
-}
