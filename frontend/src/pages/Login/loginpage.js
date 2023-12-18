@@ -14,7 +14,7 @@ function LoginPage(props) {
     const formData = new FormData(event.target);
     const email = formData.get("email");
     const password = formData.get("password");
-
+    // const name = formData.get("name");
     try {
       let response;
       if (props.title === "user") {
@@ -40,10 +40,16 @@ function LoginPage(props) {
       if (response.ok) {
         // Assuming the server returns a user object with a token property
         const user = await response.json();
+        // console.log(user);
         const token = user.token;
 
         // Store the token in localStorage or a more secure storage option
         localStorage.setItem("token", token);
+        
+        // Store email and password temporarily in localStorage
+        localStorage.setItem("tempEmail", email);
+        localStorage.setItem("tempPassword", password);
+        // localStorage.setItem("tempName", name);
 
         if (props.title === "admin") {
           // Redirect to admin page

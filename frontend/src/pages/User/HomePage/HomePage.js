@@ -21,9 +21,10 @@ import React, { useEffect, useState } from "react";
 
 function Homepage() {
   const [books, setBooks] = useState([]);
+  const [genrebooks, setgenreBooks] = useState([]);
 
   const displayedBooks = books.slice(0, 22);
-
+  const displayedgenreBooks = genrebooks.slice(0, 22);
   useEffect(() => {
     axios
       .get("http://localhost:3001/books")
@@ -35,6 +36,19 @@ function Homepage() {
         // console.error(err);
       });
   }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/books/9781668016138/genres")
+      .then((res) => {
+        console.log(res.data);
+        setgenreBooks(res.data);
+      })
+      .catch((err) => {
+        // console.error(err);
+      });
+  }, []);
+
   const newsData = displayedBooks.map((book) => (
     <New
       key={book.ISBN}
@@ -59,8 +73,8 @@ function Homepage() {
       coverLink={book.coverLink}
     />
   ));
-  const categData = displayedBooks.map((book) => (
-    <Category key={book.ISBN} desc={book.desc} />
+  const categData = displayedgenreBooks.map((book) => (
+    <Category key={book.ISBN} genre={book.genre} />
   ));
   // const newsData = newData.map((item) => <New name={item.name} url={item.imageurl} author={item.author}/>);
   // const trendData = trendingData.map((item) => <Trending name={item.name} url={item.imageurl} author={item.author}/>);
