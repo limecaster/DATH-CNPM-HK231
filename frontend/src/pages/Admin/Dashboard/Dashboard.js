@@ -14,7 +14,7 @@ const Dashboard = () => {
                     <Sidebar />
                 </div>
                 <div style={{flex:'1'}}>
-                    <Container >
+                    <Container fluid className='container-fluid' >
                         <Row>
                             <Col xs={12} sm={12}>
                                 <ShowDashboard />

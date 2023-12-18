@@ -655,7 +655,7 @@ const Book = () => {
 
     });
     return (
-        <Container>
+        <Container fluid>
             <Row>
                 <h1 style={{ fontFamily: 'Montserrat', fontWeight: 'bold', fontSize: '30px', textAlign: 'center' }}>Quản lý sách của thư viện</h1>
             </Row>
