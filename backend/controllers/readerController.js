@@ -143,5 +143,24 @@ export const updatingReader = async (req, res) => {
   }
 }
 
+export const gettingReader = async (req, res) => {
+  console.log('Request Body:', req.body);
+  console.log('Request File:', req.file);
+  try {
+    verifyToken(req, res, async () => {
+      const readerEmail = req.decoded.email;
+
+      const readerFound = await findByEmail(readerEmail);
+      if (!readerFound) {
+        return res.status(400).send({ message: "Email is not in use!" });
+      }
+      res.status(200).send(readerFound);
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+}
+
 
 

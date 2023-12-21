@@ -116,3 +116,22 @@ export const updatingManager = async (req, res) => {
   }
 }
 
+export const gettingManager = async (req, res) => {
+  console.log('Request Body:', req.body);
+  console.log('Request File:', req.file);
+  try {
+    verifyToken(req, res, async () => {
+      const managerEmail = req.decoded.email;
+
+      const managerFound = await findByEmail(managerEmail);
+      if (!managerFound) {
+        return res.status(400).send({ message: "Email is not in use!" });
+      }
+      res.status(200).send(managerFound);
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+}
+
