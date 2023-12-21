@@ -86,10 +86,12 @@ FROM ((book natural join author_write_book) join author on author_write_book.aut
 
 export const getAllGenres = async (req, res) => {
   try {
-    let sql = `SELECT distinct genre FROM library.genre_of_book;`;
+    let sql = `SELECT genre, SUBSTRING_INDEX(GROUP_CONCAT(coverLink ORDER BY RAND()), ',', 1) AS random_coverLink
+FROM genre_of_book
+NATURAL JOIN book
+GROUP BY genre;`;
     let [genres, _] = await db.execute(sql);
-    const genreList = await genres.map((genre) => genre.genre);
-    return res.status(200).send(genreList);
+    return res.status(200).send(genres);
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
