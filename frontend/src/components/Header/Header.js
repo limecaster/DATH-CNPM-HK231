@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Navbar, Nav, Form, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import Dropdown from 'react-bootstrap/Dropdown';
+import Dropdown from "react-bootstrap/Dropdown";
 import "./Header.css";
 
 import hcmut from "../../assets/image/hcmut.png";
 import { BsBell, BsSearch } from "react-icons/bs";
 
-import { styled } from '@mui/material/styles';
-import Badge from '@mui/material/Badge';
-import NotificationsIcon from '@mui/icons-material/Notifications';import {
+import { styled } from "@mui/material/styles";
+import Badge from "@mui/material/Badge";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import {
   BrowserRouter as Router,
   Routes,
   Route,
@@ -19,11 +20,11 @@ import NotificationsIcon from '@mui/icons-material/Notifications';import {
 
 const Header = ({ books, setSearchResults }) => {
   const navigate = useNavigate();
-  
+
   // Retrieve email and password from localStorage
   const email = localStorage.getItem("tempEmail");
   const password = localStorage.getItem("tempPassword");
-  // const name = localStorage.getItem("tempName");
+  const name = localStorage.getItem("tempName");
   // Clear the stored email and password
   // localStorage.removeItem("tempEmail");
   // localStorage.removeItem("tempPassword");
@@ -56,11 +57,11 @@ const Header = ({ books, setSearchResults }) => {
     window.location.reload();
   };
   const StyledBadge = styled(Badge)(() => ({
-    '& .MuiBadge-badge': {
+    "& .MuiBadge-badge": {
       right: 6,
       top: 10,
-      border: '2px solid',
-      padding: '0 4px',
+      border: "2px solid",
+      padding: "0 4px",
     },
   }));
 
@@ -150,8 +151,8 @@ const Header = ({ books, setSearchResults }) => {
                 }}
               >
                 <StyledBadge className="me-2" badgeContent={4} color="primary">
-      <NotificationsIcon color="action" />
-    </StyledBadge>
+                  <NotificationsIcon color="action" />
+                </StyledBadge>
                 Thông báo
               </span>
             </Nav.Link>
@@ -171,90 +172,157 @@ const Header = ({ books, setSearchResults }) => {
               </span>
             </Nav.Link>
           </Nav.Item>
-          {
-            !email ? (
+          {!email ? (
             <>
               <Nav.Item>
-              <Button
-                variant="light"
-                className="border-success ms-2 me-4"
-                style={{ backgroundColor: "white", color: "#21717A" }}
-              >
-                <Link to="/selectmember/*" style={{textDecoration: "none"}}>
-                  <span
-                    style={{
-                      textAlign: "center",
-                      color: "#21717A",
-                      fontSize: 16.26,
-                      fontFamily: "Work Sans",
-                      fontWeight: "400",
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    Đăng nhập
-                  </span>
-                </Link>
-              </Button>
-            </Nav.Item>
-            <Nav.Item>
-              <Button
-                variant="light"
-                className="border-success ms-2 me-4"
-                style={{ backgroundColor: "white", color: "#21717A" }}
-              >
-                <Link to="/register" style={{textDecoration: "none"}}>
-                  <span
-                    style={{
-                      textAlign: "center",
-                      color: "#21717A",
-                      fontSize: 16.26,
-                      fontFamily: "Work Sans",
-                      fontWeight: "400",
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    Đăng kí
-                  </span>
-                </Link>
-              </Button>
-            </Nav.Item>
+                <Button
+                  variant="light"
+                  className="border-success ms-2 me-4"
+                  style={{ backgroundColor: "white", color: "#21717A" }}
+                >
+                  <Link to="/selectmember/*" style={{ textDecoration: "none" }}>
+                    <span
+                      style={{
+                        textAlign: "center",
+                        color: "#21717A",
+                        fontSize: 16.26,
+                        fontFamily: "Work Sans",
+                        fontWeight: "400",
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      Đăng nhập
+                    </span>
+                  </Link>
+                </Button>
+              </Nav.Item>
+              <Nav.Item>
+                <Button
+                  variant="light"
+                  className="border-success ms-2 me-4"
+                  style={{ backgroundColor: "white", color: "#21717A" }}
+                >
+                  <Link to="/register" style={{ textDecoration: "none" }}>
+                    <span
+                      style={{
+                        textAlign: "center",
+                        color: "#21717A",
+                        fontSize: 16.26,
+                        fontFamily: "Work Sans",
+                        fontWeight: "400",
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      Đăng kí
+                    </span>
+                  </Link>
+                </Button>
+              </Nav.Item>
             </>
-          ) :
-          (
+          ) : (
             <>
-            <Dropdown>
-              <Dropdown.Toggle className="bg-transparent text-dark border-0">
-                <img src="https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=" alt="Avatar" class="avatar" style={{verticalAlign: 'middle',
-  width: '50px',
-  height: '50px',
-  borderRadius: '50%'
-}}/>
-                {email}
-              </Dropdown.Toggle>
+              <Dropdown>
+                <Dropdown.Toggle className="bg-transparent text-dark border-0">
+                  <img
+                    src="https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="
+                    alt="Avatar"
+                    class="avatar"
+                    style={{
+                      verticalAlign: "middle",
+                      width: "50px",
+                      height: "50px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                  {email}
+                </Dropdown.Toggle>
 
-              <Dropdown.Menu className="py-0">
-                <Link to='/' style={{ textDecoration: 'none'}}>
-                  <Dropdown.Item href="#/action-1" style={{width: '100%', height: '100%', color: '#566976',lineHeight: '2', fontSize: 20, fontFamily: 'Work Sans', fontWeight: '500', wordWrap: 'break-word'}} className="dropdown-item-link">
-                    Thông tin tài khoản
-                  </Dropdown.Item>
-                </Link>
-                <Link to='/' style={{ textDecoration: 'none'}}>
-                  <Dropdown.Item href="#/action-2" style={{width: '100%', height: '100%', color: '#566976',lineHeight: '2', fontSize: 20, fontFamily: 'Work Sans', fontWeight: '500', wordWrap: 'break-word'}} className="dropdown-item-link">Lịch sử</Dropdown.Item>
-                </Link>
-                <Link to='/' style={{ textDecoration: 'none'}}>
-                  <Dropdown.Item href="#/action-3" style={{width: '100%', height: '100%', color: '#566976',lineHeight: '2', fontSize: 20, fontFamily: 'Work Sans', fontWeight: '500', wordWrap: 'break-word'}} className="dropdown-item-link">Danh mục ưa thích</Dropdown.Item>
-                </Link>
-                <Link to='/' style={{ textDecoration: 'none'}}>
-                  <Dropdown.Item href="#/action-4" style={{width: '100%', height: '100%', color: '#566976',lineHeight: '2', fontSize: 20, fontFamily: 'Work Sans', fontWeight: '500', wordWrap: 'break-word'}} className="dropdown-item-link">Đề xuất</Dropdown.Item>
-                </Link>
-                <Link to='/' style={{ textDecoration: 'none'}}>
-                  <Dropdown.Item onClick={(e) => handleLogout(e)} className="text-center text-danger dropdown-item-link" style={{fontFamily: 'Work Sans'}}>Đăng xuất</Dropdown.Item>
-                </Link>
-              </Dropdown.Menu>
-            </Dropdown>
+                <Dropdown.Menu className="py-0">
+                  <Link to="/" style={{ textDecoration: "none" }}>
+                    <Dropdown.Item
+                      href="#/action-1"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        color: "#566976",
+                        lineHeight: "2",
+                        fontSize: 20,
+                        fontFamily: "Work Sans",
+                        fontWeight: "500",
+                        wordWrap: "break-word",
+                      }}
+                      className="dropdown-item-link"
+                    >
+                      Thông tin tài khoản
+                    </Dropdown.Item>
+                  </Link>
+                  <Link to="/" style={{ textDecoration: "none" }}>
+                    <Dropdown.Item
+                      href="#/action-2"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        color: "#566976",
+                        lineHeight: "2",
+                        fontSize: 20,
+                        fontFamily: "Work Sans",
+                        fontWeight: "500",
+                        wordWrap: "break-word",
+                      }}
+                      className="dropdown-item-link"
+                    >
+                      Lịch sử
+                    </Dropdown.Item>
+                  </Link>
+                  <Link to="/" style={{ textDecoration: "none" }}>
+                    <Dropdown.Item
+                      href="#/action-3"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        color: "#566976",
+                        lineHeight: "2",
+                        fontSize: 20,
+                        fontFamily: "Work Sans",
+                        fontWeight: "500",
+                        wordWrap: "break-word",
+                      }}
+                      className="dropdown-item-link"
+                    >
+                      Danh mục ưa thích
+                    </Dropdown.Item>
+                  </Link>
+                  <Link to="/" style={{ textDecoration: "none" }}>
+                    <Dropdown.Item
+                      href="#/action-4"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        color: "#566976",
+                        lineHeight: "2",
+                        fontSize: 20,
+                        fontFamily: "Work Sans",
+                        fontWeight: "500",
+                        wordWrap: "break-word",
+                      }}
+                      className="dropdown-item-link"
+                    >
+                      Đề xuất
+                    </Dropdown.Item>
+                  </Link>
+                  <Link to="/" style={{ textDecoration: "none" }}>
+                    <Dropdown.Item
+                      onClick={(e) => handleLogout(e)}
+                      className="text-center text-danger dropdown-item-link"
+                      style={{ fontFamily: "Work Sans" }}
+                    >
+                      Đăng xuất
+                    </Dropdown.Item>
+                  </Link>
+                </Dropdown.Menu>
+              </Dropdown>
             </>
-          )
-          }
+          )}
         </Nav>
       </Navbar.Collapse>
     </Navbar>
