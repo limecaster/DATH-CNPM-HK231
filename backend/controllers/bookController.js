@@ -61,24 +61,57 @@ export const createBook = async (req, res) => {
   }
 };
 
+export const getBookByGenre = async (req, res) => {
+  try {
+    const { genre } = req.params;
+    let sql = `
+  SELECT ISBN, title, coverLink, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\`, copyNumber , DATE_FORMAT(dateAdded, "%Y-%m-%d %H:%i:%s") AS dateAdded 
+FROM ((book natural join author_write_book) join author on author_write_book.authorID=author.authorID natural join genre_of_book) WHERE genre=? ORDER BY dateAdded DESC;`;
+    let data = await db.execute(sql, [genre]);
+
+    await Promise.all(
+      data[0].map(async (obj) => {
+        const genres = await Book.getGenres(obj.ISBN);
+        const genreValues = genres.map((genre) => genre.genre);
+        // obj.genres = genreValues;
+        obj.genres = genreValues.join(", ");
+      })
+    );
+    return res.json(data[0]);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
+export const getAllGenres = async (req, res) => {
+  try {
+    let sql = `SELECT distinct genre FROM library.genre_of_book;`;
+    let [genres, _] = await db.execute(sql);
+    const genreList = await genres.map((genre) => genre.genre);
+    return res.status(200).send(genreList);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
 export const getAllBook = async (req, res) => {
   try {
-    verifyToken(req, res, async () => {
-      let sql = `
+    let sql = `
   SELECT ISBN, title, coverLink, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\`, copyNumber , DATE_FORMAT(dateAdded, "%Y-%m-%d %H:%i:%s") AS dateAdded 
 FROM ((book natural join author_write_book) join author on author_write_book.authorID=author.authorID) ORDER BY dateAdded DESC;`;
-      let data = await db.execute(sql);
+    let data = await db.execute(sql);
 
-      await Promise.all(
-        data[0].map(async (obj) => {
-          const genres = await Book.getGenres(obj.ISBN);
-          const genreValues = genres.map((genre) => genre.genre);
-          // obj.genres = genreValues;
-          obj.genres = genreValues.join(", ");
-        })
-      );
-      return res.json(data[0]);
-    });
+    await Promise.all(
+      data[0].map(async (obj) => {
+        const genres = await Book.getGenres(obj.ISBN);
+        const genreValues = genres.map((genre) => genre.genre);
+        // obj.genres = genreValues;
+        obj.genres = genreValues.join(", ");
+      })
+    );
+    return res.json(data[0]);
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
