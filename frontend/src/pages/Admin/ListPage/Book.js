@@ -282,12 +282,7 @@ const Book = () => {
         const fetchData = async () => {
             try {
                 const data = await apiEndpoints.getAllBook();
-                // const activeCustomers = data.filter(customer => customer.deleted !== 1);
-                // setCustomer(activeCustomers);
-                // setCustomer(data)
                 const sortedBooks = data.sort((a, b) => {
-                    // Sắp xếp theo thời gian thêm mới giảm dần
-                    // console.log("Date:", new Date(b.dateAdded) - new Date(a.dateAdded))
                     return new Date(b.dateAdded) - new Date(a.dateAdded);
                 });
                 setBooks(sortedBooks);
@@ -295,7 +290,6 @@ const Book = () => {
                 console.error('Error fetching data:', error);
             }
         };
-
         fetchData();
     }, []);
 
@@ -324,10 +318,7 @@ const Book = () => {
             setChooseImage(false);
             setSelectedImage(null);
             setSelectedGenres([]);
-            // setNewCoverLink('');
             const updatedData = await apiEndpoints.getAllBook();
-
-            // const activeCustomers = updatedData.filter(customer => customer.deleted !== 1);
             setBooks(updatedData);
             window.alert('Đăng kí sách mới thành công');
         } catch (error) {
@@ -341,9 +332,10 @@ const Book = () => {
     const handleEditUser = ({ table, row }) => {
         // Split the genres string into an array
         const existingGenres = row.original.genres ? row.original.genres.split(',') : [];
-
+        const genresWithoutSpaces = existingGenres.map(genre => genre.trim());
+        // console.log("Existing Genres:", genresWithoutSpaces);
         // Set the initial state of selectedGenres
-        setSelectedGenres(existingGenres);
+        setSelectedGenres(genresWithoutSpaces);
 
         // Open the edit dialog
 
@@ -364,9 +356,6 @@ const Book = () => {
             setChooseImage(false);
             setSelectedGenres([]);
             const updatedData = await apiEndpoints.getAllBook();
-
-
-            // const activeCustomers = updatedData.filter(customer => customer.deleted !== 1);
             setBooks(updatedData);
             window.alert('Cập nhật thông tin sách thành công');
             table.setEditingRow(null);
@@ -452,10 +441,6 @@ const Book = () => {
         renderRowActions: ({ row, table }) => (
             <Box sx={{ display: 'flex', gap: '1rem' }}>
                 <Tooltip title="Edit">
-                    {/* <IconButton > */}
-                    {/* <IconButton onClick={() => table.setEditingRow(row)}>
-                        <EditIcon />
-                    </IconButton> */}
                     <IconButton onClick={() => handleEditUser({ row, table })}>
                         <EditIcon />
                     </IconButton>
