@@ -7,7 +7,7 @@ function Profile() {
       <div className="boxNoBorder">
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb-profile">
-            <li className="breadcrumb-item"><a href="https://google.com" style={{ textDecorationLine: 'none', color: 'var(--product-normal)' }}><p>Trang chủ</p></a></li>
+            <li className="breadcrumb-item"><a href="/" style={{ textDecorationLine: 'none', color: 'var(--product-normal)' }}><p>Trang chủ</p></a></li>
             <li className="breadcrumb-item"><a href="https://translate.google.com" style={{ textDecorationLine: 'none', color: 'var(--product-normal)' }}><span>Thông tin cá nhân</span></a></li>
             <li className="breadcrumb-item active" aria-current="page">Thông tin tài khoản</li>
           </ol>

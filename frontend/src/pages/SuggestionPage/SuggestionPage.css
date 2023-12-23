@@ -52,7 +52,7 @@
   --red-light: #F8E0E0;
 }
 
-a:link {
+/* a:link {
   color: #0000FF;
 }
 a:hover {
@@ -63,7 +63,7 @@ a:active {
 }
 a:visited {
   color: #00FF00;
-}
+} */
 
 .btn-close {
   position: absolute;
