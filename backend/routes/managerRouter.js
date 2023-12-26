@@ -13,6 +13,6 @@ router.get("/gets", getAllManager);
 router.get("/get", gettingManager);
 router.post("/signup", createManager);
 router.post("/login", loginManager);
-router.put("/update", updatingManager);
+router.patch("/update", updatingManager);
 
 export const managerRouter = router;
