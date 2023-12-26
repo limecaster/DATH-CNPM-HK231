@@ -314,24 +314,6 @@ const Header = ({ books, setSearchResults }) => {
                     </Link>
                     <Link to="/" style={{ textDecoration: "none" }}>
                       <Dropdown.Item
-                        href="#/action-4"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          color: "#566976",
-                          lineHeight: "2",
-                          fontSize: 20,
-                          fontFamily: "Work Sans",
-                          fontWeight: "500",
-                          wordWrap: "break-word",
-                        }}
-                        className="dropdown-item-link"
-                      >
-                        Đề xuất
-                      </Dropdown.Item>
-                    </Link>
-                    <Link to="/" style={{ textDecoration: "none" }}>
-                      <Dropdown.Item
                         onClick={(e) => handleLogout(e)}
                         className="text-center text-danger dropdown-item-link"
                         style={{ fontFamily: "Work Sans" }}
