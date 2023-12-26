@@ -51,6 +51,28 @@ function LoginPage(props) {
         localStorage.setItem("tempPassword", password);
         // localStorage.setItem("tempName", name);
 
+        if (props.title === "user") {
+        // Fetch manager information using the obtained token
+        const userInfoResponse = await fetch("http://localhost:3001/reader/get", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the request header
+          "Content-Type": "application/json",
+        },
+        });
+
+        if (userInfoResponse.ok) {
+        const userInfo = await userInfoResponse.json();
+        console.log("Manager Information:", userInfo);
+        localStorage.setItem("name", userInfo.name);
+
+        // Additional handling of manager information can be done here
+        } else {
+          // Handle error in fetching manager information
+          console.error("Failed to fetch manager information");
+        }
+        }
+
         if (props.title === "admin") {
           // Redirect to admin page
           navigate("/admin/books");

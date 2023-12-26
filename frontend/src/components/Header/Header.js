@@ -24,7 +24,7 @@ const Header = ({ books, setSearchResults }) => {
   // Retrieve email and password from localStorage
   const email = localStorage.getItem("tempEmail");
   const password = localStorage.getItem("tempPassword");
-  const name = localStorage.getItem("tempName");
+  const name = localStorage.getItem("name");
   // Clear the stored email and password
   // localStorage.removeItem("tempEmail");
   // localStorage.removeItem("tempPassword");
@@ -54,7 +54,7 @@ const Header = ({ books, setSearchResults }) => {
   };
   const handleLogout = (e) => {
     localStorage.clear();
-    window.location.reload();
+    window.location.href = "/";
   };
   const StyledBadge = styled(Badge)(() => ({
     "& .MuiBadge-badge": {
@@ -66,7 +66,7 @@ const Header = ({ books, setSearchResults }) => {
   }));
 
   return (
-    <Navbar bg="#ffffff" variant="light" expand="lg" className="border-bottom">
+    <Navbar bg="#ffffff" variant="light" expand="lg" className="border-bottom pe-4">
       <Link to="/#home">
         <Navbar.Brand>
           <div className="d-inline-block ms-4 me-2">
@@ -157,23 +157,24 @@ const Header = ({ books, setSearchResults }) => {
               </span>
             </Nav.Link>
           </Nav.Item>
-          <Nav.Item>
-            <Nav.Link href="#features" className="ms-2 me-2">
-              <span
-                style={{
-                  color: "#324552",
-                  fontSize: 16.26,
-                  fontFamily: "Work Sans",
-                  fontWeight: "400",
-                  wordWrap: "break-word",
-                }}
-              >
-                Đề xuất
-              </span>
-            </Nav.Link>
-          </Nav.Item>
+
           {!email ? (
             <>
+              <Nav.Item>
+              <Nav.Link className="ms-2 me-2">
+                  <span
+                    style={{
+                      color: "#324552",
+                      fontSize: 16.26,
+                      fontFamily: "Work Sans",
+                      fontWeight: "400",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    Đề xuất
+                  </span>
+              </Nav.Link>
+            </Nav.Item>
               <Nav.Item>
                 <Button
                   variant="light"
@@ -221,12 +222,29 @@ const Header = ({ books, setSearchResults }) => {
             </>
           ) : (
             <>
+              <Nav.Item>
+                <Nav.Link className="ms-2 me-2">
+                  <Link to="/suggestion" style={{textDecoration: "none"}}>
+                    <span
+                      style={{
+                        color: "#324552",
+                        fontSize: 16.26,
+                        fontFamily: "Work Sans",
+                        fontWeight: "400",
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      Đề xuất
+                    </span>
+                  </Link>
+                </Nav.Link>
+              </Nav.Item>
               <Dropdown>
                 <Dropdown.Toggle className="bg-transparent text-dark border-0">
                   <img
                     src="https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="
                     alt="Avatar"
-                    class="avatar"
+                    className="avatar"
                     style={{
                       verticalAlign: "middle",
                       width: "50px",
@@ -234,11 +252,11 @@ const Header = ({ books, setSearchResults }) => {
                       borderRadius: "50%",
                     }}
                   />
-                  {email}
+                  {name}
                 </Dropdown.Toggle>
 
-                <Dropdown.Menu className="py-0">
-                  <Link to="/" style={{ textDecoration: "none" }}>
+                <Dropdown.Menu className="py-0" align="end">
+                  <Link to="/profile" style={{ textDecoration: "none" }}>
                     <Dropdown.Item
                       href="#/action-1"
                       style={{

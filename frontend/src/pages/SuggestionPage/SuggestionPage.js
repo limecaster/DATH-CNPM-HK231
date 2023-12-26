@@ -4,12 +4,12 @@ import './SuggestionPage.css';
 function SuggestionPage() {
   return (
     <>
-      <button type="button" className="btn-close" aria-label="Close"></button>
+      {/* <button type="button" className="btn-close" aria-label="Close"></button> */}
 
       <div className='boxNoBorder'>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb-suggestion-page">
-            <li className="breadcrumb-item"><a href="https://google.com" style={{ textDecorationLine: 'none', color: 'var(--product-normal)' }}><p>Trang chủ</p></a></li>
+            <li className="breadcrumb-item"><a href="/" style={{ textDecorationLine: 'none', color: 'var(--product-normal)' }}><p>Trang chủ</p></a></li>
             <li className="breadcrumb-item active" aria-current="page">Đề xuất</li>
           </ol>
         </nav>

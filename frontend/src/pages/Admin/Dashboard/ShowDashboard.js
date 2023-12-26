@@ -2,6 +2,8 @@
  { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } 
  from 'recharts';
 import './ShowDashboard.css'
+import Container from "react-bootstrap/Container";
+
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ReaderList from './ReaderList';
@@ -100,7 +102,7 @@ function ShowDashboard() {
      
 
   return (
-    <main className='container-fluid'>
+    <Container fluid>
         <div className='row mt-3 gx-5 gy-5'>
             <GeneralInfo/>
         </div>
@@ -162,7 +164,7 @@ function ShowDashboard() {
             <ReaderList/>
             <BookList/>
         </div>
-    </main>
+    </Container>
   )
 }
 
