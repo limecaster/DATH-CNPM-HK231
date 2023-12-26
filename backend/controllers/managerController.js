@@ -4,10 +4,6 @@ import { Manager,
         findByEmail,
         updateManager } from "../models/Manager.js";
 import { verifyToken, hashPassword } from "../middleware/jwtAuthentication.js";
-<<<<<<< HEAD
-=======
-
->>>>>>> 1d80dd207037f23cbceddf76f7c29284230dbb8d
 
 export const createManager = async (req, res) => {
   console.log('Request Body:', req.body);
