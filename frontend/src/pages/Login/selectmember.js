@@ -27,13 +27,13 @@ function SelectMember() {
           </div>
           <div className="pb-3" style={{textAlign: 'center'}}>
             <button className="mb-4" style={{width: '80%', height: '100%', paddingLeft: 14, paddingRight: 14, paddingTop: 10, paddingBottom: 10, background: 'white', borderRadius: 4, border: '1px black solid', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
-              <Link to='/user/login'>
+              <Link to='/user/login' style={{textDecoration: 'none', color: 'black'}}>
                 <div style={{width: '100%', height: '100%', textAlign: 'center', fontSize: 16, fontFamily: 'Work Sans', fontWeight: '600', wordWrap: 'break-word'}}>Sinh viên</div>
               </Link>
             </button>
             
             <button style={{width: '80%', height: '100%', paddingLeft: 14, paddingRight: 14, paddingTop: 10, paddingBottom: 10, background: 'white', borderRadius: 4, border: '1px black solid', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
-              <Link to='/admin/login'>
+              <Link to='/admin/login' style={{textDecoration: 'none', color: 'black'}}>
                 <div style={{width: '100%', height: '100%', textAlign: 'center', fontSize: 16, fontFamily: 'Work Sans', fontWeight: '600', wordWrap: 'break-word'}}>Nhân viên</div>
               </Link>
             </button>
