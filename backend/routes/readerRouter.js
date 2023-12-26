@@ -15,6 +15,6 @@ router.get("/get", gettingReader);
 router.post("/signup", creatingReader);
 router.post("/login", loginReader);
 router.post("/suggestBook", suggestingBookWithEmail);
-router.put("/update", updatingReader);
+router.patch("/update", updatingReader);
 
 export const readerRouter = router;
