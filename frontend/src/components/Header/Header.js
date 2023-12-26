@@ -105,13 +105,13 @@ const Header = ({ books, setSearchResults }) => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-        <Col xs={6} style={{ height: '32px' }}>
-          <Form inline={+true} onSubmit={handleSubmit}>
-            <Row style={{ width: "100%" }}>
+        <Col xs={6} style={{ display: 'flex', alignItems: 'center', justifyContent: 'right' }} >
+          <Form inline={+true} style={{ display: 'flex', width: "90%" }} onSubmit={handleSubmit}>
+            <Row style={{ display: 'flex', flexWrap: 'nowrap', width: "100%" }}>
               <Col
-                xs="auto"
+                xs="10"
                 style={{
-                  width: "90%",
+                  width: "100%",
                   paddingRight: "0",
                   color: "#566976",
                   fontSize: 16.26,
@@ -127,7 +127,7 @@ const Header = ({ books, setSearchResults }) => {
                   onChange={handleSearchChange}
                 />
               </Col>
-              <Col xs="auto" style={{ paddingLeft: "0" }}>
+              <Col xs="2" style={{ paddingLeft: "0" }}>
                 <Button
                   type="submit"
                   className="rounded-0"
