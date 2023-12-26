@@ -3,13 +3,14 @@ import {
   getAllReaders,
   getLastReaderId,
   findByEmail,
-  suggestBook
+  suggestBook,
+  updateReader
 } from "../models/Reader.js";
 
 import { verifyToken, hashPassword } from "../middleware/jwtAuthentication.js";
 
 
-export const createReader = async (req, res) => {
+export const creatingReader = async (req, res) => {
 
   console.log('Request Body:', req.body);
   console.log('Request File:', req.file);
@@ -74,7 +75,7 @@ export const createReader = async (req, res) => {
 };
 
 
-export const getAllReader = async (req, res) => {
+export const gettingAllReader = async (req, res) => {
   console.log('Request Body:', req.body);
   console.log('Request File:', req.file);
 
@@ -90,7 +91,7 @@ export const getAllReader = async (req, res) => {
   }
 };
 
-export const suggestBookWithEmail = async (req, res) => {
+export const suggestingBookWithEmail = async (req, res) => {
   try {
     // Use the verifyToken middleware
     verifyToken(req, res, async () => {
@@ -106,7 +107,60 @@ export const suggestBookWithEmail = async (req, res) => {
     console.log(error.message);
     res.status(500).send({ message: error.message });
   }
-
 }
+
+export const updatingReader = async (req, res) => {
+  console.log('Request Body:', req.body);
+  console.log('Request File:', req.file);
+  try {
+    verifyToken(req, res, async () => {
+      const {
+        name,
+        sex,
+        dob,
+        phoneNumber,
+        university,
+        email,
+        password
+      } = req.body;
+
+      if (!name || !sex || !dob || !phoneNumber || !university || !email || !password) {
+        return res.status(400).send({ message: "Pls send all required fields!" });
+      }
+      
+      const readerFound = await findByEmail(email);
+      if (!readerFound) {
+        return res.status(400).send({ message: "Email is not in use!" });
+      }
+
+      const response = await updateReader(name, sex, dob, phoneNumber, university, email, await hashPassword(password));
+      console.log("Update reader successfully");
+      return res.status(200).send(response);
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+}
+
+export const gettingReader = async (req, res) => {
+  console.log('Request Body:', req.body);
+  console.log('Request File:', req.file);
+  try {
+    verifyToken(req, res, async () => {
+      const readerEmail = req.decoded.email;
+
+      const readerFound = await findByEmail(readerEmail);
+      if (!readerFound) {
+        return res.status(400).send({ message: "Email is not in use!" });
+      }
+      res.status(200).send(readerFound);
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+}
+
 
 

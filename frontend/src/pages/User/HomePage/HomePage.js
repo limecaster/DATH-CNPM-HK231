@@ -39,7 +39,7 @@ function Homepage() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/books/9781668016138/genres")
+      .get("http://localhost:3001/books/genres")
       .then((res) => {
         console.log(res.data);
         setgenreBooks(res.data);
@@ -74,7 +74,7 @@ function Homepage() {
     />
   ));
   const categData = displayedgenreBooks.map((book) => (
-    <Category key={book.ISBN} genre={book.genre} />
+    <Category key={book.ISBN} genre={book.genre} coverLink={book.random_coverLink} />
   ));
   // const newsData = newData.map((item) => <New name={item.name} url={item.imageurl} author={item.author}/>);
   // const trendData = trendingData.map((item) => <Trending name={item.name} url={item.imageurl} author={item.author}/>);
@@ -82,7 +82,6 @@ function Homepage() {
   // const categData = categoryData.map((item) => <Category name={item.name} url={item.imageurl}/>);
   return (
     <>
-      <Header />
       <div className="container">
         <Welcome />
         <div
@@ -150,7 +149,6 @@ function Homepage() {
         </div>
         <Carousel responsive={responsive}>{categData}</Carousel>
       </div>
-      <Footer />
     </>
   );
 }

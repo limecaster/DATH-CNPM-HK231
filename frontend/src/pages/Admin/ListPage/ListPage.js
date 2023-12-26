@@ -19,7 +19,7 @@ const ListPage = () => {
                     <Sidebar />
                 </div>
                 <div style={{ flex: '1' }}>
-                    <Container className='m-2'>
+                    <Container fluid className='m-2'>
                         <Row >
                             <Col xs={12} sm={12} >
 
@@ -30,6 +30,7 @@ const ListPage = () => {
                 </div>
             </div>
         </Container>
+
     )
 }
 

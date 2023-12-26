@@ -7,7 +7,7 @@ class Welcome extends React.Component {
     render() {
         return (
             <>
-                <div style={{color: '#02598B', fontSize: 30, fontFamily: 'Inter', fontWeight: '400', textDecoration: 'underline', wordWrap: 'break-word', paddingBottom: '30px'}}>Chào mừng đến với thư viện</div>
+                <div className="mt-4" style={{color: '#02598B', fontSize: 30, fontFamily: 'Inter', fontWeight: '400', textDecoration: 'underline', wordWrap: 'break-word', paddingBottom: '30px', textDecoration: "none"}}>Chào mừng đến với thư viện</div>
                 
                 <div className="container text-center">
                     <div className="row gap-3">
