@@ -105,8 +105,8 @@ const Header = ({ books, setSearchResults }) => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-        <Col xs={6} >
-          <Form inline={+true} style={{ width: "65%" }} onSubmit={handleSubmit}>
+        <Col xs={6} style={{ height: '32px' }}>
+          <Form inline={+true} onSubmit={handleSubmit}>
             <Row style={{ width: "100%" }}>
               <Col
                 xs="auto"

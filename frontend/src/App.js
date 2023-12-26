@@ -86,7 +86,8 @@ import BookDetailPage from "./pages/User/BookDetailPage/BookDetailPage";
 import SearchPage from "./pages/User/SearchPage/SearchPage";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/footer";
-
+import SuggestionPage from "./pages/SuggestionPage/SuggestionPage";
+import Profile from "./pages/Profile/Profile";
 function App() {
   const [books, setBooks] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
@@ -128,6 +129,24 @@ function App() {
               </>
             }
           />
+          <Route 
+            path="/suggestion" 
+            element={
+              <>
+                <Header books={books} setSearchResults={setSearchResults} />
+                <SuggestionPage />
+                <Footer />
+              </>
+            } />
+            <Route 
+            path="/profile" 
+            element={
+              <>
+                <Header books={books} setSearchResults={setSearchResults} />
+                <Profile />
+                <Footer />
+              </>
+            } />
           <Route
             path="/bookdetailpage/:ISBN"
             element={
