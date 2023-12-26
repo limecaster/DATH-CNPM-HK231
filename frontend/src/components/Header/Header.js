@@ -73,7 +73,7 @@ const Header = ({ books, setSearchResults }) => {
             <img
               alt="img"
               src={hcmut}
-              //className="d-inline-block"
+            //className="d-inline-block"
             />
           </div>
           <span className="d-inline-block align-bottom">
@@ -105,126 +105,65 @@ const Header = ({ books, setSearchResults }) => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-        <Form inline={+true} style={{ width: "65%" }} onSubmit={handleSubmit}>
-          <Row style={{ width: "100%" }}>
-            <Col
-              xs="auto"
-              style={{
-                width: "90%",
-                paddingRight: "0",
-                color: "#566976",
-                fontSize: 16.26,
-                fontFamily: "Work Sans",
-                fontWeight: "400",
-                wordWrap: "break-word",
-              }}
-            >
-              <Form.Control
-                type="text"
-                placeholder="Tìm kiếm"
-                className=" mr-sm-2 rounded-0"
-                onChange={handleSearchChange}
-              />
-            </Col>
-            <Col xs="auto" style={{ paddingLeft: "0" }}>
-              <Button
-                type="submit"
-                className="rounded-0"
-                style={{ backgroundColor: "#31AAB7" }}
-              >
-                <BsSearch />
-              </Button>
-            </Col>
-          </Row>
-        </Form>
-
-        <Nav>
-          <Nav.Item>
-            <Nav.Link href="#home" className="ms-2 me-2">
-              <span
+        <Col xs={6} style={{ height: '32px' }}>
+          <Form inline={+true} onSubmit={handleSubmit}>
+            <Row style={{ width: "100%" }}>
+              <Col
+                xs="auto"
                 style={{
-                  color: "#324552",
+                  width: "90%",
+                  paddingRight: "0",
+                  color: "#566976",
                   fontSize: 16.26,
                   fontFamily: "Work Sans",
                   fontWeight: "400",
                   wordWrap: "break-word",
                 }}
               >
-                <StyledBadge className="me-2" badgeContent={4} color="primary">
-                  <NotificationsIcon color="action" />
-                </StyledBadge>
-                Thông báo
-              </span>
-            </Nav.Link>
-          </Nav.Item>
-
-          {!email ? (
-            <>
-              <Nav.Item>
-              <Nav.Link className="ms-2 me-2">
-                  <span
-                    style={{
-                      color: "#324552",
-                      fontSize: 16.26,
-                      fontFamily: "Work Sans",
-                      fontWeight: "400",
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    Đề xuất
-                  </span>
+                <Form.Control
+                  type="text"
+                  placeholder="Tìm kiếm"
+                  className=" mr-sm-2 rounded-0"
+                  onChange={handleSearchChange}
+                />
+              </Col>
+              <Col xs="auto" style={{ paddingLeft: "0" }}>
+                <Button
+                  type="submit"
+                  className="rounded-0"
+                  style={{ backgroundColor: "#31AAB7" }}
+                >
+                  <BsSearch />
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+        <Col style={{ display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
+          <Nav style={{ display: 'flex', alignItems: 'center' }} >
+            <Nav.Item>
+              <Nav.Link href="#home" className="ms-2 me-2">
+                <span
+                  style={{
+                    color: "#324552",
+                    fontSize: 16.26,
+                    fontFamily: "Work Sans",
+                    fontWeight: "400",
+                    wordWrap: "break-word",
+                  }}
+                >
+                  <StyledBadge className="me-2" badgeContent={4} color="primary">
+                    <NotificationsIcon color="action" />
+                  </StyledBadge>
+                  Thông báo
+                </span>
               </Nav.Link>
             </Nav.Item>
-              <Nav.Item>
-                <Button
-                  variant="light"
-                  className="border-success ms-2 me-4"
-                  style={{ backgroundColor: "white", color: "#21717A" }}
-                >
-                  <Link to="/selectmember/*" style={{ textDecoration: "none" }}>
-                    <span
-                      style={{
-                        textAlign: "center",
-                        color: "#21717A",
-                        fontSize: 16.26,
-                        fontFamily: "Work Sans",
-                        fontWeight: "400",
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      Đăng nhập
-                    </span>
-                  </Link>
-                </Button>
-              </Nav.Item>
-              <Nav.Item>
-                <Button
-                  variant="light"
-                  className="border-success ms-2 me-4"
-                  style={{ backgroundColor: "white", color: "#21717A" }}
-                >
-                  <Link to="/register" style={{ textDecoration: "none" }}>
-                    <span
-                      style={{
-                        textAlign: "center",
-                        color: "#21717A",
-                        fontSize: 16.26,
-                        fontFamily: "Work Sans",
-                        fontWeight: "400",
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      Đăng kí
-                    </span>
-                  </Link>
-                </Button>
-              </Nav.Item>
-            </>
-          ) : (
-            <>
-              <Nav.Item>
-                <Nav.Link className="ms-2 me-2">
-                  <Link to="/suggestion" style={{textDecoration: "none"}}>
+
+            {!email ? (
+              <>
+                <Nav.Item>
+                  <Nav.Link className="ms-2 me-2">
                     <span
                       style={{
                         color: "#324552",
@@ -236,94 +175,176 @@ const Header = ({ books, setSearchResults }) => {
                     >
                       Đề xuất
                     </span>
-                  </Link>
-                </Nav.Link>
-              </Nav.Item>
-              <Dropdown>
-                <Dropdown.Toggle className="bg-transparent text-dark border-0">
-                  <img
-                    src="https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="
-                    alt="Avatar"
-                    className="avatar"
-                    style={{
-                      verticalAlign: "middle",
-                      width: "50px",
-                      height: "50px",
-                      borderRadius: "50%",
-                    }}
-                  />
-                  {name}
-                </Dropdown.Toggle>
+                  </Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Button
+                    variant="light"
+                    className="border-success ms-2 me-4"
+                    style={{ backgroundColor: "white", color: "#21717A" }}
+                  >
+                    <Link to="/selectmember/*" style={{ textDecoration: "none" }}>
+                      <span
+                        style={{
+                          textAlign: "center",
+                          color: "#21717A",
+                          fontSize: 16.26,
+                          fontFamily: "Work Sans",
+                          fontWeight: "400",
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        Đăng nhập
+                      </span>
+                    </Link>
+                  </Button>
+                </Nav.Item>
+                <Nav.Item>
+                  <Button
+                    variant="light"
+                    className="border-success ms-2 me-4"
+                    style={{ backgroundColor: "white", color: "#21717A" }}
+                  >
+                    <Link to="/register" style={{ textDecoration: "none" }}>
+                      <span
+                        style={{
+                          textAlign: "center",
+                          color: "#21717A",
+                          fontSize: 16.26,
+                          fontFamily: "Work Sans",
+                          fontWeight: "400",
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        Đăng kí
+                      </span>
+                    </Link>
+                  </Button>
+                </Nav.Item>
+              </>
+            ) : (
+              <>
+                <Nav.Item>
+                  <Nav.Link className="ms-2 me-2">
+                    <Link to="/suggestion" style={{ textDecoration: "none" }}>
+                      <span
+                        style={{
+                          color: "#324552",
+                          fontSize: 16.26,
+                          fontFamily: "Work Sans",
+                          fontWeight: "400",
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        Đề xuất
+                      </span>
+                    </Link>
+                  </Nav.Link>
+                </Nav.Item>
+                <Dropdown>
+                  <Dropdown.Toggle className="bg-transparent text-dark border-0">
+                    <img
+                      src="https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="
+                      alt="Avatar"
+                      className="avatar"
+                      style={{
+                        verticalAlign: "middle",
+                        width: "50px",
+                        height: "50px",
+                        borderRadius: "50%",
+                      }}
+                    />
+                    {name}
+                  </Dropdown.Toggle>
 
-                <Dropdown.Menu className="py-0" align="end">
-                  <Link to="/profile" style={{ textDecoration: "none" }}>
-                    <Dropdown.Item
-                      href="#/action-1"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        color: "#566976",
-                        lineHeight: "2",
-                        fontSize: 20,
-                        fontFamily: "Work Sans",
-                        fontWeight: "500",
-                        wordWrap: "break-word",
-                      }}
-                      className="dropdown-item-link"
-                    >
-                      Thông tin tài khoản
-                    </Dropdown.Item>
-                  </Link>
-                  <Link to="/" style={{ textDecoration: "none" }}>
-                    <Dropdown.Item
-                      href="#/action-2"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        color: "#566976",
-                        lineHeight: "2",
-                        fontSize: 20,
-                        fontFamily: "Work Sans",
-                        fontWeight: "500",
-                        wordWrap: "break-word",
-                      }}
-                      className="dropdown-item-link"
-                    >
-                      Lịch sử
-                    </Dropdown.Item>
-                  </Link>
-                  <Link to="/" style={{ textDecoration: "none" }}>
-                    <Dropdown.Item
-                      href="#/action-3"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        color: "#566976",
-                        lineHeight: "2",
-                        fontSize: 20,
-                        fontFamily: "Work Sans",
-                        fontWeight: "500",
-                        wordWrap: "break-word",
-                      }}
-                      className="dropdown-item-link"
-                    >
-                      Danh mục ưa thích
-                    </Dropdown.Item>
-                  </Link>
-                  <Link to="/" style={{ textDecoration: "none" }}>
-                    <Dropdown.Item
-                      onClick={(e) => handleLogout(e)}
-                      className="text-center text-danger dropdown-item-link"
-                      style={{ fontFamily: "Work Sans" }}
-                    >
-                      Đăng xuất
-                    </Dropdown.Item>
-                  </Link>
-                </Dropdown.Menu>
-              </Dropdown>
-            </>
-          )}
-        </Nav>
+                  <Dropdown.Menu className="py-0" align="end">
+                    <Link to="/profile" style={{ textDecoration: "none" }}>
+                      <Dropdown.Item
+                        href="#/action-1"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          color: "#566976",
+                          lineHeight: "2",
+                          fontSize: 20,
+                          fontFamily: "Work Sans",
+                          fontWeight: "500",
+                          wordWrap: "break-word",
+                        }}
+                        className="dropdown-item-link"
+                      >
+                        Thông tin tài khoản
+                      </Dropdown.Item>
+                    </Link>
+                    <Link to="/" style={{ textDecoration: "none" }}>
+                      <Dropdown.Item
+                        href="#/action-2"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          color: "#566976",
+                          lineHeight: "2",
+                          fontSize: 20,
+                          fontFamily: "Work Sans",
+                          fontWeight: "500",
+                          wordWrap: "break-word",
+                        }}
+                        className="dropdown-item-link"
+                      >
+                        Lịch sử
+                      </Dropdown.Item>
+                    </Link>
+                    <Link to="/" style={{ textDecoration: "none" }}>
+                      <Dropdown.Item
+                        href="#/action-3"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          color: "#566976",
+                          lineHeight: "2",
+                          fontSize: 20,
+                          fontFamily: "Work Sans",
+                          fontWeight: "500",
+                          wordWrap: "break-word",
+                        }}
+                        className="dropdown-item-link"
+                      >
+                        Danh mục ưa thích
+                      </Dropdown.Item>
+                    </Link>
+                    <Link to="/" style={{ textDecoration: "none" }}>
+                      <Dropdown.Item
+                        href="#/action-4"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          color: "#566976",
+                          lineHeight: "2",
+                          fontSize: 20,
+                          fontFamily: "Work Sans",
+                          fontWeight: "500",
+                          wordWrap: "break-word",
+                        }}
+                        className="dropdown-item-link"
+                      >
+                        Đề xuất
+                      </Dropdown.Item>
+                    </Link>
+                    <Link to="/" style={{ textDecoration: "none" }}>
+                      <Dropdown.Item
+                        onClick={(e) => handleLogout(e)}
+                        className="text-center text-danger dropdown-item-link"
+                        style={{ fontFamily: "Work Sans" }}
+                      >
+                        Đăng xuất
+                      </Dropdown.Item>
+                    </Link>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </>
+            )}
+          </Nav>
+        </Col>
       </Navbar.Collapse>
     </Navbar>
   );
