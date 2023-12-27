@@ -48,8 +48,14 @@ function BookCard(props) {
     >
       <img
         className="product--image"
-        src={require("../../../assets/image/book.png")}
+        // src={require("../../../assets/image/book.png")}
+        src={props.coverLink}
         alt="img"
+        style={{
+          width: "100%",
+          height: "260px",
+          objectFit: "cover",
+        }}
       />
       <Link to={bookDetailUrl}>
         <div
@@ -81,7 +87,7 @@ function BookCard(props) {
           wordWrap: "break-word",
         }}
       >
-        {props.authorName}
+        by {props.authorName}
       </div>
 
       <button
