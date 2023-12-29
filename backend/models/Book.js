@@ -204,8 +204,9 @@ export const searchBook = async (searchText) => {
         title LIKE ? 
         OR \`authorName\` LIKE ?
         OR ISBN LIKE ?
+        OR publisher LIKE ?
     ORDER BY dateAdded DESC;`;
-    const [book_details, _] = await db.query(sql, [`%${searchText}%`, `%${searchText}%`, `%${searchText}%`]);
+    const [book_details, _] = await db.query(sql, [`%${searchText}%`, `%${searchText}%`, `%${searchText}%`, `%${searchText}%`]);
     await connection.commit();
     return book_details;
   }
