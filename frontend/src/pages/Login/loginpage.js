@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import login1 from "../../assets/image/login1.png";
 import login2 from "../../assets/image/login2.png";
-import { useNavigate, BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  useNavigate,
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+} from "react-router-dom";
 
 function LoginPage(props) {
   const [errorMessage, setErrorMessage] = useState("");
@@ -45,32 +51,35 @@ function LoginPage(props) {
 
         // Store the token in localStorage or a more secure storage option
         localStorage.setItem("token", token);
-        
+
         // Store email and password temporarily in localStorage
         localStorage.setItem("tempEmail", email);
         localStorage.setItem("tempPassword", password);
         // localStorage.setItem("tempName", name);
 
         if (props.title === "user") {
-        // Fetch manager information using the obtained token
-        const userInfoResponse = await fetch("http://localhost:3001/reader/get", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the request header
-          "Content-Type": "application/json",
-        },
-        });
+          // Fetch manager information using the obtained token
+          const userInfoResponse = await fetch(
+            "http://localhost:3001/reader/get",
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the token in the request header
+                "Content-Type": "application/json",
+              },
+            }
+          );
 
-        if (userInfoResponse.ok) {
-        const userInfo = await userInfoResponse.json();
-        console.log("Manager Information:", userInfo);
-        localStorage.setItem("name", userInfo.name);
+          if (userInfoResponse.ok) {
+            const userInfo = await userInfoResponse.json();
+            console.log("Manager Information:", userInfo);
+            localStorage.setItem("name", userInfo.name);
 
-        // Additional handling of manager information can be done here
-        } else {
-          // Handle error in fetching manager information
-          console.error("Failed to fetch manager information");
-        }
+            // Additional handling of manager information can be done here
+          } else {
+            // Handle error in fetching manager information
+            console.error("Failed to fetch manager information");
+          }
         }
 
         if (props.title === "admin") {
@@ -91,7 +100,6 @@ function LoginPage(props) {
     }
   };
 
-
   return (
     <>
       <div className="d-flex align-items-center justify-content-center">
@@ -100,56 +108,133 @@ function LoginPage(props) {
       <Form onSubmit={handleLoginSubmit}>
         <Form.Group className="mb-3">
           <Form.Label style={{ fontFamily: "Work Sans" }}>Email</Form.Label>
-          <Form.Control type="email" placeholder="Nhập email" name="email" style={{ fontFamily: "Work Sans" }} required />
+          <Form.Control
+            type="email"
+            placeholder="Nhập email"
+            name="email"
+            style={{ fontFamily: "Work Sans" }}
+            required
+          />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label className="d-flex justify-content-between">
             <span style={{ fontFamily: "Work Sans" }}>Mật khẩu</span>
             <span>
-              <a href="!#" style={{ color: "#7D92A1", fontFamily: "Work Sans" }}>
+              <a
+                href="!#"
+                style={{ color: "#7D92A1", fontFamily: "Work Sans" }}
+              >
                 Quên mật khẩu?
               </a>
             </span>
           </Form.Label>
-          <Form.Control type="password" placeholder="Nhập mật khẩu..." name="password" style={{ fontFamily: "Work Sans" }} required />
+          <Form.Control
+            type="password"
+            placeholder="Nhập mật khẩu..."
+            name="password"
+            style={{ fontFamily: "Work Sans" }}
+            required
+          />
         </Form.Group>
 
         {/* Sign in button */}
-        <Button type="submit" variant="primary" className="mb-2 w-100" style={{ backgroundColor: "#31AAB7", color: "#FFFFFF", fontFamily: "Work Sans" }}>
+        <Button
+          type="submit"
+          variant="primary"
+          className="mb-2 w-100"
+          style={{
+            backgroundColor: "#31AAB7",
+            color: "#FFFFFF",
+            fontFamily: "Work Sans",
+          }}
+        >
           Đăng nhập
         </Button>
 
         {/* Display error message if login fails */}
-        {errorMessage && <div className="text-danger mb-2" style={{ fontFamily: "Work Sans" }}>{errorMessage}</div>}
+        {errorMessage && (
+          <div className="text-danger mb-2" style={{ fontFamily: "Work Sans" }}>
+            {errorMessage}
+          </div>
+        )}
 
         <div className="f-flex justify-content-center position-relative">
           <hr />
-          <div className="text-dark position-absolute ps-2 pe-2" style={{ top: "42%", left: "50%", transform: "translate(-50%, -50%)", backgroundColor: "#eaeff2", fontFamily: "Work Sans" }}>
+          <div
+            className="text-dark position-absolute ps-2 pe-2"
+            style={{
+              top: "42%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              backgroundColor: "#eaeff2",
+              fontFamily: "Work Sans",
+            }}
+          >
             Hoặc
           </div>
         </div>
 
-        <Button variant="primary" className="w-100 mb-2" style={{ backgroundColor: "#FFFFFF", color: "#324552" }}>
+        <Button
+          variant="primary"
+          className="w-100 mb-2"
+          style={{ backgroundColor: "#FFFFFF", color: "#324552" }}
+        >
           <div className="d-flex align-items-center justify-content-center">
-            <img className="img-fluid" src={login1} alt="img" style={{ float: "left", paddingRight: "5px", display: "block", alignItems: "center", fontFamily: "Work Sans" }}></img>
+            <img
+              className="img-fluid"
+              src={login1}
+              alt="img"
+              style={{
+                float: "left",
+                paddingRight: "5px",
+                display: "block",
+                alignItems: "center",
+                fontFamily: "Work Sans",
+              }}
+            ></img>
             Login with Google
           </div>
         </Button>
 
-        <Button variant="primary" className="w-100 mb-2" style={{ backgroundColor: "#FFFFFF", color: "#324552" }}>
+        <Button
+          variant="primary"
+          className="w-100 mb-2"
+          style={{ backgroundColor: "#FFFFFF", color: "#324552" }}
+        >
           <div className="d-flex align-items-center justify-content-center">
-            <img className="img-fluid" src={login2} alt="img" style={{ float: "left", paddingRight: "5px", display: "block", alignItems: "center", fontFamily: "Work Sans" }}></img>
+            <img
+              className="img-fluid"
+              src={login2}
+              alt="img"
+              style={{
+                float: "left",
+                paddingRight: "5px",
+                display: "block",
+                alignItems: "center",
+                fontFamily: "Work Sans",
+              }}
+            ></img>
             Login with Mobile number
           </div>
         </Button>
 
         {props.title === "user" && (
           <div className="d-flex align-items-center justify-content-center mt-3">
-            <span style={{ opacity: "0.5" }}>Bạn chưa có tài khoản?</span> &nbsp;
-            <Link to='/register'>
-                <span onClick={() => props.handleTabChange("login")} style={{ color: "#31AAB7", textDecoration: "underline", cursor: "pointer" }}> Đăng ký</span>
+            <span style={{ opacity: "0.5" }}>Bạn chưa có tài khoản?</span>{" "}
+            &nbsp;
+            <Link to="/register">
+              <span
+                onClick={() => props.handleTabChange("login")}
+                style={{
+                  color: "#31AAB7",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+              >
+                {" "}
+                Đăng ký
+              </span>
             </Link>
-            
           </div>
         )}
       </Form>
@@ -194,7 +279,7 @@ export default LoginPage;
 //             <hr/>
 //             <div className="text-dark position-absolute ps-2 pe-2" style={{top: '42%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#eaeff2',  fontFamily: 'Work Sans'}}>Hoặc</div>
 //             </div>
-            
+
 //             <Button variant="primary" className="w-100 mb-2" style={{ backgroundColor: '#FFFFFF', color: '#324552' }}>
 //             <div className="d-flex align-items-center justify-content-center">
 //                 <img className="img-fluid" src={login1} alt="img" style={{ float: 'left', paddingRight: '5px', display: 'block', alignItems: 'center',  fontFamily: 'Work Sans'}}></img>
@@ -209,7 +294,6 @@ export default LoginPage;
 //             </div>
 //             </Button>
 
-            
 //             {
 //                 props.title === 'user' &&
 //                 <div className="d-flex align-items-center justify-content-center mt-3">
@@ -217,7 +301,7 @@ export default LoginPage;
 //                     <span onClick={() => props.handleTabChange("login")} style={{ color: '#31AAB7', textDecoration: 'underline', cursor: 'pointer' }}> Đăng ký</span>
 //                 </div>
 //             }
-            
+
 //     </Form>
 //     </>
 //   );

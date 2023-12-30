@@ -1,37 +1,3 @@
-// import axios from "axios";
-// import React, { useEffect, useState } from "react";
-// import "./SearchPage.css";
-
-// function BookCard(props) {
-//   return (
-//     <div class="card" className="book-in-search1">
-//       <img
-//         src={require("../../../assets/image/book.png")}
-//         class="card-img-top"
-//         alt=""
-//         className="image1"
-//       />
-
-//       <div class="card-body">
-//         <div class="card-title" className="title4">
-//           {props.title}
-//         </div>
-
-//         <p class="card-text" className="author1">
-//           by {props.authorName}
-//         </p>
-
-//         <button className="mn-btn1">
-//           <div className="mn-btn-item" />
-//           <div className="mn1">Mượn</div>
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default BookCard;
-
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -53,7 +19,7 @@ function BookCard(props) {
         alt="img"
         style={{
           width: "100%",
-          height: "260px",
+          //height: "260px",
           objectFit: "cover",
         }}
       />

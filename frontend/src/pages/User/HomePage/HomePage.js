@@ -74,7 +74,11 @@ function Homepage() {
     />
   ));
   const categData = displayedgenreBooks.map((book) => (
-    <Category key={book.ISBN} genre={book.genre} coverLink={book.random_coverLink} />
+    <Category
+      key={book.ISBN}
+      genre={book.genre}
+      coverLink={book.random_coverLink}
+    />
   ));
   // const newsData = newData.map((item) => <New name={item.name} url={item.imageurl} author={item.author}/>);
   // const trendData = trendingData.map((item) => <Trending name={item.name} url={item.imageurl} author={item.author}/>);
