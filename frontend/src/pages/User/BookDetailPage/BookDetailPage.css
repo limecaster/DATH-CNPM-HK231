@@ -8,12 +8,15 @@
   margin-top: 20px;
   margin-left: 10px;
 }
+.feedback {
+  margin-left: 10px;
+}
+
 * {
   font-family: Work Sans, sans-serif;
 }
-
 .commentContainer {
-  margin-top: 6px;
+  margin-top: 10px;
   /* background-color: #d3d3d3e0; */
 
   display: flex;
@@ -23,14 +26,13 @@
   cursor: pointer;
   border-radius: 5px;
 }
-
 .commentContainer:hover {
   background-color: #d3d3d3bf;
 }
 
 .inputContainer {
   display: flex;
-
+  margin-top: 20px;
   align-items: baseline;
   gap: 5px;
   width: 100%;
@@ -41,8 +43,7 @@
 }
 
 .inputContainer__input {
-  width: 100%;
-
+  width: 90%;
   margin: 6px 0 0px 0;
   padding: 5px;
   display: flex;
@@ -88,8 +89,8 @@
     margin-right: 10px;
     width: 350px;
   }
-  .button {
-    margin-top: 140px;
+  .feedback {
+    margin-left: 0px;
   }
   .description {
     margin-left: 0px;

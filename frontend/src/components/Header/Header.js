@@ -18,9 +18,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-const Header = ({ books, setSearchResults }) => {
-  const navigate = useNavigate();
-
+const Header = () => {
   // Retrieve email and password from localStorage
   const email = localStorage.getItem("tempEmail");
   const password = localStorage.getItem("tempPassword");
@@ -32,26 +30,17 @@ const Header = ({ books, setSearchResults }) => {
   // Log email and password to console
   console.log("Email:", email, "Password:", password, "Name:", name);
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
+  const [searchText, setSearchText] = useState("");
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+    setSearchText(e.target.value);
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!searchQuery) return setSearchResults(books);
-
-    const resultsArray = books.filter(
-      (book) =>
-        book.title.includes(searchQuery) ||
-        book.authorName.includes(searchQuery)
-    );
-
-    setSearchResults(resultsArray);
-    navigate(`/searchpage?query=${searchQuery}`);
+    navigate(`/searchpage?query=${searchText}`);
   };
+
   const handleLogout = (e) => {
     localStorage.clear();
     window.location.href = "/";
@@ -66,14 +55,19 @@ const Header = ({ books, setSearchResults }) => {
   }));
 
   return (
-    <Navbar bg="#ffffff" variant="light" expand="lg" className="border-bottom pe-4">
+    <Navbar
+      bg="#ffffff"
+      variant="light"
+      expand="lg"
+      className="border-bottom pe-4"
+    >
       <Link to="/#home">
         <Navbar.Brand>
           <div className="d-inline-block ms-4 me-2">
             <img
               alt="img"
               src={hcmut}
-            //className="d-inline-block"
+              //className="d-inline-block"
             />
           </div>
           <span className="d-inline-block align-bottom">
@@ -105,9 +99,20 @@ const Header = ({ books, setSearchResults }) => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-        <Col xs={6} style={{ display: 'flex', alignItems: 'center', justifyContent: 'right' }} >
-          <Form inline={+true} style={{ display: 'flex', width: "90%" }} onSubmit={handleSubmit}>
-            <Row style={{ display: 'flex', flexWrap: 'nowrap', width: "100%" }}>
+        <Col
+          xs={6}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "right",
+          }}
+        >
+          <Form
+            inline={+true}
+            style={{ display: "flex", width: "90%" }}
+            onSubmit={handleSubmit}
+          >
+            <Row style={{ display: "flex", flexWrap: "nowrap", width: "100%" }}>
               <Col
                 xs="10"
                 style={{
@@ -139,8 +144,14 @@ const Header = ({ books, setSearchResults }) => {
             </Row>
           </Form>
         </Col>
-        <Col style={{ display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
-          <Nav style={{ display: 'flex', alignItems: 'center' }} >
+        <Col
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "right",
+          }}
+        >
+          <Nav style={{ display: "flex", alignItems: "center" }}>
             <Nav.Item>
               <Nav.Link href="#home" className="ms-2 me-2">
                 <span
@@ -152,7 +163,11 @@ const Header = ({ books, setSearchResults }) => {
                     wordWrap: "break-word",
                   }}
                 >
-                  <StyledBadge className="me-2" badgeContent={4} color="primary">
+                  <StyledBadge
+                    className="me-2"
+                    badgeContent={4}
+                    color="primary"
+                  >
                     <NotificationsIcon color="action" />
                   </StyledBadge>
                   Thông báo
@@ -183,7 +198,10 @@ const Header = ({ books, setSearchResults }) => {
                     className="border-success ms-2 me-4"
                     style={{ backgroundColor: "white", color: "#21717A" }}
                   >
-                    <Link to="/selectmember/*" style={{ textDecoration: "none" }}>
+                    <Link
+                      to="/selectmember/*"
+                      style={{ textDecoration: "none" }}
+                    >
                       <span
                         style={{
                           textAlign: "center",

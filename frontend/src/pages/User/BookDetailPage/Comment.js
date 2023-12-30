@@ -55,7 +55,7 @@ const Comment = ({
 
             <Action
               className="reply comment"
-              type="COMMENT"
+              type="Đăng tải"
               handleClick={onAddComment}
             />
           </>
