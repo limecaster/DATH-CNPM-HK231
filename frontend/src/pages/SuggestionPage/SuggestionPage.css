@@ -114,11 +114,23 @@ a:visited {
   border-radius: var(--bs-breadcrumb-border-radius);
 }
 
-.form-control {
+#tieude {
+  border: 1px solid black;
+}
+#tacgia {
+  border: 1px solid black;
+}
+#nhaxuatban {
+  border: 1px solid black;
+}
+#namxuatban {
+  border: 1px solid black;
+}
+#isbn {
   border: 1px solid black;
 }
 
-.btn-outline-danger {
+#btn-outline-danger {
   --bs-btn-color: var(--red-normal);
   --bs-btn-border-color: var(--product-darker);
 
@@ -130,8 +142,7 @@ a:visited {
   --bs-btn-active-bg: var(--red-light);
   --bs-btn-active-border-color: var(--product-darker);
 }
-
-.btn-outline-primary {
+#btn-outline-primary {
   --bs-btn-color: var(--product-darker);
   --bs-btn-border-color: black;
 
