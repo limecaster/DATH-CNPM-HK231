@@ -8,6 +8,7 @@ import {
   getDashboardReader,
   getDashboardBook,
   getNotification,
+  getBorrowChartInfo
 } from "../controllers/borrowController.js";
 // localhost:3001/borrow/...
 const router = Router();
@@ -24,7 +25,8 @@ router
 router.route("/dashboard/general-info").get(getDashboardInfo); // thông tin số ng dùng, tổng số sách, tỉ lệ mượn trả
 router.route("/dashboard/reader-list").get(getDashboardReader); // danh sách người dùng
 router.route("/dashboard/book-list").get(getDashboardBook); // danh sách các sách được mượn nhiều nhất
-router.route("/notification/:readerId").get(getNotification); // danh sách các sách được mượn nhiều nhất
+router.route("/dashboard/borrow-chart").get(getBorrowChartInfo); // hiển thị biểu đồ mượn trả theo năm
+router.route("/notification/:readerId").get(getNotification); // thông báo theo reader
 
 router.route("/:readerId").get(getBorrowDetails); // hiển thị chi tiết lịch sử mượn trả của reader
 router.route("/:readerId/general-info").get(getGeneralBorrowInfo); // hiển thị thông tin mượn trả chung của reader (ở trang profile)

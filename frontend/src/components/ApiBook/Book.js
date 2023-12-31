@@ -9,15 +9,12 @@ const api = axios.create({
 
 const apiEndpoints = {
   getAllBook: async () => {
-
-    const accessToken = localStorage.getItem('token');
+    const accessToken = localStorage.getItem("token");
 
     try {
       const response = await api.get("/", {
         headers: {
-
           Authorization: `Bearer ${accessToken}`,
-
         },
       });
       // console.log("Customer:", response.data);
@@ -48,13 +45,11 @@ const apiEndpoints = {
 
       console.log("Form Data:", [...formData]);
 
-      const accessToken = localStorage.getItem('token');
+      const accessToken = localStorage.getItem("token");
 
       const response = await api.post("/", formData, {
         headers: {
-
           Authorization: `Bearer ${accessToken}`,
-
         },
       });
       return response.data;
@@ -73,7 +68,6 @@ const apiEndpoints = {
         formData.append("coverlink", newBook.coverLink);
       }
       if (genre) {
-
       }
       formData.append("ISBN", newBook.ISBN);
       formData.append("title", newBook.title);
@@ -88,12 +82,10 @@ const apiEndpoints = {
       // formData.append("genres", newBook.genres);
       formData.append("genres", genre);
       console.log("Form Data:", [...formData]);
-      const accessToken = localStorage.getItem('token');
+      const accessToken = localStorage.getItem("token");
       const response = await api.put("/", formData, {
         headers: {
-
           Authorization: `Bearer ${accessToken}`,
-
         },
       });
       return response.data;
@@ -106,12 +98,10 @@ const apiEndpoints = {
   deleteBook: async (ISBN) => {
     try {
       console.log("Deleting:", ISBN);
-      const accessToken = localStorage.getItem('token');
+      const accessToken = localStorage.getItem("token");
       const response = await api.delete(`/${ISBN}`, {
         headers: {
-
           Authorization: `Bearer ${accessToken}`,
-
         },
       });
       return response.data;
