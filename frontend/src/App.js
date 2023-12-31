@@ -89,22 +89,6 @@ import Footer from "./components/Footer/footer";
 import SuggestionPage from "./pages/SuggestionPage/SuggestionPage";
 import Profile from "./pages/Profile/Profile";
 function App() {
-  const [books, setBooks] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/books")
-      .then((res) => {
-        console.log(res.data);
-        setBooks(res.data);
-        setSearchResults(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
-
   return (
     <div className="App">
       <Router>
@@ -113,7 +97,7 @@ function App() {
             path="/"
             element={
               <>
-                <Header books={books} setSearchResults={setSearchResults} />
+                <Header />
                 <Homepage />
                 <Footer />
               </>
@@ -123,35 +107,37 @@ function App() {
             path="/searchpage"
             element={
               <>
-                <Header books={books} setSearchResults={setSearchResults} />
-                <SearchPage searchResults={searchResults} />
+                <Header />
+                <SearchPage />
                 <Footer />
               </>
             }
           />
-          <Route 
-            path="/suggestion" 
+          <Route
+            path="/suggestion"
             element={
               <>
-                <Header books={books} setSearchResults={setSearchResults} />
+                <Header />
                 <SuggestionPage />
                 <Footer />
               </>
-            } />
-            <Route 
-            path="/profile" 
+            }
+          />
+          <Route
+            path="/profile"
             element={
               <>
-                <Header books={books} setSearchResults={setSearchResults} />
+                <Header />
                 <Profile />
                 <Footer />
               </>
-            } />
+            }
+          />
           <Route
             path="/bookdetailpage/:ISBN"
             element={
               <>
-                <Header books={books} setSearchResults={setSearchResults} />
+                <Header />
                 <BookDetailPage />
                 <Footer />
               </>

@@ -1,4 +1,4 @@
-import { Book } from "../models/Book.js";
+import { Book, searchBook } from "../models/Book.js";
 import { db } from "../config/dbConfig.js";
 import { unlink } from "fs";
 import { log } from "console";
@@ -128,6 +128,17 @@ export const getFavoriteBookOfReader = async (req, res) => {
       console.log(favorite_list);
       return res.send(favorite_list);
     });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
+export const getTrendingBooks = async (req, res) => {
+  try {
+    const trending_list = await Book.getTrendingList();
+    console.log(trending_list);
+    return res.send(trending_list);
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
@@ -285,5 +296,15 @@ export const GetBookGenres = async (req, res) => {
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
+  }
+};
+
+export const SearchBook = async (searchText) => {
+  try {
+    const results = await searchBook(searchText);
+    return results;
+  } catch (error) {
+    console.error(error);
+    return;
   }
 };

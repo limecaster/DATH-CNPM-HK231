@@ -127,6 +127,51 @@ CREATE TABLE `borrow` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `borrow_dashboard`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `borrow_dashboard` (
+	`year` VARCHAR(10) NOT NULL,
+    `month` VARCHAR(2) NOT NULL,
+    `total_borrowed` INT DEFAULT 0,
+    `total_givedback` INT DEFAULT 0,
+    PRIMARY KEY (`year`, `month`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DELIMITER ;;
+DROP TRIGGER IF EXISTS `borrow_dashboard_trigger`;
+CREATE TRIGGER `borrow_dashboard_trigger` AFTER INSERT ON `borrow`
+FOR EACH ROW
+BEGIN
+  IF (NEW.ISBN IS NOT NULL) THEN
+    SET @year = YEAR(NEW.givebackDate);
+    SET @month = MONTH(NEW.givebackDate);
+    SET @borrowed = (SELECT COUNT(*) FROM borrow WHERE YEAR(givebackDate) = @year AND MONTH(givebackDate) = @month);
+    SET @givedback = (SELECT COUNT(*) FROM borrow WHERE YEAR(givebackDate) = @year AND MONTH(givebackDate) = @month AND status = 'Hoàn thành');
+    IF (@borrowed = 0) THEN
+      SET @borrowed = 1;
+    END IF;
+    IF (@givedback = 0) THEN
+      SET @givedback = 1;
+    END IF;
+    INSERT INTO borrow_dashboard VALUES (@year, @month, @borrowed, @givedback) ON DUPLICATE KEY UPDATE total_borrowed = @borrowed, total_givedback = @givedback;
+  END IF;
+END;
+;;
+
+DELIMITER ;
+
+DELIMITER ;;
+DROP PROCEDURE IF EXISTS `GetBorrowChartInfomation`;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetBorrowChartInfomation` (
+  IN `p_year` VARCHAR(10)
+)
+BEGIN
+  SELECT * FROM borrow_dashboard WHERE `year` = `p_year`;
+END;;
+
+DELIMITER ;
+
 --
 -- Dumping data for table `borrow`
 --
@@ -337,6 +382,7 @@ CREATE TABLE `reader` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 --
 -- Table structure for table `suggested_book`
 --
@@ -352,8 +398,7 @@ CREATE TABLE `suggested_book` (
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-
-/*!50003 DROP PROCEDURE IF EXISTS `SuggestBook` */;
+DROP PROCEDURE IF EXISTS `SuggestBook`;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -374,7 +419,6 @@ BEGIN
     INSERT INTO suggested_book (readerName, title, authorName, email) VALUES (readerName, title, authorName, email);
 END ;;
 DELIMITER ;
-
 
 --
 -- Dumping data for table `reader`

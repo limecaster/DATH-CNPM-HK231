@@ -5,7 +5,6 @@ import { Manager,
         updateManager } from "../models/Manager.js";
 import { verifyToken, hashPassword } from "../middleware/jwtAuthentication.js";
 
-
 export const createManager = async (req, res) => {
   console.log('Request Body:', req.body);
   console.log('Request File:', req.file);
