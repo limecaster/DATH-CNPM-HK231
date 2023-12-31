@@ -165,6 +165,28 @@ FROM ((book natural join author_write_book) join author on author_write_book.aut
     }
   };
 
+  static getTrendingList = async (readerId) => {
+    let connection;
+    try {
+      connection = await db.getConnection();
+      await connection.beginTransaction();
+      const [trending_list, _] = await db.execute(
+        `select isbn, title, coverLink, authorName, max(registerDate) as recent_register from author natural join author_write_book natural join book natural join borrow group by isbn, authorName order by recent_register desc limit 10;`
+      );
+      await connection.commit();
+      return trending_list;
+    } catch (error) {
+      if (connection) {
+        await connection.rollback();
+      }
+      throw error;
+    } finally {
+      if (connection) {
+        connection.release();
+      }
+    }
+  };
+
   static getGenres = async (isbn) => {
     let connection;
     try {
@@ -206,11 +228,15 @@ export const searchBook = async (searchText) => {
         OR ISBN LIKE ?
         OR publisher LIKE ?
     ORDER BY dateAdded DESC;`;
-    const [book_details, _] = await db.query(sql, [`%${searchText}%`, `%${searchText}%`, `%${searchText}%`, `%${searchText}%`]);
+    const [book_details, _] = await db.query(sql, [
+      `%${searchText}%`,
+      `%${searchText}%`,
+      `%${searchText}%`,
+      `%${searchText}%`,
+    ]);
     await connection.commit();
     return book_details;
-  }
-  catch (error) {
+  } catch (error) {
     if (connection) {
       await connection.rollback();
     }
@@ -220,4 +246,4 @@ export const searchBook = async (searchText) => {
       connection.release();
     }
   }
-}
+};

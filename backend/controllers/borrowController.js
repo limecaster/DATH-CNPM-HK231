@@ -1,6 +1,7 @@
 import { Borrow, getBorrowChartInfomation } from "../models/Borrow.js";
 import { db } from "../config/dbConfig.js";
 import { verifyToken } from "../middleware/jwtAuthentication.js";
+import { read } from "fs";
 export const getDashboardBook = async (req, res) => {
   try {
     verifyToken(req, res, async () => {
@@ -69,6 +70,43 @@ export const getGeneralBorrowInfo = async (req, res) => {
       );
 
       return res.json(borrow_info);
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
+export const getNotification = async (req, res) => {
+  try {
+    verifyToken(req, res, async () => {
+      const { readerId } = req.params;
+      const borrow_info = await Borrow.getBorrowDetailsByReader(readerId);
+      const today = new Date();
+      const noti = borrow_info.map((borrow) => {
+        if (borrow.status === "Hoàn thành") {
+          return `[Trả sách thành công] Bạn đã trả thành công sách ${borrow.title}`;
+        } else if (borrow.status === "Chờ nhận sách") {
+          return `[Đăng kí mượn] Bạn đã đăng kí mượn thành công sách ${borrow.title}`;
+        } else if (borrow.status === "Đang mượn") {
+          let due = new Date(borrow.givebackDate) - today;
+          due = Math.ceil(due / (24 * 60 * 60 * 1000));
+          console.log(due);
+          if (due < 3 && due > 0)
+            return `[Đến hạn trả sách] Còn ${due} ngày đến hạn trả sách ${borrow.title}`;
+          else if (due < 0)
+            return `[Trễ hạn trả sách] Sách ${
+              borrow.title
+            } đã trễ hạn trả ${-due} ngày`;
+          else
+            return `[Mượn thành công] Bạn đã mượn thành công sách ${borrow.title}`;
+        } else {
+          // Handle other statuses if needed
+          return "Status not applicable for this message format";
+        }
+      });
+
+      return res.status(200).send(noti);
     });
   } catch (error) {
     console.log(error.message);
