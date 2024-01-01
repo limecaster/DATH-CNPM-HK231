@@ -18,13 +18,13 @@ const ListPage = () => {
                     <Sidebar />
                 </div>
                 <div style={{ flex: '1' }}>
-                    <Container fluid className='m-2'>
-                        <Row >
-                            <Col xs={12} sm={12} >
-                                <Book />
-                            </Col>
-                        </Row>
-                    </Container>
+
+                    <Row >
+                        <Col xs={12} sm={12} >
+                            <Book />
+                        </Col>
+                    </Row>
+
                 </div>
             </div>
         </Container>
