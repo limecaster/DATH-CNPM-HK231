@@ -5,46 +5,88 @@
 // import Form from "react-bootstrap/Form";
 // import { Col, Row } from "react-bootstrap";
 // import BookCard from "./BookCard";
+// import { useLocation, useParams } from "react-router-dom";
 
-// function SearchPage({ searchResults }) {
+// function SearchPage({}) {
+//   const location = useLocation();
+//   const searchParams = new URLSearchParams(location.search);
+//   const searchText = searchParams.get("query");
+//   const [searchResults, setSearchResults] = useState([]);
+
+//   useEffect(() => {
+//     axios
+//       .get(`http://localhost:3001/books/search?query=${searchText}`)
+//       .then((res) => {
+//         console.log(res.data);
+//         setSearchResults(res.data);
+//       })
+//       .catch((err) => {
+//         console.error(err);
+//       });
+//   }, [searchText]);
+
+//   const [bookGenres, setBookGenres] = useState([]);
+
+//   useEffect(() => {
+//     const fetchBookGenres = async (ISBN) => {
+//       try {
+//         const response = await axios.get(
+//           `http://localhost:3001/books/${ISBN}/genres`
+//         );
+//         return response.data;
+//       } catch (error) {
+//         console.error(error);
+//         return [];
+//       }
+//     };
+//     const fetchBookGenresForSearchResults = async () => {
+//       const genresPromises = searchResults.map((book) =>
+//         fetchBookGenres(book.ISBN)
+//       );
+
+//       try {
+//         const genres = await Promise.all(genresPromises);
+//         setBookGenres(genres);
+//       } catch (error) {
+//         console.error(error);
+//       }
+//     };
+
+//     fetchBookGenresForSearchResults();
+//   }, [searchResults]);
 //   const [selectedCategory, setSelectedCategory] = useState("");
 //   const [selectedPublisher, setSelectedPublisher] = useState("");
-//   const [filteredBooks, setFilteredBooks] = useState([]);
-//   const filterBooksByCategory = (category) => {
-//     if (category === selectedCategory) {
-//       setSelectedCategory("");
-//       setFilteredBooks([]);
-//     } else {
-//       setSelectedCategory(category);
-//       const filtered = searchResults.filter((book) =>
-//         book.genres.includes(category)
-//       );
-//       setFilteredBooks(filtered);
-//     }
-//   };
 
 //   const categories = [
 //     "adventure",
 //     "Historical Fiction",
-//     "Mythology",
-//     "Romance",
 //     "horror",
 //     "mystery",
+//     "Mythology",
+//     "Romance",
 //   ];
 //   const publishers = [
-//     "Harper Perennial",
-//     "Ecco",
-//     "William Morrow",
-//     "Penguin Classics",
-//     "Dutton",
+//     "Atria Books",
 //     "Ballantine Books",
 //     "Canary Street Press",
-//     "Scribner",
-//     "Atria Books",
+//     "Dutton",
+//     "Ecco",
+//     "Gallery Books",
 //     "Graydon House",
+//     "Harper Perennial",
 //     "Independently published",
+//     "Penguin Classics",
+//     "Scribner",
+//     "William Morrow",
 //   ];
 
+//   const handleCheckboxClick = (category) => {
+//     if (category === selectedCategory) {
+//       setSelectedCategory("");
+//     } else {
+//       setSelectedCategory(category);
+//     }
+//   };
 //   const handleCheckboxClick2 = (publisher) => {
 //     if (publisher === selectedPublisher) {
 //       setSelectedPublisher("");
@@ -52,6 +94,7 @@
 //       setSelectedPublisher(publisher);
 //     }
 //   };
+
 //   return (
 //     <div className="custom-accordion">
 //       <Accordion className="accordion">
@@ -79,7 +122,7 @@
 //               <Form.Check
 //                 label={category}
 //                 checked={category === selectedCategory}
-//                 onClick={() => filterBooksByCategory(category)}
+//                 onClick={() => handleCheckboxClick(category)}
 //                 style={{
 //                   fontFamily: "Work Sans, sans-serif",
 //                   color: "#808080",
@@ -120,30 +163,35 @@
 //         <div style={{ fontFamily: "Work Sans, sans-serif" }}>
 //           Hiển thị 1 của 53 sản phẩm
 //         </div>
+
 //         <br />
 //         <Row>
-//           {selectedCategory
-//             ? filteredBooks.map((book) => (
-//                 <Col xs={6} sm={6} md={4} lg={3}>
-//                   <BookCard
-//                     ISBN={book.ISBN}
-//                     title={book.title}
-//                     authorName={book.authorName}
-//                     coverLink={book.coverLink}
-//                   />
-//                 </Col>
-//               ))
-//             : searchResults.map((book) => (
-//                 <Col xs={6} sm={6} md={4} lg={3}>
-//                   <BookCard
-//                     ISBN={book.ISBN}
-//                     title={book.title}
-//                     authorName={book.authorName}
-//                     coverLink={book.coverLink}
-//                   />
-//                 </Col>
-//               ))}
+//           {(() => {
+//             const bookCols = [];
+//             for (let i = 0; i < searchResults.length; i++) {
+//               const book = searchResults[i];
+//               if (
+//                 (!selectedCategory ||
+//                   bookGenres[i].includes(selectedCategory)) &&
+//                 (!selectedPublisher || book.publisher === selectedPublisher)
+//               ) {
+//                 bookCols.push(
+//                   <Col xs={6} sm={6} md={4} lg={3} key={book.ISBN}>
+//                     <BookCard
+//                       ISBN={book.ISBN}
+//                       title={book.title}
+//                       authorName={book.authorName}
+//                       coverLink={book.coverLink}
+//                     />
+//                   </Col>
+//                 );
+//               }
+//             }
+//             return bookCols;
+//           })()}
 //         </Row>
+
+//         {/* <div>{bookGenres[0]}</div> */}
 //       </div>
 //     </div>
 //   );
@@ -343,8 +391,6 @@ function SearchPage({}) {
             return bookCols;
           })()}
         </Row>
-
-        {/* <div>{bookGenres[0]}</div> */}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import Action from "./Action";
+import { useNavigate } from "react-router-dom";
 
 const Comment = ({
   handleInsertNode,
@@ -39,6 +40,34 @@ const Comment = ({
     handleDeleteNode(comment.id);
   };
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+  const navigate = useNavigate();
+  const handlePostComment = () => {
+    if (isLoggedIn) {
+      // Người dùng đã đăng nhập
+      if (editMode) {
+        handleEditNode(comment.id, inputRef?.current?.innerText);
+      } else {
+        setExpand(true);
+        handleInsertNode(comment.id, input);
+        setShowInput(false);
+        setInput("");
+      }
+
+      if (editMode) setEditMode(false);
+    } else {
+      // Người dùng chưa đăng nhập, chuyển hướng đến "/selectmember/*"
+      navigate("/selectmember/*");
+    }
+  };
+
   return (
     <div style={{ flexDirection: "column" }}>
       <div className={comment.id === 1 ? "inputContainer" : "commentContainer"}>
@@ -56,7 +85,7 @@ const Comment = ({
             <Action
               className="reply comment"
               type="Đăng tải"
-              handleClick={onAddComment}
+              handleClick={handlePostComment}
             />
           </>
         ) : (

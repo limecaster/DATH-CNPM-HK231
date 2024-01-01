@@ -134,17 +134,6 @@ export const getFavoriteBookOfReader = async (req, res) => {
   }
 };
 
-export const getTrendingBooks = async (req, res) => {
-  try {
-    const trending_list = await Book.getTrendingList();
-    console.log(trending_list);
-    return res.send(trending_list);
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).send({ message: error.message });
-  }
-};
-
 export const getOneBook = async (req, res) => {
   try {
     const { isbn } = req.params;

@@ -165,28 +165,6 @@ FROM ((book natural join author_write_book) join author on author_write_book.aut
     }
   };
 
-  static getTrendingList = async (readerId) => {
-    let connection;
-    try {
-      connection = await db.getConnection();
-      await connection.beginTransaction();
-      const [trending_list, _] = await db.execute(
-        `select isbn, title, coverLink, authorName, max(registerDate) as recent_register from author natural join author_write_book natural join book natural join borrow group by isbn, authorName order by recent_register desc limit 10;`
-      );
-      await connection.commit();
-      return trending_list;
-    } catch (error) {
-      if (connection) {
-        await connection.rollback();
-      }
-      throw error;
-    } finally {
-      if (connection) {
-        connection.release();
-      }
-    }
-  };
-
   static getGenres = async (isbn) => {
     let connection;
     try {
@@ -222,6 +200,7 @@ export const searchBook = async (searchText) => {
     let sql = `
     SELECT ISBN, title, coverLink, \`authorName\`, \`desc\`, publisher, publishDate, coverType, noPages, \`language\` , DATE_FORMAT(dateAdded, "%Y-%m-%d %H:%i:%s") AS dateAdded, copyNumber
     FROM ((book natural join author_write_book) join author on author_write_book.authorID=author.authorID) 
+    
     WHERE 
         title LIKE ? 
         OR \`authorName\` LIKE ?

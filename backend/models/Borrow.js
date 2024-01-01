@@ -90,24 +90,3 @@ export class Borrow {
     }
   };
 }
-
-export const getBorrowChartInfomation = async (year) => {
-  let connection;
-  try {
-    connection = await db.getConnection();
-    await connection.beginTransaction();
-    let sql = `CALL GetBorrowChartInfomation(?)`;
-    const [borrow_chart_info, _] = await connection.query(sql, [year]);
-    await connection.commit();
-    return borrow_chart_info;
-  } catch (error) {
-    if (connection) {
-      await connection.rollback();
-    }
-    throw error;
-  } finally {
-    if (connection) {
-      connection.release();
-    }
-  }
-}

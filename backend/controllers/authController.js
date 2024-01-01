@@ -20,6 +20,9 @@ const loginUser = async (req, res, tableName) => {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
+    // if (!user || password !== user.password) {
+    //   return res.status(401).json({ message: "Invalid email or password" });
+    // }
 
     const token = jwt.sign({ email: user.email }, "T1VoDich", {
       expiresIn: "1h",
