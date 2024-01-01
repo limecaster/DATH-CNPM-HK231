@@ -53,7 +53,7 @@ export default function BookDetailPage() {
         console.log("Favor:", res.data);
         setFavBooks(res.data);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }, []);
 
   const [isHearted, setIsHearted] = useState(false);
@@ -101,8 +101,11 @@ export default function BookDetailPage() {
     }
   };
   //borrow
-  const [borrowDate, setBorrowDate] = useState(new Date());
-  const [givebackDate, setGiveBackDate] = useState(new Date());
+  const [borrowDate, setBorrowDate] = React.useState(null);
+  const [givebackDate, setGiveBackDate] = React.useState(null);
+
+
+
   const handleSubmitClick = async (event) => {
     event.preventDefault();
 
@@ -133,6 +136,8 @@ export default function BookDetailPage() {
         console.log(responseResult);
 
         alert("Mượn thành công");
+        setModalIsOpen(false);
+
       } else {
         alert("Mượn không thành công, vui lòng nhập lại ngày hợp lệ");
       }
@@ -155,6 +160,7 @@ export default function BookDetailPage() {
     const temp = { ...finalStructure };
     setCommentsData(temp);
   };
+
 
   useEffect(() => {
     axios
@@ -355,7 +361,7 @@ export default function BookDetailPage() {
               Mượn sách
             </button>
 
-            <Modal
+            {/* <Modal
               isOpen={modalIsOpen}
               onRequestClose={closeModal}
               contentLabel="Mượn sách"
@@ -407,7 +413,72 @@ export default function BookDetailPage() {
                   <b>Mượn</b>
                 </button>
               </div>
+            </Modal> */}
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={closeModal}
+              contentLabel="Mượn sách"
+              style={{
+                overlay: {
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                },
+                content: {
+                  width: "500px",
+                  height: "400px",
+                  margin: "auto",
+                },
+              }}
+            >
+              <h2 style={{ textAlign: 'center' }}>Đăng ký mượn sách</h2>
+              <div style={{ alignItems: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px', alignItems: 'center' }}>
+                  <label style={{ marginRight: '30px' }}>Ngày mượn:</label>
+                  <DatePicker
+                    selected={borrowDate}
+                    onChange={(date) => {
+                      setBorrowDate(date);
+                      // Calculate Ngày trả as Ngày mượn + 2 weeks
+                      const newGiveBackDate = new Date(date);
+                      newGiveBackDate.setDate(newGiveBackDate.getDate() + 14); // 14 days = 2 weeks
+                      setGiveBackDate(newGiveBackDate);
+                    }}
+                    dateFormat="yyyy-MM-dd"
+                    style={{ width: "100%" }}
+                  />
+
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px', alignItems: 'center' }} >
+                  <label style={{ marginRight: '52px', alignItems: 'center' }}>Ngày trả:</label>
+                  <DatePicker
+                    selected={givebackDate}
+                    disabled
+                    dateFormat="yyyy-MM-dd"
+                    style={{ width: "100%" }}
+                  />
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: "60px" }}>
+                <button
+                  type="button"
+                  className="btn btn-outline-primary"
+                  id="btn-outline-primary"
+                  onClick={closeModal}
+                  style={{ marginRight: "70px" }}
+                >
+                  <b>Huỷ</b>
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-outline-primary"
+                  id="btn-outline-primary"
+                  onClick={handleSubmitClick}
+                >
+                  <b>Mượn</b>
+                </button>
+              </div>
             </Modal>
+
           </p>
         </div>
       </div>

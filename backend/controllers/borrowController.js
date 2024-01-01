@@ -95,9 +95,8 @@ export const getNotification = async (req, res) => {
           if (due < 3 && due > 0)
             return `[Đến hạn trả sách] Còn ${due} ngày đến hạn trả sách ${borrow.title}`;
           else if (due < 0)
-            return `[Trễ hạn trả sách] Sách ${
-              borrow.title
-            } đã trễ hạn trả ${-due} ngày`;
+            return `[Trễ hạn trả sách] Sách ${borrow.title
+              } đã trễ hạn trả ${-due} ngày`;
           else
             return `[Mượn thành công] Bạn đã mượn thành công sách ${borrow.title}`;
         } else {
@@ -129,7 +128,14 @@ export const getAllBorrow = async (req, res) => {
 export const insertBorrow = async (req, res) => {
   try {
     verifyToken(req, res, async () => {
-      const { ISBN, readerId, borrowDate, givebackDate } = req.body;
+      let { ISBN, readerId, borrowDate, givebackDate } = req.body;
+      console.log("Ngày mượn:", borrowDate);
+      console.log("Ngày trả:", givebackDate);
+      const borrowDate1 = borrowDate.split('T')[0];
+      const givebackDate1 = givebackDate.split('T')[0];
+      console.log("Ngày mượn:", borrowDate1);
+      console.log("Ngày trả:", givebackDate1);
+
       // kiem tra so luong sach ton kho
       let [copyNumber, _] = await db.execute(
         `SELECT copyNumber FROM book WHERE ISBN = ?`,
@@ -142,8 +148,8 @@ export const insertBorrow = async (req, res) => {
           .send({ message: "Thư viện hiện đã hết đầu sách này" });
       }
       // kiểm tra ngày mượn, trả
-      const date1 = new Date(borrowDate);
-      const date2 = new Date(givebackDate);
+      const date1 = new Date(borrowDate1);
+      const date2 = new Date(givebackDate1);
       if (date2 < date1)
         return res
           .status(400)
@@ -154,8 +160,8 @@ export const insertBorrow = async (req, res) => {
       const borrow_info = await Borrow.save(
         ISBN,
         readerId,
-        borrowDate,
-        givebackDate,
+        borrowDate1,
+        givebackDate1,
         registerDate,
         status
       );
