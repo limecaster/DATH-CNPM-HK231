@@ -3,7 +3,6 @@ import { Navbar, Nav, Form, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import Dropdown from "react-bootstrap/Dropdown";
 import "./Header.css";
-import io from "socket.io-client";
 import hcmut from "../../assets/image/hcmut.png";
 import { BsBell, BsSearch } from "react-icons/bs";
 
