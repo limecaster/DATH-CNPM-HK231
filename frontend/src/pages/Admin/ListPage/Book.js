@@ -567,7 +567,7 @@ const Book = () => {
             <>
                 <DialogTitle variant="h5" style={{ textAlign: 'center' }}>Chỉnh sửa thông tin sách</DialogTitle>
                 <DialogContent sx={{ display: 'flex', flexDirection: 'column', marginTop: '10px', gap: '1rem' }}>
-                    {internalEditComponents.slice(0, 2)}
+                    {internalEditComponents.slice(1, 2)}
                     <div className='coverlink'>Bìa sách</div>
                     <div
                         style={{
