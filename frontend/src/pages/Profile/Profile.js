@@ -55,13 +55,18 @@ function Profile() {
 
         localStorage.setItem('storedReaderInfo', JSON.stringify(readerInfoResult));
         setReaderName(readerInfoResult.name);
-        setBirthday(readerInfoResult.dob.slice(0, 10));
+        console.log("readerInfoResult.dob", typeof(readerInfoResult.dob));
+        let newDate = readerInfoResult.dob.slice(0, 10);
+        if (typeof(readerInfoResult.dob) === 'string') {
+          newDate = new Date(newDate).toISOString().slice(0, 10);
+        }
+        setBirthday(newDate);
         setGender(readerInfoResult.sex);
         setUniversity(readerInfoResult.university);
         setPhoneNumber(readerInfoResult.phoneNumber);
         setEmail(readerInfoResult.email);
         localStorage.setItem('username', readerInfoResult.name);
-        localStorage.setItem('storedBirthday', readerInfoResult.dob);
+        localStorage.setItem('storedBirthday', newDate);
         localStorage.setItem('storedGender', readerInfoResult.sex);
         localStorage.setItem('storedUniversity', readerInfoResult.university);
         localStorage.setItem('storedPhoneNumber', readerInfoResult.phoneNumber);
@@ -104,7 +109,6 @@ function Profile() {
     const name = readerName;
     const sex = gender;
     const dob = birthday;
-
     if (readerName.trim() === '' || birthday.trim() === '' || gender.trim() === '' || university.trim() === '' || phoneNumber.trim() === '' || email.trim() === '') {
       alert("Hãy nhập đầy đủ thông tin v_v");
       return;
@@ -153,6 +157,7 @@ function Profile() {
       }
       const password = newPassword;
       try {
+
         const patchData = await fetch("http://localhost:3001/reader/update", {
           method: "PATCH",
           headers: {
@@ -161,14 +166,18 @@ function Profile() {
           },
           body: JSON.stringify({ name, sex, dob, phoneNumber, university, email, password }),
         });
+
+        console.log("dob", dob);
+        console.log("patchData", patchData);
         if (patchData.status === 200) {
           const patchDataResult = await patchData.json();
-          console.log(patchDataResult);
+          console.log("patch: ", patchDataResult);
 
           getData();
           localStorage.setItem("userPassword", newPassword);
 
           alert("Cập nhật thông tin với mật khẩu mới thành công ^_^");
+          window.location.reload();
         }
         else {
           console.error("Failed to patch reader information with new password");
@@ -195,6 +204,7 @@ function Profile() {
           getData();
 
           alert("Cập nhật thông tin thành công ^_^");
+          window.location.reload();
         }
         else {
           console.error("Failed to patch reader information");

@@ -137,6 +137,7 @@ export default function BookDetailPage() {
 
         alert("Mượn thành công");
         setModalIsOpen(false);
+        window.location.reload();
 
       } else {
         alert("Mượn không thành công, vui lòng nhập lại ngày hợp lệ");

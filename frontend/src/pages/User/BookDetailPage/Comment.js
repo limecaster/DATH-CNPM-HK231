@@ -47,7 +47,6 @@ const Comment = ({
             <input
               type="text"
               className="inputContainer__input first_input"
-              autoFocus
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Viết nội dung phản hồi"
