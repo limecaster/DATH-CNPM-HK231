@@ -424,11 +424,11 @@ DELIMITER ;
 -- Dumping data for table `reader`
 --
 
--- LOCK TABLES `reader` WRITE;
--- /*!40000 ALTER TABLE `reader` DISABLE KEYS */;
--- INSERT INTO `reader` VALUES ('ST1000000','Cù Hoàng Nguyễn Sơn','M','2003-04-01','0123456789','soncu@hcmut.edu.vn','Đại học Bách Khoa','ST1000000','soncuvippro','$2b$10$YmPEKIZ6FUlvN8/nyzIKKun85.5GeV4jCzX0107e/R0H6NoKJdho2','2023-11-01','ST'),('ST1000001','Phạm Bá Hoàng','M','2003-06-21','0123456789','hoangpham@hcmut.edu.vn','Đại học Bách Khoa','ST1000001','hoangphamt1con','$2b$10$YmPEKIZ6FUlvN8/nyzIKKun85.5GeV4jCzX0107e/R0H6NoKJdho2','2023-11-01','ST');
--- /*!40000 ALTER TABLE `reader` ENABLE KEYS */;
--- UNLOCK TABLES;
+LOCK TABLES `reader` WRITE;
+/*!40000 ALTER TABLE `reader` DISABLE KEYS */;
+INSERT INTO `reader` VALUES ('ST1000000','Cù Hoàng Nguyễn Sơn','M','2003-04-01','0123456789','soncu@hcmut.edu.vn','Đại học Bách Khoa','ST1000000','soncuvippro','$2b$10$YmPEKIZ6FUlvN8/nyzIKKun85.5GeV4jCzX0107e/R0H6NoKJdho2','2023-11-01','ST'),('ST1000001','Phạm Bá Hoàng','M','2003-06-21','0123456789','hoangpham@hcmut.edu.vn','Đại học Bách Khoa','ST1000001','hoangphamt1con','$2b$10$YmPEKIZ6FUlvN8/nyzIKKun85.5GeV4jCzX0107e/R0H6NoKJdho2','2023-11-01','ST');
+/*!40000 ALTER TABLE `reader` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Dumping events for database 'library'
