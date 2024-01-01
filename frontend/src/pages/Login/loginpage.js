@@ -56,11 +56,13 @@ function LoginPage(props) {
         // Store email and password temporarily in localStorage
         if (props.title === "user") {
           localStorage.setItem("userEmail", email);
+          localStorage.setItem("userPassword", password);
           // localStorage.setItem("tempName", name);
         }
 
         if (props.title === "admin") {
           localStorage.setItem("adminEmail", email);
+          localStorage.setItem("adminPassword", password);
         }
 
         if (props.title === "user") {
