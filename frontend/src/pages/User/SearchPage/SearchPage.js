@@ -95,7 +95,38 @@ function SearchPage({}) {
       setSelectedPublisher(publisher);
     }
   };
+  const [bookCount, setBookCount] = useState(0);
+  const [totalBooks, setTotalBooks] = useState([]);
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/books")
+      .then((res) => {
+        console.log(res.data);
+        setTotalBooks(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+  useEffect(() => {
+    let count = 0;
+
+    for (let i = 0; i < searchResults.length; i++) {
+      const book = searchResults[i];
+      const genreCondition =
+        searchGenre !== null
+          ? bookGenres[i] && bookGenres[i].includes(searchGenre)
+          : (!selectedCategory || bookGenres[i].includes(selectedCategory)) &&
+            (!selectedPublisher || book.publisher === selectedPublisher);
+
+      if (genreCondition) {
+        count++;
+      }
+    }
+
+    setBookCount(count);
+  }, [searchResults, searchGenre, selectedCategory, selectedPublisher]);
   return (
     <div className="custom-accordion">
       <Accordion className="accordion">
@@ -166,10 +197,11 @@ function SearchPage({}) {
           ) : null}
         </div>
         <div style={{ fontFamily: "Work Sans, sans-serif" }}>
-          Hiển thị 1 của 53 sản phẩm
+          Hiển thị {bookCount} của {totalBooks.length} sản phẩm
         </div>
 
         <br />
+
         <Row>
           {(() => {
             const bookCols = [];
@@ -207,7 +239,42 @@ function SearchPage({}) {
           })()}
         </Row>
 
-        {/* <div>{bookGenres[0]}</div> */}
+        {/* <Row>
+          {(() => {
+            const bookCols = [];
+            for (let i = 0; i < searchResults.length; i++) {
+              const book = searchResults[i];
+              const genreCondition =
+                searchGenre !== null
+                  ? bookGenres[i] && bookGenres[i].includes(searchGenre)
+                  : (!selectedCategory ||
+                      bookGenres[i].includes(selectedCategory)) &&
+                    (!selectedPublisher ||
+                      book.publisher === selectedPublisher);
+
+              if (genreCondition) {
+                bookCols.push(
+                  <Col
+                    className="mb-5"
+                    xs={6}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    key={book.ISBN}
+                  >
+                    <BookCard
+                      ISBN={book.ISBN}
+                      title={book.title}
+                      authorName={book.authorName}
+                      coverLink={book.coverLink}
+                    />
+                  </Col>
+                );
+              }
+            }
+            return bookCols;
+          })()}
+        </Row> */}
       </div>
     </div>
   );
