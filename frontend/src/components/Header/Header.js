@@ -3,7 +3,6 @@ import { Navbar, Nav, Form, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import Dropdown from "react-bootstrap/Dropdown";
 import "./Header.css";
-import io from "socket.io-client";
 import hcmut from "../../assets/image/hcmut.png";
 import { BsBell, BsSearch } from "react-icons/bs";
 
@@ -200,24 +199,6 @@ const Header = () => {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu className="py-0" align="end">
-                    <Link to="/profile" style={{ textDecoration: "none" }}>
-                      <Dropdown.Item
-                        href="#/action-1"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          color: "#566976",
-                          lineHeight: "2",
-                          fontSize: 20,
-                          fontFamily: "Work Sans",
-                          fontWeight: "500",
-                          wordWrap: "break-word",
-                        }}
-                        className="dropdown-item-link"
-                      >
-                        Thông tin tài khoản
-                      </Dropdown.Item>
-                    </Link>
                     <Link to="/admin/books/*" style={{ textDecoration: "none" }}>
                       <Dropdown.Item
                         href="#/action-2"
@@ -275,7 +256,7 @@ const Header = () => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "right",
+                justifyContent: "center",
               }}
             >
               <Form
