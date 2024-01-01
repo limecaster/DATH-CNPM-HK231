@@ -465,7 +465,7 @@ const Header = () => {
                             Thông tin tài khoản
                           </Dropdown.Item>
                         </Link>
-                        <Link to="/history" style={{ textDecoration: "none" }}>
+                        <Link to="/historypage" style={{ textDecoration: "none" }}>
                           <Dropdown.Item
                             href="#/action-2"
                             style={{
