@@ -19,13 +19,13 @@ export const getDashboardBook = async (req, res) => {
 
 export const getDashboardReader = async (req, res) => {
   try {
-    verifyToken(req, res, async () => {
-      const [dashboard_reader, _] = await db.execute(
-        `SELECT * FROM dashboard_reader;`
-      );
+    //verifyToken(req, res, async () => {
+    const [dashboard_reader, _] = await db.execute(
+      `SELECT * FROM dashboard_reader;`
+    );
 
-      return res.json(dashboard_reader);
-    });
+    return res.json(dashboard_reader);
+    //});
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
@@ -95,8 +95,9 @@ export const getNotification = async (req, res) => {
           if (due < 3 && due > 0)
             return `[Đến hạn trả sách] Còn ${due} ngày đến hạn trả sách ${borrow.title}`;
           else if (due < 0)
-            return `[Trễ hạn trả sách] Sách ${borrow.title
-              } đã trễ hạn trả ${-due} ngày`;
+            return `[Trễ hạn trả sách] Sách ${
+              borrow.title
+            } đã trễ hạn trả ${-due} ngày`;
           else
             return `[Mượn thành công] Bạn đã mượn thành công sách ${borrow.title}`;
         } else {
@@ -177,4 +178,4 @@ export const getBorrowChartInfo = async (req, res) => {
     console.log(error.message);
     res.status(500).send({ message: error.message });
   }
-}
+};
