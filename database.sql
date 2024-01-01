@@ -326,7 +326,7 @@ CREATE TABLE `genre_of_book` (
 
 LOCK TABLES `genre_of_book` WRITE;
 /*!40000 ALTER TABLE `genre_of_book` DISABLE KEYS */;
-INSERT INTO `genre_of_book` VALUES ('adventure','9780060935467'),('Historical Fiction','9780062060624'),('Mythology','9780062060624'),('Romance','9780062060624'),('horror','9780062499554'),('mystery','9780062499554'),('adventure','9780141196886'),('horror','9780141196886'),('horror','9780143039976'),('horror','9780593183212'),('horror','9781101904244'),('mystery','9781335004888'),('horror','9781501142970'),('mystery','9781501154652'),('adventure','9781525823565'),('horror','9781525823565'),('horror','9781668016138'),('mystery','9781668016138'),('horror','9781982110581'),('mystery','9781982110581'),('mystery','9798352831533');
+INSERT INTO `genre_of_book` VALUES ('Adventure','9780060935467'),('Historical-Fiction','9780062060624'),('Mythology','9780062060624'),('Romance','9780062060624'),('Horror','9780062499554'),('Mystery','9780062499554'),('Adventure','9780141196886'),('Horror','9780141196886'),('Horror','9780143039976'),('Horror','9780593183212'),('Horror','9781101904244'),('Mystery','9781335004888'),('Horror','9781501142970'),('Mystery','9781501154652'),('Adventure','9781525823565'),('Horror','9781525823565'),('Horror','9781668016138'),('Mystery','9781668016138'),('Horror','9781982110581'),('Mystery','9781982110581'),('Mystery','9798352831533');
 /*!40000 ALTER TABLE `genre_of_book` ENABLE KEYS */;
 UNLOCK TABLES;
 
