@@ -35,24 +35,6 @@ const Header = () => {
   const [notifications, setNotifications] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Initialize socket connection
-    const socket = io("http://localhost:3001");
-
-    // Listen for incoming notifications
-    socket.on("notification", (newNotification) => {
-      setNotifications((prevNotifications) => [
-        newNotification,
-        ...prevNotifications,
-      ]);
-    });
-
-    // Cleanup the socket connection when component unmounts
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-
   const handleClearNotifications = () => {
     setNotifications([]);
   };
@@ -341,43 +323,6 @@ const Header = () => {
           }}
         >
           <Nav style={{ display: "flex", alignItems: "center" }}>
-            <Dropdown className="ms-2 me-2">
-            <Dropdown.Toggle
-              variant="light"
-              id="dropdown-notifications"
-              className="d-flex align-items-center"
-            >
-              <span
-                  style={{
-                    color: "#324552",
-                    fontSize: 16.26,
-                    fontFamily: "Work Sans",
-                    fontWeight: "400",
-                    wordWrap: "break-word",
-                    display: "flex",
-                    alignItems: "center"
-                  }}
-                >
-              <StyledBadge className="me-2" badgeContent={notifications.length} color="primary">
-                <NotificationsIcon color="action" />
-              </StyledBadge>
-              Thông báo
-              </span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="py-0" align="end" style={{color: 'black', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>
-              {/* <Dropdown.Header>Notifications</Dropdown.Header> */}
-              {notifications.map((notification, index) => (
-                <Dropdown.Item key={index}>{notification}</Dropdown.Item>
-              ))}
-              {notifications.length === 0 && (
-                <Dropdown.Item disabled>No notifications</Dropdown.Item>
-              )}
-              {/* <Dropdown.Divider />
-              <Dropdown.Item onClick={handleClearNotifications}>
-                Clear Notifications
-              </Dropdown.Item> */}
-            </Dropdown.Menu>
-          </Dropdown>
             
             {!useremail ? (
               <>
@@ -448,6 +393,43 @@ const Header = () => {
               </>
             ) : (
               <>
+              <Dropdown className="ms-2 me-2">
+            <Dropdown.Toggle
+              variant="light"
+              id="dropdown-notifications"
+              className="d-flex align-items-center"
+            >
+              <span
+                  style={{
+                    color: "#324552",
+                    fontSize: 16.26,
+                    fontFamily: "Work Sans",
+                    fontWeight: "400",
+                    wordWrap: "break-word",
+                    display: "flex",
+                    alignItems: "center"
+                  }}
+                >
+              <StyledBadge className="me-2" badgeContent={notifications.length} color="primary">
+                <NotificationsIcon color="action" />
+              </StyledBadge>
+              Thông báo
+              </span>
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="py-0" align="end" style={{color: 'black', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>
+              {/* <Dropdown.Header>Notifications</Dropdown.Header> */}
+              {notifications.map((notification, index) => (
+                <Dropdown.Item key={index}>{notification}</Dropdown.Item>
+              ))}
+              {notifications.length === 0 && (
+                <Dropdown.Item disabled>No notifications</Dropdown.Item>
+              )}
+              {/* <Dropdown.Divider />
+              <Dropdown.Item onClick={handleClearNotifications}>
+                Clear Notifications
+              </Dropdown.Item> */}
+            </Dropdown.Menu>
+          </Dropdown>
                 <Nav.Item>
                   <Nav.Link className="ms-2 me-2">
                     <Link to="/suggestion" style={{ textDecoration: "none" }}>
