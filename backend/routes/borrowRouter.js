@@ -30,5 +30,5 @@ router.route("/notification/:readerId").get(getNotification); // thông báo the
 
 router.route("/:readerId").get(getBorrowDetails); // hiển thị chi tiết lịch sử mượn trả của reader
 router.route("/:readerId/general-info").get(getGeneralBorrowInfo); // hiển thị thông tin mượn trả chung của reader (ở trang profile)
-
+router.route("/dashboard/borrow-chart").post(getBorrowChartInfo); // hiển thị biểu đồ mượn trả theo năm
 export const borrowRouter = router;
