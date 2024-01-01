@@ -95,9 +95,8 @@ export const getNotification = async (req, res) => {
           if (due < 3 && due > 0)
             return `[Đến hạn trả sách] Còn ${due} ngày đến hạn trả sách ${borrow.title}`;
           else if (due < 0)
-            return `[Trễ hạn trả sách] Sách ${
-              borrow.title
-            } đã trễ hạn trả ${-due} ngày`;
+            return `[Trễ hạn trả sách] Sách ${borrow.title
+              } đã trễ hạn trả ${-due} ngày`;
           else
             return `[Mượn thành công] Bạn đã mượn thành công sách ${borrow.title}`;
         } else {

@@ -53,12 +53,12 @@ function LoginPage(props) {
         localStorage.setItem("token", token);
 
         // Store email and password temporarily in localStorage
-        if(props.title ==="user") {
+        if (props.title === "user") {
           localStorage.setItem("userEmail", email);
         // localStorage.setItem("tempName", name);
         }
 
-        if(props.title ==="admin") {
+        if (props.title === "admin") {
           localStorage.setItem("adminEmail", email);
         }
 
@@ -79,6 +79,7 @@ function LoginPage(props) {
             const userInfo = await userInfoResponse.json();
             console.log("User Information:", userInfo);
             localStorage.setItem("username", userInfo.name);
+            localStorage.setItem("accountID", userInfo.accountId);
             localStorage.setItem("role", userInfo.accountType);
             localStorage.setItem("userID", userInfo.readerId);
             // Additional handling of manager information can be done here
