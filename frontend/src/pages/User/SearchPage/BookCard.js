@@ -19,7 +19,7 @@ function BookCard(props) {
         alt="img"
         style={{
           width: "100%",
-          height: "500px",
+          height: "300px",
           objectFit: "cover",
         }}
       />
@@ -57,22 +57,22 @@ function BookCard(props) {
       </div>
 
       <Link to={bookDetailUrl}>
-      <button
-        className="btn btn-success"
-        style={{
-          width: "100%",
-          textAlign: "center",
-          color: "white",
-          fontSize: 14,
-          fontFamily: "Inter",
-          fontWeight: "400",
-          wordWrap: "break-word",
-          backgroundColor: "#31AAB7",
-        }}
-      >
-        Mượn
-      </button>
-    </Link>
+        <button
+          className="btn btn-success"
+          style={{
+            width: "100%",
+            textAlign: "center",
+            color: "white",
+            fontSize: 14,
+            fontFamily: "Inter",
+            fontWeight: "400",
+            wordWrap: "break-word",
+            backgroundColor: "#31AAB7",
+          }}
+        >
+          Mượn
+        </button>
+      </Link>
     </div>
   );
 }
