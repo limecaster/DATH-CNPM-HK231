@@ -182,7 +182,8 @@ import ReaderList from './ReaderList';
 import GeneralInfo from './GeneralInfo';
 import BookList from './BookList';
 function ShowDashboard() {
-  const [data, setData] = useState();
+
+  const [dataChart, setData] = useState();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -202,80 +203,102 @@ function ShowDashboard() {
         }
       )
       .then((res) => {
-        setData(res.data);
+
+        // Process the received data
+        let processedData = [];
+
+        const monthToDataMap = new Map();
+        res.data.forEach((entry) => {
+          monthToDataMap.set(entry.month, entry);
+        });
+
+        for (let i = 1; i <= 12; i++) {
+          const monthData = monthToDataMap.get(i.toString());
+          if (monthData) {
+            processedData.push(monthData);
+          } else {
+            processedData.push({ year: payload.year, month: i.toString(), total_borrowed: 0, total_givedback: 0 });
+          }
+        }
+
+
+        setData(processedData);
       })
       .catch((error) => {
         console.log("Error:", error);
       });
   }, []);
 
-  console.log('>>> CHART DATA', data);
   return (
-    // <Container fluid>
-    //     <div className='row mt-3 gx-5 gy-5'>
-    //         <GeneralInfo/>
-    //     </div>
+    <Container fluid>
+      <div className='row'>
+        <h1 style={{ fontFamily: 'Montserrat', fontWeight: 'bold', fontSize: '30px', textAlign: 'center', marginTop: '10px' }}>Thống kê hoạt động của thư viện</h1>
+      </div>
+      <div className='row mt-3 gx-5 gy-5'>
+        <GeneralInfo />
+      </div>
 
-    //     {/* <div className='charts mb-5 '>
-    //         <div style={{ textAlign: 'center', marginBottom: '100px' }}>
-    //         <h5>Biểu đồ thống kê số lượng truy cập và số sách mượn</h5>
-    //         <ResponsiveContainer width="100%" height={300}>
-    //             <LineChart
-    //             width={500}
-    //             height={300}
-    //             data={dataChart}
-    //             margin={{
-    //                 top: 5,
-    //                 right: 30,
-    //                 left: 20,
-    //                 bottom: 5,
-    //             }}
-    //             >
-    //             <CartesianGrid strokeDasharray="3 3" />
-    //             <XAxis dataKey="name" />
-    //             <YAxis />
-    //             <Tooltip />
-    //             <Legend />
-    //             <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} name="Số lượt truy cập" />
-    //             <Line type="monotone" dataKey="amt" stroke="#82ca9d" name="Số sách mượn" />
-    //             </LineChart>
-    //         </ResponsiveContainer>
-    //         </div>
-    //         <div style={{ textAlign: 'center', marginBottom: '100px' }}>
-    //         <h5>Biểu đồ thống kê số lượng sách mượn và trả</h5>
-    //         <ResponsiveContainer width="100%" height={300}>
-    //         <BarChart
-    //         width={500}
-    //         height={300}
-    //         data={dataChart}
-    //         margin={{
-    //             top: 5,
-    //             right: 30,
-    //             left: 20,
-    //             bottom: 5,
-    //         }}
-    //         >
-    //             <CartesianGrid strokeDasharray="3 3" />
-    //             <XAxis dataKey="name" />
-    //             <YAxis />
-    //             <Tooltip />
-    //             <Legend />
-    //             <Bar dataKey="amt" fill="#8884d8" name='Số sách trả'/>
-    //             <Bar dataKey="uv" fill="#82ca9d" name='Số sách mượn'/>
-    //             </BarChart>
-    //         </ResponsiveContainer>
-    //         </div>
+      <div className='charts mb-5 '>
+        <div style={{ textAlign: 'center', marginBottom: '100px' }}>
+          <h5 className='text-center'>Biểu đồ thống kê số lượng truy cập và số sách mượn</h5>
+
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart
+              width={500}
+              height={300}
+              data={dataChart}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="total_borrowed" stroke="#8884d8" activeDot={{ r: 8 }} name="Số lượt truy cập" />
+              <Line type="monotone" dataKey="total_givedback" stroke="#82ca9d" name="Số sách mượn" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div style={{ textAlign: 'center', marginBottom: '100px' }}>
+          <h5 className='text-center'>Biểu đồ thống kê số lượng sách mượn và trả</h5>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart
+              width={500}
+              height={300}
+              data={dataChart}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="total_borrowed" fill="#8884d8" name='Số sách trả' />
+              <Bar dataKey="total_givedback" fill="#82ca9d" name='Số sách mượn' />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
 
 
-    //     </div> */}
+      </div>
 
-    //     <div className='row my-5 gx-5 gy-5'>
-    //         <ReaderList/>
-    //         <BookList/>
-    //     </div>
-    // </Container>
-    <></>
+      <div className='row my-5 gx-5 gy-5'>
+        <ReaderList />
+        <BookList />
+      </div>
+    </Container>
   )
 }
 
-export default ShowDashboard
+export default ShowDashboard;

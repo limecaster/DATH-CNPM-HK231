@@ -1,156 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import Accordion from "react-bootstrap/Accordion";
-// import axios from "axios";
-// import "./SearchPage.css";
-// import Form from "react-bootstrap/Form";
-// import { Col, Row } from "react-bootstrap";
-// import BookCard from "./BookCard";
-
-// function SearchPage({ searchResults }) {
-//   const [selectedCategory, setSelectedCategory] = useState("");
-//   const [selectedPublisher, setSelectedPublisher] = useState("");
-//   const [filteredBooks, setFilteredBooks] = useState([]);
-//   const filterBooksByCategory = (category) => {
-//     if (category === selectedCategory) {
-//       setSelectedCategory("");
-//       setFilteredBooks([]);
-//     } else {
-//       setSelectedCategory(category);
-//       const filtered = searchResults.filter((book) =>
-//         book.genres.includes(category)
-//       );
-//       setFilteredBooks(filtered);
-//     }
-//   };
-
-//   const categories = [
-//     "adventure",
-//     "Historical Fiction",
-//     "Mythology",
-//     "Romance",
-//     "horror",
-//     "mystery",
-//   ];
-//   const publishers = [
-//     "Harper Perennial",
-//     "Ecco",
-//     "William Morrow",
-//     "Penguin Classics",
-//     "Dutton",
-//     "Ballantine Books",
-//     "Canary Street Press",
-//     "Scribner",
-//     "Atria Books",
-//     "Graydon House",
-//     "Independently published",
-//   ];
-
-//   const handleCheckboxClick2 = (publisher) => {
-//     if (publisher === selectedPublisher) {
-//       setSelectedPublisher("");
-//     } else {
-//       setSelectedPublisher(publisher);
-//     }
-//   };
-//   return (
-//     <div className="custom-accordion">
-//       <Accordion className="accordion">
-//         <Accordion.Item eventKey="0">
-//           <Accordion.Header
-//             style={{
-//               fontFamily: "Work Sans, sans-serif",
-//               color: "rgba(0, 0, 0, 0.8)",
-//             }}
-//           >
-//             Filter by
-//           </Accordion.Header>
-
-//           <Accordion.Body>
-//             <hr />
-//             <div
-//               style={{
-//                 fontFamily: "Work Sans, sans-serif",
-//                 color: "rgba(0, 0, 0, 0.8)",
-//               }}
-//             >
-//               Categories
-//             </div>
-//             {categories.map((category) => (
-//               <Form.Check
-//                 label={category}
-//                 checked={category === selectedCategory}
-//                 onClick={() => filterBooksByCategory(category)}
-//                 style={{
-//                   fontFamily: "Work Sans, sans-serif",
-//                   color: "#808080",
-//                 }}
-//               />
-//             ))}
-//             <hr />
-//             <div style={{ fontFamily: "Work Sans, sans-serif" }}>
-//               Nhà xuất bản
-//             </div>
-//             {publishers.map((publisher) => (
-//               <Form.Check
-//                 label={publisher}
-//                 checked={publisher === selectedPublisher}
-//                 onClick={() => handleCheckboxClick2(publisher)}
-//                 style={{
-//                   fontFamily: "Work Sans, sans-serif",
-//                   color: "#808080",
-//                 }}
-//               />
-//             ))}
-//           </Accordion.Body>
-//         </Accordion.Item>
-//       </Accordion>
-//       <div className="display">
-//         <div
-//           style={{
-//             fontFamily: "Work Sans, sans-serif",
-//             color: "#21717A",
-//             fontSize: 27.87,
-//             fontWeight: "500",
-//           }}
-//         >
-//           {selectedCategory && (
-//             <div key={selectedCategory}>{selectedCategory}</div>
-//           )}
-//         </div>
-//         <div style={{ fontFamily: "Work Sans, sans-serif" }}>
-//           Hiển thị 1 của 53 sản phẩm
-//         </div>
-//         <br />
-//         <Row>
-//           {selectedCategory
-//             ? filteredBooks.map((book) => (
-//                 <Col xs={6} sm={6} md={4} lg={3}>
-//                   <BookCard
-//                     ISBN={book.ISBN}
-//                     title={book.title}
-//                     authorName={book.authorName}
-//                     coverLink={book.coverLink}
-//                   />
-//                 </Col>
-//               ))
-//             : searchResults.map((book) => (
-//                 <Col xs={6} sm={6} md={4} lg={3}>
-//                   <BookCard
-//                     ISBN={book.ISBN}
-//                     title={book.title}
-//                     authorName={book.authorName}
-//                     coverLink={book.coverLink}
-//                   />
-//                 </Col>
-//               ))}
-//         </Row>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default SearchPage;
-
 import React, { useEffect, useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import axios from "axios";
@@ -164,6 +11,7 @@ function SearchPage({}) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchText = searchParams.get("query");
+  const searchGenre = searchParams.get("genre");
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
@@ -247,7 +95,38 @@ function SearchPage({}) {
       setSelectedPublisher(publisher);
     }
   };
+  const [bookCount, setBookCount] = useState(0);
+  const [totalBooks, setTotalBooks] = useState([]);
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/books")
+      .then((res) => {
+        console.log(res.data);
+        setTotalBooks(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+  useEffect(() => {
+    let count = 0;
+
+    for (let i = 0; i < searchResults.length; i++) {
+      const book = searchResults[i];
+      const genreCondition =
+        searchGenre !== null
+          ? bookGenres[i] && bookGenres[i].includes(searchGenre)
+          : (!selectedCategory || bookGenres[i].includes(selectedCategory)) &&
+            (!selectedPublisher || book.publisher === selectedPublisher);
+
+      if (genreCondition) {
+        count++;
+      }
+    }
+
+    setBookCount(count);
+  }, [searchResults, searchGenre, selectedCategory, selectedPublisher]);
   return (
     <div className="custom-accordion">
       <Accordion className="accordion">
@@ -274,7 +153,9 @@ function SearchPage({}) {
             {categories.map((category) => (
               <Form.Check
                 label={category}
-                checked={category === selectedCategory}
+                checked={
+                  category === selectedCategory || category === searchGenre
+                }
                 onClick={() => handleCheckboxClick(category)}
                 style={{
                   fontFamily: "Work Sans, sans-serif",
@@ -309,27 +190,41 @@ function SearchPage({}) {
             fontWeight: "500",
           }}
         >
-          {selectedCategory && (
+          {searchGenre !== null ? (
+            <div key={searchGenre}>{searchGenre}</div>
+          ) : selectedCategory ? (
             <div key={selectedCategory}>{selectedCategory}</div>
-          )}
+          ) : null}
         </div>
         <div style={{ fontFamily: "Work Sans, sans-serif" }}>
-          Hiển thị 1 của 53 sản phẩm
+          Hiển thị {bookCount} của {totalBooks.length} sản phẩm
         </div>
 
         <br />
+
         <Row>
           {(() => {
             const bookCols = [];
             for (let i = 0; i < searchResults.length; i++) {
               const book = searchResults[i];
-              if (
-                (!selectedCategory ||
-                  bookGenres[i].includes(selectedCategory)) &&
-                (!selectedPublisher || book.publisher === selectedPublisher)
-              ) {
+              const genreCondition =
+                searchGenre !== null
+                  ? bookGenres[i] && bookGenres[i].includes(searchGenre)
+                  : (!selectedCategory ||
+                      bookGenres[i].includes(selectedCategory)) &&
+                    (!selectedPublisher ||
+                      book.publisher === selectedPublisher);
+
+              if (genreCondition) {
                 bookCols.push(
-                  <Col className="mb-5" xs={6} sm={6} md={4} lg={3} key={book.ISBN}>
+                  <Col
+                    className="mb-5"
+                    xs={6}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    key={book.ISBN}
+                  >
                     <BookCard
                       ISBN={book.ISBN}
                       title={book.title}
@@ -344,7 +239,42 @@ function SearchPage({}) {
           })()}
         </Row>
 
-        {/* <div>{bookGenres[0]}</div> */}
+        {/* <Row>
+          {(() => {
+            const bookCols = [];
+            for (let i = 0; i < searchResults.length; i++) {
+              const book = searchResults[i];
+              const genreCondition =
+                searchGenre !== null
+                  ? bookGenres[i] && bookGenres[i].includes(searchGenre)
+                  : (!selectedCategory ||
+                      bookGenres[i].includes(selectedCategory)) &&
+                    (!selectedPublisher ||
+                      book.publisher === selectedPublisher);
+
+              if (genreCondition) {
+                bookCols.push(
+                  <Col
+                    className="mb-5"
+                    xs={6}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    key={book.ISBN}
+                  >
+                    <BookCard
+                      ISBN={book.ISBN}
+                      title={book.title}
+                      authorName={book.authorName}
+                      coverLink={book.coverLink}
+                    />
+                  </Col>
+                );
+              }
+            }
+            return bookCols;
+          })()}
+        </Row> */}
       </div>
     </div>
   );

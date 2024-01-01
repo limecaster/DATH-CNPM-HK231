@@ -105,11 +105,44 @@ body {
   --bs-list-group-item-padding-y: 0.5rem;
 }
 
-.form-control {
+#hovaten {
+  border: 1px solid var(--component-outline);
+}
+#ngaysinh {
+  border: 1px solid var(--component-outline);
+}
+#daihoc {
+  border: 1px solid var(--component-outline);
+}
+#sdt {
+  border: 1px solid var(--component-outline);
+}
+#email {
+  border: 1px solid var(--component-outline);
+}
+#matkhauhientai {
+  border: 1px solid var(--component-outline);
+}
+#matkhaumoi {
+  border: 1px solid var(--component-outline);
+}
+#xacnhanmatkhau {
   border: 1px solid var(--component-outline);
 }
 
-.btn-outline-primary {
+#btn-outline-danger {
+  --bs-btn-color: var(--red-normal);
+  --bs-btn-border-color: var(--product-darker);
+
+  --bs-btn-hover-color: var(--white);
+  --bs-btn-hover-bg: var(--red-normal);
+  --bs-btn-hover-border-color: var(--product-darker);
+
+  --bs-btn-active-color: var(--white);
+  --bs-btn-active-bg: var(--red-light);
+  --bs-btn-active-border-color: var(--product-darker);
+}
+#btn-outline-primary {
   --bs-btn-color: var(--product-darker);
   --bs-btn-border-color: var(--product-darker);
 
@@ -121,8 +154,7 @@ body {
   --bs-btn-active-bg: var(--product-light);
   --bs-btn-active-border-color: var(--product-darker);
 }
-
-.btn-primary {
+#btn-primary {
   --bs-btn-color: var(--white);
   --bs-btn-bg: var(--product-dark);
   --bs-btn-border-color: var(--product-dark);

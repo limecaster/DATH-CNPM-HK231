@@ -13,8 +13,15 @@ export default function ReaderList() {
     { readerId: "", readerName: "", borrowCount: 0, givebackCount: 0 },
   ]);
   useEffect(() => {
+    const token = localStorage.getItem('token');
     axios
-      .get("http://localhost:3001/borrow/dashboard/reader-list")
+      .get("http://localhost:3001/borrow/dashboard/reader-list",
+      {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        })
       .then((res) => {
         console.log(res.data);
         setreaderList(res.data);
@@ -27,7 +34,7 @@ export default function ReaderList() {
   return (
     <div className="col">
       <div className="d-flex flex-wrap p-3 shadow rounded border border-secondary">
-        <h5 className="w-100 d-block">Danh sách người dùng</h5>
+        <h5 className="w-100 d-block text-center">Danh sách người dùng</h5>
         <Table>
           <TableHead>
             <TableRow

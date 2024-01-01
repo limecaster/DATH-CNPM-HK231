@@ -17,14 +17,14 @@ const ListPage = () => {
                 <div className='h-auto' style={{ position: 'static' }}>
                     <Sidebar />
                 </div>
-                <div style={{ flex: '1' }}>
-
-                    <Row >
-                        <Col xs={12} sm={12} >
-                            <Book />
-                        </Col>
-                    </Row>
-
+                <div style={{ flex: '1', overflowX: 'hidden' }}>
+                    <Container className='m-2'>
+                        <Row >
+                            <Col xs={12} sm={12} >
+                                <Book />
+                            </Col>
+                        </Row>
+                    </Container>
                 </div>
             </div>
         </Container>
