@@ -11,7 +11,7 @@ import Container from 'react-bootstrap/Container';
 import axios from 'axios';
 import Row from 'react-bootstrap/Row';
 
-const History = () => {
+const HistoryPage = () => {
     const [validationErrors, setValidationErrors] = useState({});
     const [historyData, setHistoryData] = useState([]);
 
@@ -187,5 +187,5 @@ const History = () => {
     );
 };
 
-export default History;
+export default HistoryPage;
 
