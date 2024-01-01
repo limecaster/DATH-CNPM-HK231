@@ -51,11 +51,12 @@ function LoginPage(props) {
 
         // Store the token in localStorage or a more secure storage option
         localStorage.setItem("token", token);
+        console.log(token);
 
         // Store email and password temporarily in localStorage
         if (props.title === "user") {
           localStorage.setItem("userEmail", email);
-        // localStorage.setItem("tempName", name);
+          // localStorage.setItem("tempName", name);
         }
 
         if (props.title === "admin") {
