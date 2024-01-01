@@ -19,6 +19,7 @@ import Footer from "./components/Footer/footer";
 import SuggestionPage from "./pages/SuggestionPage/SuggestionPage";
 import Profile from "./pages/Profile/Profile";
 import Favorite from "./pages/User/Favor/favor";
+import History from "./pages/History/History";
 import HistoryPage from "./pages/HistoryPage/HistoryPage";
 function App() {
   return (
@@ -67,6 +68,16 @@ function App() {
           />
           <Route
             path="/history"
+            element={
+              <>
+                <Header />
+                <History />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/historypage"
             element={
               <>
                 <Header />
