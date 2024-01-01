@@ -74,6 +74,7 @@ function LoginPage(props) {
             const userInfo = await userInfoResponse.json();
             console.log("Manager Information:", userInfo);
             localStorage.setItem("name", userInfo.name);
+            localStorage.setItem("accountID", userInfo.accountID);
 
             // Additional handling of manager information can be done here
           } else {
