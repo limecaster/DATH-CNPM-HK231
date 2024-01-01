@@ -15,7 +15,7 @@ function Favor(props) {
         width: "100%",
         height: "260px", // Set your desired height
         objectFit: "cover", // or "contain" based on your preference
-      }}/>
+      }} />
       <Link to={`/bookdetailpage/${props.ISBN}`}>
         <div style={{ width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#324552', fontSize: 14, fontFamily: 'Work Sans', fontWeight: '600', wordWrap: 'break-word' }}>{props.title}</div>
       </Link>
@@ -24,7 +24,7 @@ function Favor(props) {
 
       <Link to={`/bookdetailpage/${props.ISBN}`}>
         <button className="btn btn-success" style={{ width: '100%', textAlign: 'center', color: 'white', fontSize: 14, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word', backgroundColor: '#31AAB7' }}>Mượn</button>
-      </Link>    
+      </Link>
     </div>
   );
 }
