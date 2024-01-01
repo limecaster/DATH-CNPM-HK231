@@ -131,7 +131,7 @@ function History() {
               <Link to="#" className="list-group-item list-group-item-action active" aria-current="true">
                 Lịch sử
               </Link>
-              <a href="https://translate.google.com" className="list-group-item list-group-item-action">Danh mục ưa thích</a>
+              <Link to="/favor" className="list-group-item list-group-item-action">Danh mục ưa thích</Link>
               <Link to="/suggestion" className="list-group-item list-group-item-action">Đề xuất của tôi</Link>
             </div>
           </div>
