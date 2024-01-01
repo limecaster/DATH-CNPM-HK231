@@ -514,7 +514,7 @@ const Header = () => {
                         Lịch sử
                       </Dropdown.Item>
                     </Link>
-                    <Link to="/" style={{ textDecoration: "none" }}>
+                    <Link to="/favor" style={{ textDecoration: "none" }}>
                       <Dropdown.Item
                         href="#/action-3"
                         style={{
