@@ -9,6 +9,8 @@ import useNode from "./useNode";
 import Comment from "./Comment";
 import ReadMore from "./ReadMore";
 import Modal from "react-modal";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 const comments = {
   id: 1,
   items: [],
@@ -99,14 +101,19 @@ export default function BookDetailPage() {
     }
   };
   //borrow
-  const [borrowDate, setBorrowDate] = useState("");
-  const [givebackDate, setGiveBackDate] = useState("");
+  const [borrowDate, setBorrowDate] = useState(new Date());
+  const [givebackDate, setGiveBackDate] = useState(new Date());
   const handleSubmitClick = async (event) => {
     event.preventDefault();
 
     const readerId = localStorage.getItem("userID");
     const url = "http://localhost:3001/borrow";
+    const formattedBorrowDate = borrowDate.toISOString().slice(0, 10);
+    const formattedGivebackDate = givebackDate.toISOString().slice(0, 10);
 
+    
+    console.log("formattedBorrowDate:", formattedBorrowDate);
+    console.log("formattedGivebackDate:", formattedGivebackDate);
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -114,7 +121,12 @@ export default function BookDetailPage() {
           Authorization: `Bearer ${jwtToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ISBN, readerId, borrowDate, givebackDate }),
+        body: JSON.stringify({
+          ISBN,
+          readerId,
+          borrowDate: formattedBorrowDate,
+          givebackDate: formattedGivebackDate,
+        }),
       });
       if (response.status === 200) {
         const responseResult = await response.json();
@@ -360,17 +372,19 @@ export default function BookDetailPage() {
             >
               <h2>Đăng ký mượn sách</h2>
               <label>Ngày mượn (yyyy-mm-dd)</label>
-              <input
-                type="text"
-                value={borrowDate}
-                onChange={(e) => setBorrowDate(e.target.value)}
+              <DatePicker
+                selected={borrowDate}
+                onChange={(date) => setBorrowDate(date)}
+                dateFormat="yyyy-MM-dd"
+                //readOnly
               />
 
-              <label style={{ marginTop: "20px" }}>Ngày trả (yyyy-mm-dd)</label>
-              <input
-                type="text"
-                value={givebackDate}
-                onChange={(e) => setGiveBackDate(e.target.value)}
+              <label>Ngày trả (yyyy-mm-dd)</label>
+              <DatePicker
+                selected={givebackDate}
+                onChange={(date) => setGiveBackDate(date)}
+                dateFormat="yyyy-MM-dd"
+                //readOnly
               />
 
               <div style={{ marginTop: "20px" }}>
