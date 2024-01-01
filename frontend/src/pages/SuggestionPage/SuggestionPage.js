@@ -14,8 +14,8 @@ function SuggestionPage() {
     event.preventDefault();
     
     //Lấy name, email từ Local Storage
-    const readerName = localStorage.getItem('name');
-    const email = localStorage.getItem('tempEmail');
+    const readerName = localStorage.getItem('username');
+    const email = localStorage.getItem('userEmail');
 
     if (bookTitle.trim() === '' || authorName.trim() === '') {
       if (bookTitle.trim() === '' && authorName.trim() === '') {
