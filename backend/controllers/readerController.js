@@ -45,7 +45,6 @@ export const creatingReader = async (req, res) => {
     const username = email; // Default value
     const university = "HCMUT"; // Default value
     const hashedPassword = await hashPassword(password);
-    console.log(hashedPassword);
     // Get current date with datetime mysql format and store it to openedDay
     const openedDay = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const accountType = "ST"; // Default value
