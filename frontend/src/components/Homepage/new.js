@@ -1,6 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Book from "../../assets/image/book.png";
+import {
+  useNavigate,
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+} from "react-router-dom";
 
 function New(props) {
   return (
@@ -50,6 +56,7 @@ function New(props) {
         {props.authorName}
       </div>
 
+      <Link to={`/bookdetailpage/${props.ISBN}`}>
       <button
         className="btn btn-success"
         style={{
@@ -65,6 +72,7 @@ function New(props) {
       >
         Mượn
       </button>
+    </Link>
     </div>
   );
 }

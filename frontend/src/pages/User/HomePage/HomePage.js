@@ -20,17 +20,57 @@ import React, { useEffect, useState } from "react";
 // import { categoryData } from './categorydata';
 
 function Homepage() {
+  const email = localStorage.getItem("userEmail");
+  const password = localStorage.getItem("userPassword");
+  const name = localStorage.getItem("username");
+  const readerID = localStorage.getItem("userID");
+  // Clear the stored email and password
+  // localStorage.removeItem("tempEmail");
+  // localStorage.removeItem("tempPassword");
+
+  // Log email and password to console
+  console.log("Email:", email, "Password:", password, "Name:", name);
+
   const [books, setBooks] = useState([]);
   const [genrebooks, setgenreBooks] = useState([]);
+  const [favoritebooks, setfavoriteBooks] = useState([]);
+  const [trendingbooks, settrendingBooks] = useState([]);
 
-  const displayedBooks = books.slice(0, 22);
-  const displayedgenreBooks = genrebooks.slice(0, 22);
+  const displayedBooks = books;
+  const displayedgenreBooks = genrebooks;
+  const displayedfavoriteBooks = favoritebooks;
+  const displayedtrendingBooks = trendingbooks;
+
   useEffect(() => {
     axios
       .get("http://localhost:3001/books")
       .then((res) => {
         console.log(res.data);
         setBooks(res.data);
+      })
+      .catch((err) => {
+        // console.error(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/books/trending")
+      .then((res) => {
+        console.log(res.data);
+        settrendingBooks(res.data);
+      })
+      .catch((err) => {
+        // console.error(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/borrow/favorite/${readerID}`)
+      .then((res) => {
+        console.log(res.data);
+        setfavoriteBooks(res.data);
       })
       .catch((err) => {
         // console.error(err);
@@ -52,22 +92,25 @@ function Homepage() {
   const newsData = displayedBooks.map((book) => (
     <New
       key={book.ISBN}
+      ISBN={book.ISBN}
       title={book.title}
       authorName={book.authorName}
       coverLink={book.coverLink}
     />
   ));
-  const trendData = displayedBooks.map((book) => (
+  const trendData = displayedtrendingBooks.map((book) => (
     <Trending
-      key={book.ISBN}
+      key={book.isbn}
+      ISBN={book.isbn}
       title={book.title}
       authorName={book.authorName}
       coverLink={book.coverLink}
     />
   ));
-  const favoriteData = displayedBooks.map((book) => (
+  const favoriteData = displayedfavoriteBooks.map((book) => (
     <Favor
       key={book.ISBN}
+      ISBN={book.ISBN}
       title={book.title}
       authorName={book.authorName}
       coverLink={book.coverLink}
@@ -75,7 +118,7 @@ function Homepage() {
   ));
   const categData = displayedgenreBooks.map((book) => (
     <Category
-      key={book.ISBN}
+      key={book.genre}
       genre={book.genre}
       coverLink={book.random_coverLink}
     />
@@ -120,7 +163,11 @@ function Homepage() {
           Phổ biến
         </div>
         <Carousel responsive={responsive}>{trendData}</Carousel>
-        <div
+        {!email ? (<></>) : (
+          <>
+          {displayedfavoriteBooks.length === 0 ? (<></>) : (
+          <>
+            <div
           className="d-flex align-items-center justify-content-center"
           style={{
             color: "#02598B",
@@ -136,6 +183,8 @@ function Homepage() {
           Ưa thích
         </div>
         <Carousel responsive={responsive}>{favoriteData}</Carousel>
+        </>)}
+        </>)}
         <div
           className="d-flex align-items-center justify-content-center"
           style={{

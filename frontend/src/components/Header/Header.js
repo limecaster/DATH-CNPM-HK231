@@ -19,16 +19,23 @@ import {
 } from "react-router-dom";
 
 const Header = () => {
+  const role = localStorage.getItem('role');
+
   // Retrieve email and password from localStorage
-  const email = localStorage.getItem("tempEmail");
-  const password = localStorage.getItem("tempPassword");
-  const name = localStorage.getItem("name");
+  const useremail = localStorage.getItem("userEmail");
+  const userpassword = localStorage.getItem("userPassword");
+  const username = localStorage.getItem("username");
+
+  const adminemail = localStorage.getItem("adminEmail");
+  const adminpassword = localStorage.getItem("adminPassword");
+  const adminname = localStorage.getItem("adminname");
   // Clear the stored email and password
   // localStorage.removeItem("tempEmail");
   // localStorage.removeItem("tempPassword");
 
   // Log email and password to console
-  console.log("Email:", email, "Password:", password, "Name:", name);
+  if (role === "ST") console.log("Email:", useremail, "Password:", userpassword, "Name:", username);
+  if (role === "MS") console.log("Email:", adminemail, "Password:", adminpassword, "Name:", adminname);
 
   const navigate = useNavigate();
 
@@ -61,7 +68,9 @@ const Header = () => {
       expand="lg"
       className="border-bottom pe-4"
     >
-      <Link to="/#home">
+    {!adminemail ? (
+      <>
+      <Link to="/">
         <Navbar.Brand>
           <div className="d-inline-block ms-4 me-2">
             <img
@@ -96,9 +105,145 @@ const Header = () => {
           </span>
         </Navbar.Brand>
       </Link>
+      </>
+    ) : (
+      <>
+        <Link to="/admin/books/*">
+          <Navbar.Brand>
+            <div className="d-inline-block ms-4 me-2">
+              <img
+                alt="img"
+                src={hcmut}
+                //className="d-inline-block"
+              />
+            </div>
+            <span className="d-inline-block align-bottom">
+              <span
+                style={{
+                  color: "#032B91",
+                  fontSize: 40,
+                  fontFamily: "Train One",
+                  fontWeight: "400",
+                  wordWrap: "break-word",
+                }}
+              >
+                BK
+              </span>
+              <span
+                style={{
+                  color: "#1488DB",
+                  fontSize: 40,
+                  fontFamily: "Train One",
+                  fontWeight: "400",
+                  wordWrap: "break-word",
+                }}
+              >
+                LIB
+              </span>
+            </span>
+          </Navbar.Brand>
+        </Link>
+      </>
+    )}
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
-
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+        {adminemail ? (
+          <>
+          <Col
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "right",
+            }}
+          >
+          <Nav style={{ display: "flex", alignItems: "center" }}>
+          <Dropdown>
+            <Dropdown.Toggle className="bg-transparent text-dark border-0">
+              <img
+                src="https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="
+                alt="Avatar"
+                className="avatar"
+                style={{
+                  verticalAlign: "middle",
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "50%",
+                }}
+              />
+              {adminname}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu className="py-0" align="end">
+              <Link to="/profile" style={{ textDecoration: "none" }}>
+                <Dropdown.Item
+                  href="#/action-1"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    color: "#566976",
+                    lineHeight: "2",
+                    fontSize: 20,
+                    fontFamily: "Work Sans",
+                    fontWeight: "500",
+                    wordWrap: "break-word",
+                  }}
+                  className="dropdown-item-link"
+                >
+                  Thông tin tài khoản
+                </Dropdown.Item>
+              </Link>
+              <Link to="/admin/books/*" style={{ textDecoration: "none" }}>
+                <Dropdown.Item
+                  href="#/action-2"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    color: "#566976",
+                    lineHeight: "2",
+                    fontSize: 20,
+                    fontFamily: "Work Sans",
+                    fontWeight: "500",
+                    wordWrap: "break-word",
+                  }}
+                  className="dropdown-item-link"
+                >
+                  Danh sách
+                </Dropdown.Item>
+              </Link>
+              <Link to="/admin/dashboard/*" style={{ textDecoration: "none" }}>
+                <Dropdown.Item
+                  href="#/action-3"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    color: "#566976",
+                    lineHeight: "2",
+                    fontSize: 20,
+                    fontFamily: "Work Sans",
+                    fontWeight: "500",
+                    wordWrap: "break-word",
+                  }}
+                  className="dropdown-item-link"
+                >
+                  Thống kê
+                </Dropdown.Item>
+              </Link>
+              <Link to="/" style={{ textDecoration: "none" }}>
+                <Dropdown.Item
+                  onClick={(e) => handleLogout(e)}
+                  className="text-center text-danger dropdown-item-link"
+                  style={{ fontFamily: "Work Sans" }}
+                >
+                  Đăng xuất
+                </Dropdown.Item>
+              </Link>
+            </Dropdown.Menu>
+          </Dropdown>
+          </Nav>
+        </Col>
+        </>
+        ) : (
+          <>
         <Col
           xs={6}
           style={{
@@ -175,7 +320,7 @@ const Header = () => {
               </Nav.Link>
             </Nav.Item>
 
-            {!email ? (
+            {!useremail ? (
               <>
                 <Nav.Item>
                   <Nav.Link className="ms-2 me-2">
@@ -272,7 +417,7 @@ const Header = () => {
                         borderRadius: "50%",
                       }}
                     />
-                    {name}
+                    {username}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu className="py-0" align="end">
@@ -345,6 +490,7 @@ const Header = () => {
             )}
           </Nav>
         </Col>
+        </>)}
       </Navbar.Collapse>
     </Navbar>
   );
