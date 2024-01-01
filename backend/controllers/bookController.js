@@ -31,7 +31,6 @@ export const createBook = async (req, res) => {
         typeof genres === "string"
           ? genres.split(", ").map((genre) => genre.trim())
           : genres;
-      console.log("Genres:", genresArray);
 
       const coverlink =
         "http://localhost:3001/books/covers/" + req.file.filename;
@@ -125,7 +124,7 @@ export const getFavoriteBookOfReader = async (req, res) => {
     verifyToken(req, res, async () => {
       const { readerId } = req.params;
       const favorite_list = await Book.getFavoriteList(readerId);
-      console.log(favorite_list);
+
       return res.send(favorite_list);
     });
   } catch (error) {
@@ -137,7 +136,7 @@ export const getFavoriteBookOfReader = async (req, res) => {
 export const getTrendingBooks = async (req, res) => {
   try {
     const trending_list = await Book.getTrendingList();
-    console.log(trending_list);
+
     return res.send(trending_list);
   } catch (error) {
     console.log(error.message);
@@ -220,7 +219,6 @@ export const updateBookByISBN = async (req, res) => {
           .send({ message: "Pls send all required fields!" });
       }
       if (coverlink === undefined) {
-        console.log("cololo:", coverlink);
         coverlink = "http://localhost:3001/books/covers/" + req.file.filename;
         await deleteOldCoverFile(ISBN);
       }
@@ -244,7 +242,7 @@ export const updateBookByISBN = async (req, res) => {
         copyNumber,
         genresArray
       );
-      console.log(book);
+
       book = await book.update();
 
       console.log("Update book");
@@ -291,7 +289,6 @@ export const GetBookGenres = async (req, res) => {
     const genreValues = genres.map((genre) => {
       return genre.genre;
     });
-    console.log("Get genres of book");
     if (req) return res.status(200).send(genreValues);
   } catch (error) {
     console.log(error.message);
