@@ -21,15 +21,10 @@ import React, { useEffect, useState } from "react";
 
 function Homepage() {
   const email = localStorage.getItem("userEmail");
-  const password = localStorage.getItem("userPassword");
   const name = localStorage.getItem("username");
-  const readerID = localStorage.getItem("userID");
-  // Clear the stored email and password
-  // localStorage.removeItem("tempEmail");
-  // localStorage.removeItem("tempPassword");
+  const userID = localStorage.getItem("userID");
 
-  // Log email and password to console
-  console.log("Email:", email, "Password:", password, "Name:", name);
+  console.log("Email:", email, "Name:", name);
 
   const [books, setBooks] = useState([]);
   const [genrebooks, setgenreBooks] = useState([]);
@@ -67,7 +62,7 @@ function Homepage() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/borrow/favorite/${readerID}`)
+      .get(`http://localhost:3001/borrow/favorite/${userID}`)
       .then((res) => {
         console.log(res.data);
         setfavoriteBooks(res.data);

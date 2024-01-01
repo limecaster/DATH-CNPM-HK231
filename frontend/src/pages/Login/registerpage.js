@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function RegisterPage({ handleTabChange }) {
   const [passwordMatch, setPasswordMatch] = useState(true);
-
+  const [usedEmail, setUsedEmail] = useState(false);
   // ... (your existing imports and code)
 
   const handleRegisterSubmit = async (event) => {
@@ -45,29 +45,11 @@ function RegisterPage({ handleTabChange }) {
         handleTabChange("login");
       }
     } catch (error) {
+      setUsedEmail(true);
       // Handle error (e.g., display an error message)
       console.error("Registration failed:", error.response.data);
     }
   };
-
-  // ... (rest of your component code)
-
-  // const handleRegisterSubmit = (event) => {
-  //   event.preventDefault();
-  //   // Your registration logic here
-  //   // Check if passwords match
-  //   const password = event.target.elements.password.value;
-  //   const confirmPassword = event.target.elements.confirmPassword.value;
-  //   if (password !== confirmPassword) {
-  //     setPasswordMatch(false);
-  //     return;
-  //   }
-
-  //   // Passwords match, proceed with registration
-  //   setPasswordMatch(true);
-  //   // Navigate to login page after successful registration
-  //   handleTabChange("login");
-  // };
 
   return (
     <>
@@ -121,12 +103,16 @@ function RegisterPage({ handleTabChange }) {
           />
         </Form.Group>
 
-        {!passwordMatch && (
+        {!passwordMatch && !usedEmail && (
           <div className="text-danger mb-2" style={{ fontFamily: "Work Sans" }}>
             Mật khẩu và xác nhận mật khẩu không khớp.
           </div>
         )}
-
+        {usedEmail && (
+          <div className="text-danger mb-2" style={{ fontFamily: "Work Sans" }}>
+            Email đã được sử dụng !
+        </div>
+        )}
         {/* Sign up button */}
         <Button
           type="submit"
