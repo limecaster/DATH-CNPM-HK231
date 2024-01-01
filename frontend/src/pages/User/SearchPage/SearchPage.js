@@ -7,7 +7,7 @@ import { Col, Row } from "react-bootstrap";
 import BookCard from "./BookCard";
 import { useLocation, useParams } from "react-router-dom";
 
-function SearchPage({}) {
+function SearchPage({ }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchText = searchParams.get("query");
@@ -59,12 +59,18 @@ function SearchPage({}) {
   const [selectedPublisher, setSelectedPublisher] = useState("");
 
   const categories = [
-    "adventure",
-    "Historical Fiction",
-    "horror",
-    "mystery",
+    "Adventure",
+    "Historical-Fiction",
+    "Horror",
+    "Mystery",
     "Mythology",
     "Romance",
+    'Thriller',
+    'Crime',
+    'Fiction',
+    'Drama',
+    'Action',
+
   ];
   const publishers = [
     "Atria Books",
@@ -118,7 +124,7 @@ function SearchPage({}) {
         searchGenre !== null
           ? bookGenres[i] && bookGenres[i].includes(searchGenre)
           : (!selectedCategory || bookGenres[i].includes(selectedCategory)) &&
-            (!selectedPublisher || book.publisher === selectedPublisher);
+          (!selectedPublisher || book.publisher === selectedPublisher);
 
       if (genreCondition) {
         count++;
@@ -211,9 +217,9 @@ function SearchPage({}) {
                 searchGenre !== null
                   ? bookGenres[i] && bookGenres[i].includes(searchGenre)
                   : (!selectedCategory ||
-                      bookGenres[i].includes(selectedCategory)) &&
-                    (!selectedPublisher ||
-                      book.publisher === selectedPublisher);
+                    bookGenres[i].includes(selectedCategory)) &&
+                  (!selectedPublisher ||
+                    book.publisher === selectedPublisher);
 
               if (genreCondition) {
                 bookCols.push(
