@@ -8,13 +8,16 @@ export const bookLanguage = [
 ];
 
 export const bookGenres = [
-    { id: 1, name: 'adventure' },
-    { id: 2, name: 'horror' },
-    { id: 3, name: 'mystery' },
-    { id: 4, name: 'historical' },
-    { id: 5, name: 'thriller' },
-    { id: 6, name: 'crime fiction' },
-    { id: 7, name: 'fiction' },
-    { id: 8, name: 'drama' },
-    { id: 9, name: 'action' },
+    { id: 1, name: 'Adventure' },
+    { id: 2, name: 'Horror' },
+    { id: 3, name: 'Mystery' },
+    { id: 4, name: 'Historical-Fiction' },
+    { id: 5, name: 'Thriller' },
+    { id: 6, name: 'Crime' },
+    { id: 7, name: 'Fiction' },
+    { id: 8, name: 'Drama' },
+    { id: 9, name: 'Action' },
+    { id: 10, name: 'Mythology' },
+    { id: 11, name: 'Romance' },
+
 ];
