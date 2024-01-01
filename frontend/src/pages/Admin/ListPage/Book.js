@@ -565,7 +565,7 @@ const Book = () => {
         ),
         renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
             <>
-                <DialogTitle variant="h5" style={{ textAlign: 'center' }}>Chỉnh sử thông tin sách</DialogTitle>
+                <DialogTitle variant="h5" style={{ textAlign: 'center' }}>Chỉnh sửa thông tin sách</DialogTitle>
                 <DialogContent sx={{ display: 'flex', flexDirection: 'column', marginTop: '10px', gap: '1rem' }}>
                     {internalEditComponents.slice(0, 2)}
                     <div className='coverlink'>Bìa sách</div>
