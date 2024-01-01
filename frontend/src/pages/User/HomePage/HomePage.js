@@ -61,8 +61,13 @@ function Homepage() {
   }, []);
 
   useEffect(() => {
+    const accessToken = localStorage.getItem("token");
     axios
-      .get(`http://localhost:3001/borrow/favorite/${userID}`)
+      .get(`http://localhost:3001/books/favorite/${userID}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         setfavoriteBooks(res.data);
