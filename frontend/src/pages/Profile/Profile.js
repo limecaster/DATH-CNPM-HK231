@@ -6,7 +6,7 @@ import './Profile.css';
 
 function Profile() {
   const [readerName, setReaderName] = useState(() => {
-    const name = localStorage.getItem("name");
+    const name = localStorage.getItem('username');
     return name ? name : '';
   });
   const [birthday, setBirthday] = useState(() => {
@@ -26,7 +26,7 @@ function Profile() {
     return storedPhoneNumber ? storedPhoneNumber : '';
   });
   const [email, setEmail] = useState(() => {
-    const tempEmail = localStorage.getItem("tempEmail");
+    const tempEmail = localStorage.getItem('userEmail');
     return tempEmail ? tempEmail : '';
   });
   const [isEditingPassword, setIsEditingPassword] = useState(false);
@@ -37,7 +37,7 @@ function Profile() {
   const [checkNewPassword, setCheckNewPassword] = useState(-1);
   const [checkConfirmPassword, setCheckConfirmPassword] = useState(-1);
   
-  // Lấy JWT, email, name, password từ Local Storage
+  // Lấy JWT từ Local Storage
   const jwtToken = localStorage.getItem('token');
   // Gửi yêu cầu GET với JWT trong header
   const getData = async () => {
@@ -60,7 +60,7 @@ function Profile() {
         setUniversity(readerInfoResult.university);
         setPhoneNumber(readerInfoResult.phoneNumber);
         setEmail(readerInfoResult.email);
-        localStorage.setItem('name', readerInfoResult.name);
+        localStorage.setItem('username', readerInfoResult.name);
         localStorage.setItem('storedBirthday', readerInfoResult.dob);
         localStorage.setItem('storedGender', readerInfoResult.sex);
         localStorage.setItem('storedUniversity', readerInfoResult.university);
@@ -104,8 +104,13 @@ function Profile() {
     const name = readerName;
     const sex = gender;
     const dob = birthday;
+
+    if (readerName.trim() === '' || birthday.trim() === '' || gender.trim() === '' || university.trim() === '' || phoneNumber.trim() === '' || email.trim() === '') {
+      alert("Hãy nhập đầy đủ thông tin v_v");
+      return;
+    }
     
-    const tempPassword = localStorage.getItem("tempPassword");
+    const tempPassword = localStorage.getItem("userPassword");
     if (isEditingPassword) {
       if (!currentPassword) {
         setCheckCurrentPassword(1); //Chua dien thong tin vao o currentPassword
@@ -155,7 +160,7 @@ function Profile() {
           console.log(patchDataResult);
 
           getData();
-          localStorage.setItem('tempPassword', newPassword);
+          localStorage.setItem("userPassword", newPassword);
 
           alert("Cập nhật thông tin với mật khẩu mới thành công ^_^");
         }
