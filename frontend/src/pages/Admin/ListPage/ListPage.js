@@ -14,7 +14,6 @@ const ListPage = () => {
     return (
         <Container fluid className='p-0'>
             <div className='d-flex'>
-
                 <div className='h-auto' style={{ position: 'static' }}>
                     <Sidebar />
                 </div>
@@ -22,7 +21,6 @@ const ListPage = () => {
                     <Container fluid className='m-2'>
                         <Row >
                             <Col xs={12} sm={12} >
-
                                 <Book />
                             </Col>
                         </Row>
