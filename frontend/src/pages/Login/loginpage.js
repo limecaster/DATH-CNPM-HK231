@@ -53,9 +53,16 @@ function LoginPage(props) {
         localStorage.setItem("token", token);
 
         // Store email and password temporarily in localStorage
-        localStorage.setItem("tempEmail", email);
-        localStorage.setItem("tempPassword", password);
-        // localStorage.setItem("tempName", name);
+        if (props.title === "user") {
+          localStorage.setItem("userEmail", email);
+          localStorage.setItem("userPassword", password);
+          // localStorage.setItem("tempName", name);
+        }
+
+        if (props.title === "admin") {
+          localStorage.setItem("adminEmail", email);
+          localStorage.setItem("adminPassword", password);
+        }
 
         if (props.title === "user") {
           // Fetch manager information using the obtained token
@@ -72,19 +79,43 @@ function LoginPage(props) {
 
           if (userInfoResponse.ok) {
             const userInfo = await userInfoResponse.json();
-            console.log("Manager Information:", userInfo);
-            localStorage.setItem("name", userInfo.name);
-            localStorage.setItem("accountID", userInfo.accountID);
+            console.log("User Information:", userInfo);
+            localStorage.setItem("username", userInfo.name);
+            localStorage.setItem("accountID", userInfo.accountId);
+            localStorage.setItem("role", userInfo.accountType);
+            localStorage.setItem("userID", userInfo.readerId);
+
+            // Additional handling of manager information can be done here
+          } else {
+            // Handle error in fetching manager information
+            console.error("Failed to fetch user information");
+          }
+        }
+
+        if (props.title === "admin") {
+          // Redirect to admin page
+          const managerInfoResponse = await fetch(
+            "http://localhost:3001/manager/get",
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the token in the request header
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (managerInfoResponse.ok) {
+            const managerInfo = await managerInfoResponse.json();
+            console.log("Manager Information:", managerInfo);
+            localStorage.setItem("adminname", managerInfo.name);
+            localStorage.setItem("role", managerInfo.accountType);
 
             // Additional handling of manager information can be done here
           } else {
             // Handle error in fetching manager information
             console.error("Failed to fetch manager information");
           }
-        }
-
-        if (props.title === "admin") {
-          // Redirect to admin page
           navigate("/admin/books");
         } else {
           // Redirect to homepage

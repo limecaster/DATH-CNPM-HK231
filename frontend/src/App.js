@@ -88,6 +88,7 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/footer";
 import SuggestionPage from "./pages/SuggestionPage/SuggestionPage";
 import Profile from "./pages/Profile/Profile";
+import Favorite from "./pages/User/Favor/favor";
 function App() {
   return (
     <div className="App">
@@ -134,6 +135,16 @@ function App() {
             }
           />
           <Route
+            path="/favor"
+            element={
+              <>
+                <Header />
+                <Favorite />
+                <Footer />
+              </>
+            }
+          />
+          <Route
             path="/bookdetailpage/:ISBN"
             element={
               <>
@@ -169,8 +180,16 @@ function App() {
             }
           />
           <Route path="/admin/">
-            <Route path="books/*" element={<ListPage />} />
-            <Route path="dashboard/*" element={<Dashboard />} />
+            <Route path="books/*" element={
+              <>
+                <Header />
+                <ListPage />
+              </>} />
+            <Route path="dashboard/*" element={
+              <>
+                <Header />
+                <Dashboard />
+              </>} />
           </Route>
         </Routes>
       </Router>

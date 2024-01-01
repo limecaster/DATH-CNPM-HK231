@@ -19,7 +19,7 @@ function BookCard(props) {
         alt="img"
         style={{
           width: "100%",
-          //height: "260px",
+          height: "500px",
           objectFit: "cover",
         }}
       />
@@ -56,6 +56,7 @@ function BookCard(props) {
         by {props.authorName}
       </div>
 
+      <Link to={bookDetailUrl}>
       <button
         className="btn btn-success"
         style={{
@@ -71,6 +72,7 @@ function BookCard(props) {
       >
         Mượn
       </button>
+    </Link>
     </div>
   );
 }
