@@ -329,7 +329,7 @@ function SearchPage({}) {
                 (!selectedPublisher || book.publisher === selectedPublisher)
               ) {
                 bookCols.push(
-                  <Col xs={6} sm={6} md={4} lg={3} key={book.ISBN}>
+                  <Col className="mb-5" xs={6} sm={6} md={4} lg={3} key={book.ISBN}>
                     <BookCard
                       ISBN={book.ISBN}
                       title={book.title}
