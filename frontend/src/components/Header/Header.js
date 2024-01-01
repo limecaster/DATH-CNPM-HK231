@@ -275,7 +275,7 @@ const Header = () => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "right",
+                justifyContent: "center",
               }}
             >
               <Form
