@@ -200,24 +200,6 @@ const Header = () => {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu className="py-0" align="end">
-                    <Link to="/profile" style={{ textDecoration: "none" }}>
-                      <Dropdown.Item
-                        href="#/action-1"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          color: "#566976",
-                          lineHeight: "2",
-                          fontSize: 20,
-                          fontFamily: "Work Sans",
-                          fontWeight: "500",
-                          wordWrap: "break-word",
-                        }}
-                        className="dropdown-item-link"
-                      >
-                        Thông tin tài khoản
-                      </Dropdown.Item>
-                    </Link>
                     <Link to="/admin/books/*" style={{ textDecoration: "none" }}>
                       <Dropdown.Item
                         href="#/action-2"
