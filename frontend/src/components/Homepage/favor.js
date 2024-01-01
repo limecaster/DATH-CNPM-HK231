@@ -16,8 +16,9 @@ function Favor(props) {
         height: "260px", // Set your desired height
         objectFit: "cover", // or "contain" based on your preference
       }}/>
-
-      <div style={{ width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#324552', fontSize: 14, fontFamily: 'Work Sans', fontWeight: '600', wordWrap: 'break-word' }}>{props.title}</div>
+      <Link to={`/bookdetailpage/${props.ISBN}`}>
+        <div style={{ width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#324552', fontSize: 14, fontFamily: 'Work Sans', fontWeight: '600', wordWrap: 'break-word' }}>{props.title}</div>
+      </Link>
 
       <div style={{ width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#7D92A1', fontSize: 12, fontFamily: 'Work Sans', fontWeight: '400', wordWrap: 'break-word' }}>{props.authorName}</div>
 
