@@ -65,7 +65,7 @@ function Profile() {
         localStorage.setItem('storedGender', readerInfoResult.sex);
         localStorage.setItem('storedUniversity', readerInfoResult.university);
         localStorage.setItem('storedPhoneNumber', readerInfoResult.phoneNumber);
-        //localStorage.setItem('storedEmail', readerInfoResult.email);
+        localStorage.setItem('userEmail', readerInfoResult.email);
       }
       else {
         console.error("Failed to fetch reader information");
@@ -130,7 +130,13 @@ function Profile() {
         return;
       }
       else {
-        setCheckNewPassword(0); //newPassword hop le
+        if (newPassword === tempPassword) {
+          setCheckNewPassword(2); //newPassword trung voi password!!!
+          return;
+        }
+        else {
+          setCheckNewPassword(0); //newPassword hop le
+        }
       }
       if (!confirmPassword) {
         setCheckConfirmPassword(1); //Chua dien thong tin vao o confirmPassword
@@ -313,6 +319,11 @@ function Profile() {
                   {checkNewPassword === 1 && (
                     <div className="text-danger mb-3" style={{ fontFamily: 'Work Sans' }}>
                       Vui lòng điền thông tin vào ô trên!
+                    </div>
+                  )}
+                  {checkNewPassword === 2 && (
+                    <div className="text-danger mb-3" style={{ fontFamily: 'Work Sans' }}>
+                      Mật khẩu mới trùng với mật khẩu hiện tại!!!
                     </div>
                   )}
                 </div>
