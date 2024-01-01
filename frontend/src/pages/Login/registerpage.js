@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function RegisterPage({ handleTabChange }) {
   const [passwordMatch, setPasswordMatch] = useState(true);
-
+  const [usedEmail, setUsedEmail] = useState(false);
   // ... (your existing imports and code)
 
   const handleRegisterSubmit = async (event) => {
@@ -18,11 +18,6 @@ function RegisterPage({ handleTabChange }) {
     const confirmPassword = formData.get("confirmPassword");
 
     // Check if passwords match on the client side
-    if (password !== confirmPassword) {
-      setPasswordMatch(false);
-      return;
-    }
-
     const userData = {
       name,
       email,
@@ -35,39 +30,27 @@ function RegisterPage({ handleTabChange }) {
         "http://localhost:3001/reader/signup",
         userData
       );
-
+        console.log(response.status);
       // Check the response status or data for success
       if (response.status === 201) {
         // Assuming 201 Created is the appropriate status for successful registration
         // Registration successful
+        if (password !== confirmPassword) {
+          setPasswordMatch(false);
+          setUsedEmail(false)
+          return;
+        }
         setPasswordMatch(true);
+        setUsedEmail(false);
         // Navigate to login page after successful registration
         handleTabChange("login");
       }
     } catch (error) {
+      setUsedEmail(true);
       // Handle error (e.g., display an error message)
       console.error("Registration failed:", error.response.data);
     }
   };
-
-  // ... (rest of your component code)
-
-  // const handleRegisterSubmit = (event) => {
-  //   event.preventDefault();
-  //   // Your registration logic here
-  //   // Check if passwords match
-  //   const password = event.target.elements.password.value;
-  //   const confirmPassword = event.target.elements.confirmPassword.value;
-  //   if (password !== confirmPassword) {
-  //     setPasswordMatch(false);
-  //     return;
-  //   }
-
-  //   // Passwords match, proceed with registration
-  //   setPasswordMatch(true);
-  //   // Navigate to login page after successful registration
-  //   handleTabChange("login");
-  // };
 
   return (
     <>
@@ -120,8 +103,13 @@ function RegisterPage({ handleTabChange }) {
             required
           />
         </Form.Group>
+        {usedEmail && (
+          <div className="text-danger mb-2" style={{ fontFamily: "Work Sans" }}>
+            Email đã được sử dụng !
+        </div>
+        )}
 
-        {!passwordMatch && (
+        {(!usedEmail && !passwordMatch) && (
           <div className="text-danger mb-2" style={{ fontFamily: "Work Sans" }}>
             Mật khẩu và xác nhận mật khẩu không khớp.
           </div>

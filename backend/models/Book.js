@@ -100,7 +100,6 @@ export class Book {
       connection = await db.getConnection();
       await connection.beginTransaction();
 
-      console.log("delete:", isbn);
       const [result] = await connection.execute(
         `DELETE FROM book WHERE ISBN = ?;`,
         [isbn]
