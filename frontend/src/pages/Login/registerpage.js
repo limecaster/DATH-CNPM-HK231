@@ -18,11 +18,6 @@ function RegisterPage({ handleTabChange }) {
     const confirmPassword = formData.get("confirmPassword");
 
     // Check if passwords match on the client side
-    if (password !== confirmPassword) {
-      setPasswordMatch(false);
-      return;
-    }
-
     const userData = {
       name,
       email,
@@ -35,12 +30,18 @@ function RegisterPage({ handleTabChange }) {
         "http://localhost:3001/reader/signup",
         userData
       );
-
+        console.log(response.status);
       // Check the response status or data for success
       if (response.status === 201) {
         // Assuming 201 Created is the appropriate status for successful registration
         // Registration successful
+        if (password !== confirmPassword) {
+          setPasswordMatch(false);
+          setUsedEmail(false)
+          return;
+        }
         setPasswordMatch(true);
+        setUsedEmail(false);
         // Navigate to login page after successful registration
         handleTabChange("login");
       }
@@ -102,17 +103,18 @@ function RegisterPage({ handleTabChange }) {
             required
           />
         </Form.Group>
-
-        {!passwordMatch && !usedEmail && (
-          <div className="text-danger mb-2" style={{ fontFamily: "Work Sans" }}>
-            Mật khẩu và xác nhận mật khẩu không khớp.
-          </div>
-        )}
         {usedEmail && (
           <div className="text-danger mb-2" style={{ fontFamily: "Work Sans" }}>
             Email đã được sử dụng !
         </div>
         )}
+
+        {(!usedEmail && !passwordMatch) && (
+          <div className="text-danger mb-2" style={{ fontFamily: "Work Sans" }}>
+            Mật khẩu và xác nhận mật khẩu không khớp.
+          </div>
+        )}
+
         {/* Sign up button */}
         <Button
           type="submit"
