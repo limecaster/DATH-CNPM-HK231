@@ -57,7 +57,9 @@ useEffect(() => {
 console.log('>>> CHART DATA', dataChart);
   return (
     <Container fluid>
-        
+        <div className='row'>
+          <h1 style={{fontFamily: 'Montserrat', fontWeight: 'bold', fontSize: '30px', textAlign: 'center', marginTop:'10px'}}>Thống kê hoạt động của thư viện</h1>
+        </div>
         <div className='row mt-3 gx-5 gy-5'>
             <GeneralInfo/>
         </div>
