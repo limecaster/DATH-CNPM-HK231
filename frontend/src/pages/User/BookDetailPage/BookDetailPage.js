@@ -1,7 +1,9 @@
 // import axios from "axios";
 // import React, { useEffect, useState } from "react";
 // import { useParams } from "react-router-dom";
-
+// import Box from "@mui/material/Box";
+// import Rating from "@mui/material/Rating";
+// import Typography from "@mui/material/Typography";
 // import "./BookDetailPage.css";
 // import useNode from "./useNode";
 // import Comment from "./Comment";
@@ -12,11 +14,43 @@
 // };
 // export default function BookDetailPage() {
 //   const { ISBN } = useParams();
+
 //   const [books, setBooks] = useState([]);
 //   const [genres, setGenres] = useState([]);
 //   const [commentsData, setCommentsData] = useState(comments);
-
+//   const [value, setValue] = useState(0);
 //   const { insertNode, editNode, deleteNode } = useNode();
+
+//   const jwtToken = localStorage.getItem("token");
+//   const [isHearted, setIsHearted] = useState(false);
+//   const handleHeartClick = async (event) => {
+//     event.preventDefault();
+//     setIsHearted(!isHearted);
+//     const readerId = localStorage.getItem("userID");
+
+//     const url = "http://localhost:3002/favorite";
+
+//     try {
+//       const response = await fetch(url, {
+//         method: "POST",
+//         headers: {
+//           Authorization: `Bearer ${jwtToken}`,
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ readerId, ISBN }),
+//       });
+//       if (response.status === 200) {
+//         const responseResult = await response.json();
+//         console.log(responseResult);
+
+//         alert("đã thêm vào danh sách ưa thích");
+//       } else {
+//         console.error("failed to add to favorite");
+//       }
+//     } catch (error) {
+//       console.error("Error: ", error);
+//     }
+//   };
 
 //   const handleInsertNode = (folderId, item) => {
 //     const finalStructure = insertNode(commentsData, folderId, item);
@@ -36,7 +70,7 @@
 
 //   useEffect(() => {
 //     axios
-//       .get("http://localhost:3001/books")
+//       .get("http://localhost:3002/books")
 //       .then((res) => {
 //         console.log(res.data);
 //         setBooks(res.data);
@@ -47,7 +81,7 @@
 //   }, []);
 //   useEffect(() => {
 //     axios
-//       .get(`http://localhost:3001/books/${ISBN}/genres`)
+//       .get(`http://localhost:3002/books/${ISBN}/genres`)
 //       .then((res) => {
 //         console.log(res.data);
 //         setGenres(res.data);
@@ -81,7 +115,21 @@
 //           >
 //             {book.title}
 //           </p>
+//           <p
+//             style={{
+//               fontSize: "20px",
+//               fontFamily: "Work Sans",
+//               fontWeight: "700",
+//               marginLeft: "10px",
+//               color: isHearted ? "red" : "black",
+//               cursor: "pointer",
+//             }}
+//             onClick={handleHeartClick}
+//           >
+//             {isHearted ? "❤️" : "🤍"}
+//           </p>
 //           {/* rating */}
+
 //           <p>
 //             <div
 //               style={{
@@ -258,6 +306,15 @@
 //       >
 //         Phản hồi
 //       </div>
+//       <div style={{ marginTop: "20px" }}>
+//         <Rating
+//           name="simple-controlled"
+//           value={value}
+//           onChange={(event, newValue) => {
+//             setValue(newValue);
+//           }}
+//         />
+//       </div>
 
 //       <Comment
 //         handleInsertNode={handleInsertNode}
@@ -285,11 +342,77 @@ const comments = {
 };
 export default function BookDetailPage() {
   const { ISBN } = useParams();
+
   const [books, setBooks] = useState([]);
   const [genres, setGenres] = useState([]);
   const [commentsData, setCommentsData] = useState(comments);
   const [value, setValue] = useState(0);
   const { insertNode, editNode, deleteNode } = useNode();
+
+  const [favBooks, setFavBooks] = useState([]);
+  const email = localStorage.getItem("userEmail");
+  console.log("email", email);
+  const readerID = localStorage.getItem("userID");
+  console.log("ID", readerID);
+  const jwtToken = localStorage.getItem("token");
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/books/favorite/${readerID}`, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      })
+      .then((res) => {
+        console.log("Favor:", res.data);
+        setFavBooks(res.data);
+      })
+      .catch((err) => {});
+  }, []);
+
+  const [isHearted, setIsHearted] = useState(false);
+  const checkIsHearted = () => {
+    const hasHeartedBook = favBooks.some((book) => book.ISBN === ISBN);
+    setIsHearted(hasHeartedBook);
+  };
+
+  useEffect(() => {
+    checkIsHearted();
+  }, [favBooks]);
+
+  const handleHeartClick = async (event) => {
+    event.preventDefault();
+
+    const readerId = localStorage.getItem("userID");
+
+    const url = "http://localhost:3001/favorite";
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ readerId, ISBN }),
+      });
+      if (response.status === 200) {
+        const responseResult = await response.json();
+        console.log(responseResult);
+
+        if (isHearted) {
+          alert("Xoá khỏi danh sách yêu thích");
+        } else {
+          alert("Thêm vào danh sách yêu thích");
+        }
+
+        setIsHearted(!isHearted);
+      } else {
+        console.error("failed to add to favorite");
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
 
   const handleInsertNode = (folderId, item) => {
     const finalStructure = insertNode(commentsData, folderId, item);
@@ -354,7 +477,21 @@ export default function BookDetailPage() {
           >
             {book.title}
           </p>
+          <p
+            style={{
+              fontSize: "20px",
+              fontFamily: "Work Sans",
+              fontWeight: "700",
+              marginLeft: "10px",
+              color: isHearted ? "red" : "black",
+              cursor: "pointer",
+            }}
+            onClick={handleHeartClick}
+          >
+            {isHearted ? "❤️" : "🤍"}
+          </p>
           {/* rating */}
+
           <p>
             <div
               style={{

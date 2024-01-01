@@ -430,7 +430,7 @@ const Book = () => {
         editDisplayMode: 'modal',
         enableEditing: true,
         getRowId: (row) => row.ISBN,
-        initialState: { columnVisibility: { publishDate: false, language: false, coverType: false, desc: false, noPages: false } },
+        initialState: { columnVisibility: { publishDate: false, language: false, genres: false, coverType: false, desc: false, noPages: false } },
         muiTableContainerProps: {
             sx: {
                 overflowX: 'auto',

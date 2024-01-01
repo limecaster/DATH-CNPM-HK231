@@ -3,7 +3,7 @@ import { Navbar, Nav, Form, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import Dropdown from "react-bootstrap/Dropdown";
 import "./Header.css";
-
+import io from "socket.io-client";
 import hcmut from "../../assets/image/hcmut.png";
 import { BsBell, BsSearch } from "react-icons/bs";
 
@@ -20,22 +20,66 @@ import {
 
 const Header = () => {
   const role = localStorage.getItem('role');
+  const token = localStorage.getItem('token');
 
-  // Retrieve email and password from localStorage
   const useremail = localStorage.getItem("userEmail");
-  const userpassword = localStorage.getItem("userPassword");
   const username = localStorage.getItem("username");
-
+  const userID = localStorage.getItem("userID");
+ 
   const adminemail = localStorage.getItem("adminEmail");
-  const adminpassword = localStorage.getItem("adminPassword");
   const adminname = localStorage.getItem("adminname");
-  // Clear the stored email and password
-  // localStorage.removeItem("tempEmail");
-  // localStorage.removeItem("tempPassword");
 
-  // Log email and password to console
-  if (role === "ST") console.log("Email:", useremail, "Password:", userpassword, "Name:", username);
-  if (role === "MS") console.log("Email:", adminemail, "Password:", adminpassword, "Name:", adminname);
+  if (role === "ST") console.log("Email:", useremail, "Name:", username, "ID:", userID);
+  if (role === "MS") console.log("Email:", adminemail, "Name:", adminname);
+
+  const [notifications, setNotifications] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Initialize socket connection
+    const socket = io("http://localhost:3001");
+
+    // Listen for incoming notifications
+    socket.on("notification", (newNotification) => {
+      setNotifications((prevNotifications) => [
+        newNotification,
+        ...prevNotifications,
+      ]);
+    });
+
+    // Cleanup the socket connection when component unmounts
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  const handleClearNotifications = () => {
+    setNotifications([]);
+  };
+
+  // Fetch notifications with authorization
+  const fetchNotifications = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/borrow/notification/${userID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Replace with your actual access token
+          },
+        }
+      );
+
+      setNotifications(response.data);
+      console.log("Notifications:", response.data); // Log notifications
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
 
   const navigate = useNavigate();
 
@@ -297,29 +341,44 @@ const Header = () => {
           }}
         >
           <Nav style={{ display: "flex", alignItems: "center" }}>
-            <Nav.Item>
-              <Nav.Link href="#home" className="ms-2 me-2">
-                <span
+            <Dropdown className="ms-2 me-2">
+            <Dropdown.Toggle
+              variant="light"
+              id="dropdown-notifications"
+              className="d-flex align-items-center"
+            >
+              <span
                   style={{
                     color: "#324552",
                     fontSize: 16.26,
                     fontFamily: "Work Sans",
                     fontWeight: "400",
                     wordWrap: "break-word",
+                    display: "flex",
+                    alignItems: "center"
                   }}
                 >
-                  <StyledBadge
-                    className="me-2"
-                    badgeContent={4}
-                    color="primary"
-                  >
-                    <NotificationsIcon color="action" />
-                  </StyledBadge>
-                  Thông báo
-                </span>
-              </Nav.Link>
-            </Nav.Item>
-
+              <StyledBadge className="me-2" badgeContent={notifications.length} color="primary">
+                <NotificationsIcon color="action" />
+              </StyledBadge>
+              Thông báo
+              </span>
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="py-0" align="end" style={{color: 'black', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>
+              {/* <Dropdown.Header>Notifications</Dropdown.Header> */}
+              {notifications.map((notification, index) => (
+                <Dropdown.Item key={index}>{notification}</Dropdown.Item>
+              ))}
+              {notifications.length === 0 && (
+                <Dropdown.Item disabled>No notifications</Dropdown.Item>
+              )}
+              {/* <Dropdown.Divider />
+              <Dropdown.Item onClick={handleClearNotifications}>
+                Clear Notifications
+              </Dropdown.Item> */}
+            </Dropdown.Menu>
+          </Dropdown>
+            
             {!useremail ? (
               <>
                 <Nav.Item>
@@ -331,6 +390,8 @@ const Header = () => {
                         fontFamily: "Work Sans",
                         fontWeight: "400",
                         wordWrap: "break-word",
+                        display: "flex",
+                        alignItems: "center"
                       }}
                     >
                       Đề xuất
@@ -397,6 +458,8 @@ const Header = () => {
                           fontFamily: "Work Sans",
                           fontWeight: "400",
                           wordWrap: "break-word",
+                          display: "flex",
+                          alignItems: "center"
                         }}
                       >
                         Đề xuất
@@ -457,7 +520,7 @@ const Header = () => {
                         Lịch sử
                       </Dropdown.Item>
                     </Link>
-                    <Link to="/" style={{ textDecoration: "none" }}>
+                    <Link to="/favor" style={{ textDecoration: "none" }}>
                       <Dropdown.Item
                         href="#/action-3"
                         style={{

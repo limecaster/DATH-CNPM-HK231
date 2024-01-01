@@ -31,6 +31,7 @@ export const hashPassword = async (plainPassword) => {
   try {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+    console.log("hashedPassword", await bcrypt.hash("123456", saltRounds));
     return hashedPassword;
   } catch (error) {
     throw error;
