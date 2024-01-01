@@ -169,12 +169,10 @@ export const insertBorrow = async (req, res) => {
 
 export const getBorrowChartInfo = async (req, res) => {
   try {
-    verifyToken(req, res, async () => {
-      const year = req.body.year;
-      const [borrow_chart_info, _] = await getBorrowChartInfomation(year);
+    const year = req.body.year;
+    const [borrow_chart_info, _] = await getBorrowChartInfomation(year);
 
-      res.status(200).send(borrow_chart_info);
-    });
+    res.status(200).send(borrow_chart_info);
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
