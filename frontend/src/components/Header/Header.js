@@ -347,13 +347,15 @@ const Header = () => {
               id="dropdown-notifications"
               className="d-flex align-items-center"
             >
-              <span className="d-flex align-items-center"
+              <span
                   style={{
                     color: "#324552",
                     fontSize: 16.26,
                     fontFamily: "Work Sans",
                     fontWeight: "400",
                     wordWrap: "break-word",
+                    display: "flex",
+                    alignItems: "center"
                   }}
                 >
               <StyledBadge className="me-2" badgeContent={notifications.length} color="primary">
@@ -388,6 +390,8 @@ const Header = () => {
                         fontFamily: "Work Sans",
                         fontWeight: "400",
                         wordWrap: "break-word",
+                        display: "flex",
+                        alignItems: "center"
                       }}
                     >
                       Đề xuất
@@ -454,6 +458,8 @@ const Header = () => {
                           fontFamily: "Work Sans",
                           fontWeight: "400",
                           wordWrap: "break-word",
+                          display: "flex",
+                          alignItems: "center"
                         }}
                       >
                         Đề xuất
