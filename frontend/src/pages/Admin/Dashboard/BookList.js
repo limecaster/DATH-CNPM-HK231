@@ -13,8 +13,15 @@ export default function BookList() {
     { readerId: "", readerName: "", borrowCount: 0, givebackCount: 0 },
   ]);
   useEffect(() => {
+    const token = localStorage.getItem('token');
     axios
-      .get("http://localhost:3001/borrow/dashboard/book-list")
+      .get("http://localhost:3001/borrow/dashboard/book-list",
+      {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        })
       .then((res) => {
         console.log(res.data);
         setbookList(res.data);
@@ -27,8 +34,8 @@ export default function BookList() {
   return (
     <div className="col">
       <div className="d-flex flex-wrap p-3 shadow rounded border border-secondary">
-        <h5 className="w-100 d-block">Danh sách sách được mượn nhiều nhất</h5>
-        <Table>
+        <h5 className="w-100 d-block text-center">Sách được mượn nhiều nhất</h5>
+        <Table style={{height:'200px', overflowX:'scroll'}}>
           <TableHead>
             <TableRow
               style={{

@@ -26,5 +26,5 @@ router.route("/dashboard/reader-list").get(getDashboardReader); // danh sách ng
 router.route("/dashboard/book-list").get(getDashboardBook); // danh sách các sách được mượn nhiều nhất
 router.route("/:readerId").get(getBorrowDetails); // hiển thị chi tiết lịch sử mượn trả của reader
 router.route("/:readerId/general-info").get(getGeneralBorrowInfo); // hiển thị thông tin mượn trả chung của reader (ở trang profile)
-router.route("/dashboard/borrow-chart").get(getBorrowChartInfo); // hiển thị biểu đồ mượn trả theo năm
+router.route("/dashboard/borrow-chart").post(getBorrowChartInfo); // hiển thị biểu đồ mượn trả theo năm
 export const borrowRouter = router;
