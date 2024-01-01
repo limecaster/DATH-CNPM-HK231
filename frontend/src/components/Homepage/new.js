@@ -1,6 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Book from "../../assets/image/book.png";
+import {
+  useNavigate,
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+} from "react-router-dom";
 
 function New(props) {
   return (
@@ -18,21 +24,23 @@ function New(props) {
     objectFit: "cover", // or "contain" based on your preference
   }}/>
 
-      <div
-        style={{
-          width: "100%",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          whiteSpace: "nowrap",
-          color: "#324552",
-          fontSize: 14,
-          fontFamily: "Work Sans",
-          fontWeight: "600",
-          wordWrap: "break-word",
-        }}
-      >
-        {props.title}
-      </div>
+      <Link to={`/bookdetailpage/${props.ISBN}`}>
+        <div
+          style={{
+            width: "100%",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            color: "#324552",
+            fontSize: 14,
+            fontFamily: "Work Sans",
+            fontWeight: "600",
+            wordWrap: "break-word",
+          }}
+        >
+          {props.title}
+        </div>
+      </Link>
 
       <div
         style={{
@@ -50,6 +58,7 @@ function New(props) {
         {props.authorName}
       </div>
 
+      <Link to={`/bookdetailpage/${props.ISBN}`}>
       <button
         className="btn btn-success"
         style={{
@@ -65,6 +74,7 @@ function New(props) {
       >
         Mượn
       </button>
+    </Link>
     </div>
   );
 }

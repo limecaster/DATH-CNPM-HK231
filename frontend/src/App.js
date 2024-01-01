@@ -169,8 +169,16 @@ function App() {
             }
           />
           <Route path="/admin/">
-            <Route path="books/*" element={<ListPage />} />
-            <Route path="dashboard/*" element={<Dashboard />} />
+            <Route path="books/*" element={
+              <>
+                <Header /> 
+                <ListPage />
+              </>} />
+            <Route path="dashboard/*" element={
+              <>
+                <Header /> 
+                <Dashboard />
+              </>} />
           </Route>
         </Routes>
       </Router>
