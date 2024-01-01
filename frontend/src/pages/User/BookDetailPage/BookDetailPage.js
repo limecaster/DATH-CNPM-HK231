@@ -28,7 +28,7 @@
 //     setIsHearted(!isHearted);
 //     const readerId = localStorage.getItem("userID");
 
-//     const url = "http://localhost:3002/favorite";
+//     const url = "http://localhost:3001/favorite";
 
 //     try {
 //       const response = await fetch(url, {
@@ -70,7 +70,7 @@
 
 //   useEffect(() => {
 //     axios
-//       .get("http://localhost:3002/books")
+//       .get("http://localhost:3001/books")
 //       .then((res) => {
 //         console.log(res.data);
 //         setBooks(res.data);
@@ -81,7 +81,7 @@
 //   }, []);
 //   useEffect(() => {
 //     axios
-//       .get(`http://localhost:3002/books/${ISBN}/genres`)
+//       .get(`http://localhost:3001/books/${ISBN}/genres`)
 //       .then((res) => {
 //         console.log(res.data);
 //         setGenres(res.data);
@@ -357,7 +357,7 @@ export default function BookDetailPage() {
   const jwtToken = localStorage.getItem("token");
   useEffect(() => {
     axios
-      .get(`http://localhost:3002/books/favorite/${readerID}`, {
+      .get(`http://localhost:3001/books/favorite/${readerID}`, {
         headers: {
           Authorization: `Bearer ${jwtToken}`,
         },
@@ -384,7 +384,7 @@ export default function BookDetailPage() {
 
     const readerId = localStorage.getItem("userID");
 
-    const url = "http://localhost:3002/favorite";
+    const url = "http://localhost:3001/favorite";
 
     try {
       const response = await fetch(url, {
@@ -432,7 +432,7 @@ export default function BookDetailPage() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3002/books")
+      .get("http://localhost:3001/books")
       .then((res) => {
         console.log(res.data);
         setBooks(res.data);
@@ -443,7 +443,7 @@ export default function BookDetailPage() {
   }, []);
   useEffect(() => {
     axios
-      .get(`http://localhost:3002/books/${ISBN}/genres`)
+      .get(`http://localhost:3001/books/${ISBN}/genres`)
       .then((res) => {
         console.log(res.data);
         setGenres(res.data);
